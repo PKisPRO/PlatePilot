@@ -4,6 +4,16 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Recipes - PlatePilot</title>
+    <meta name="description" content="PlatePilot Recipes: Explore healthy, delicious recipes for every meal and diet preference.">
+    <meta property="og:title" content="PlatePilot Recipes">
+    <meta property="og:description" content="Explore healthy, delicious recipes for every meal and diet preference.">
+    <meta property="og:image" content="https://pkispro.github.io/PlatePilot/assets/platepilot-og.jpg">
+    <meta property="og:type" content="website">
+    <meta property="og:url" content="https://pkispro.github.io/PlatePilot/recipes.html">
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:title" content="PlatePilot Recipes">
+    <meta name="twitter:description" content="Explore healthy, delicious recipes for every meal and diet preference.">
+    <meta name="twitter:image" content="https://pkispro.github.io/PlatePilot/assets/platepilot-og.jpg">
     <script src="https://cdn.tailwindcss.com"></script>
     <script>
         tailwind.config = {
@@ -610,6 +620,13 @@
         </div>
     </div>
 
+    <!-- Back to Top Button -->
+    <button id="backToTop" aria-label="Back to Top" class="hidden fixed bottom-24 right-8 bg-green-500 text-white p-3 rounded-full shadow-lg hover:bg-green-600 transition-colors z-50">
+        <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 15l7-7 7 7" />
+        </svg>
+    </button>
+
     <script>
         // Set base path for GitHub Pages
         const basePath = '/PlatePilot';
@@ -824,6 +841,19 @@
             document.getElementById('aiAssistantModal').classList.add('hidden');
             document.getElementById('aiAssistantModal').classList.remove('flex');
         }
+
+        // Back to Top functionality
+        const backToTop = document.getElementById('backToTop');
+        window.addEventListener('scroll', () => {
+            if (window.scrollY > 300) {
+                backToTop.classList.remove('hidden');
+            } else {
+                backToTop.classList.add('hidden');
+            }
+        });
+        backToTop.addEventListener('click', () => {
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+        });
     </script>
 </body>
 </html> 
