@@ -3,20 +3,33 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Quinoa Stuffed Bell Peppers - VitaMeal</title>
+    <title>Quinoa Stuffed Bell Peppers - PlatePilot</title>
+    <meta name="description" content="PlatePilot: Quinoa Stuffed Bell Peppers - Colorful bell peppers filled with protein-rich quinoa and vegetables, with nutrition info, comments, and AI-powered wellness assistant.">
+    <meta property="og:title" content="Quinoa Stuffed Bell Peppers - PlatePilot">
+    <meta property="og:description" content="Colorful bell peppers filled with protein-rich quinoa and vegetables, with nutrition info, comments, and AI-powered wellness assistant.">
+    <meta property="og:image" content="https://images.unsplash.com/photo-1464306076886-c17ce3b3f404">
+    <meta property="og:type" content="article">
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:title" content="Quinoa Stuffed Bell Peppers - PlatePilot">
+    <meta name="twitter:description" content="Colorful bell peppers filled with protein-rich quinoa and vegetables, with nutrition info, comments, and AI-powered wellness assistant.">
+    <meta name="twitter:image" content="https://images.unsplash.com/photo-1464306076886-c17ce3b3f404">
     <script src="https://cdn.tailwindcss.com"></script>
     <script>
         tailwind.config = {
             darkMode: 'class',
-            theme: {
-                extend: {
-                    colors: {
-                        // You can add custom colors here if needed
-                    }
-                }
-            }
+            theme: { extend: { colors: {} } }
         }
     </script>
+    <style>
+        .recipe-image { transition: transform 0.3s; }
+        .recipe-image:hover { transform: scale(1.02); }
+        .floating-ai-btn { position: fixed; bottom: 2rem; right: 2rem; z-index: 50; }
+        .tooltip { position: relative; cursor: pointer; }
+        .tooltip .tooltip-text { visibility: hidden; width: 120px; background: #222; color: #fff; text-align: center; border-radius: 6px; padding: 5px 0; position: absolute; z-index: 100; bottom: 125%; left: 50%; margin-left: -60px; opacity: 0; transition: opacity 0.3s; }
+        .tooltip:hover .tooltip-text { visibility: visible; opacity: 1; }
+        .back-to-top { position: fixed; bottom: 5rem; right: 2rem; z-index: 40; display: none; }
+        .back-to-top.show { display: block; }
+    </style>
 </head>
 <body class="bg-gray-50 dark:bg-gray-900 min-h-screen">
     <!-- Navigation Bar -->
@@ -24,7 +37,7 @@
         <div class="container mx-auto px-4">
             <div class="flex justify-between items-center h-16">
                 <a href="index.html" class="text-2xl font-bold text-green-600 dark:text-green-400 hover:text-green-700 dark:hover:text-green-300 transition-colors">
-                    VitaMeal
+                    PlatePilot
                 </a>
                 <div class="hidden md:flex items-center space-x-8">
                     <a href="index.html" class="text-gray-700 dark:text-gray-300 hover:text-green-600 dark:hover:text-green-400 transition-colors">Home</a>
@@ -101,7 +114,7 @@
 
             <!-- Recipe Image -->
             <div class="mb-12">
-                <img src="https://images.unsplash.com/photo-1464306076886-c17ce3b3f404" alt="Quinoa Stuffed Bell Peppers" class="w-full h-96 object-cover rounded-xl shadow-lg">
+                <img src="https://images.unsplash.com/photo-1464306076886-c17ce3b3f404" alt="Quinoa Stuffed Bell Peppers" class="w-full h-96 object-cover rounded-xl shadow-lg recipe-image">
             </div>
 
             <!-- Recipe Details -->
@@ -249,7 +262,7 @@
         <div class="container mx-auto px-4">
             <div class="grid grid-cols-1 md:grid-cols-4 gap-8">
                 <div>
-                    <h3 class="text-xl font-bold mb-4">VitaMeal</h3>
+                    <h3 class="text-xl font-bold mb-4">PlatePilot</h3>
                     <p class="text-gray-400">Your partner in healthy living.</p>
                 </div>
                 <div>
@@ -265,7 +278,7 @@
                 <div>
                     <h4 class="font-semibold mb-4">Contact</h4>
                     <ul class="space-y-2 text-gray-400">
-                        <li>Email: vitameal.happy@gmail.com</li>
+                        <li>Email: platepilot.happy@gmail.com</li>
                         <li>Phone: +91 9251681626</li>
                     </ul>
                 </div>
@@ -279,7 +292,7 @@
                 </div>
             </div>
             <div class="border-t border-gray-700 mt-8 pt-8 text-center text-gray-400">
-                <p>&copy; 2024 VitaMeal. All rights reserved.</p>
+                <p>&copy; 2024 PlatePilot. All rights reserved.</p>
             </div>
         </div>
     </footer>

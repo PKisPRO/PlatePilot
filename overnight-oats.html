@@ -3,7 +3,16 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Overnight Oats - VitaMeal</title>
+    <title>Overnight Oats - PlatePilot</title>
+    <meta name="description" content="PlatePilot: Overnight Oats - A make-ahead breakfast recipe with nutrition info, comments, and AI-powered wellness assistant.">
+    <meta property="og:title" content="Overnight Oats - PlatePilot">
+    <meta property="og:description" content="A make-ahead breakfast recipe with nutrition info, comments, and AI-powered wellness assistant.">
+    <meta property="og:image" content="https://images.unsplash.com/photo-1517093602195-b40af9261bdb">
+    <meta property="og:type" content="article">
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:title" content="Overnight Oats - PlatePilot">
+    <meta name="twitter:description" content="A make-ahead breakfast recipe with nutrition info, comments, and AI-powered wellness assistant.">
+    <meta name="twitter:image" content="https://images.unsplash.com/photo-1517093602195-b40af9261bdb">
     <script src="https://cdn.tailwindcss.com"></script>
     <script>
         tailwind.config = {
@@ -17,6 +26,16 @@
             }
         }
     </script>
+    <style>
+        .recipe-image { transition: transform 0.3s; }
+        .recipe-image:hover { transform: scale(1.02); }
+        .floating-ai-btn { position: fixed; bottom: 2rem; right: 2rem; z-index: 50; }
+        .tooltip { position: relative; cursor: pointer; }
+        .tooltip .tooltip-text { visibility: hidden; width: 120px; background: #222; color: #fff; text-align: center; border-radius: 6px; padding: 5px 0; position: absolute; z-index: 100; bottom: 125%; left: 50%; margin-left: -60px; opacity: 0; transition: opacity 0.3s; }
+        .tooltip:hover .tooltip-text { visibility: visible; opacity: 1; }
+        .back-to-top { position: fixed; bottom: 5rem; right: 2rem; z-index: 40; display: none; }
+        .back-to-top.show { display: block; }
+    </style>
 </head>
 <body class="bg-gray-50 dark:bg-gray-900 min-h-screen">
     <!-- Navigation Bar -->
@@ -68,7 +87,7 @@
 
             <!-- Recipe Image -->
             <div class="mb-12">
-                <img src="https://images.unsplash.com/photo-1517093602195-b40af9261bdb" alt="Overnight Oats" class="w-full h-96 object-cover rounded-xl shadow-lg">
+                <img src="https://images.unsplash.com/photo-1517093602195-b40af9261bdb" alt="Overnight Oats" class="w-full h-96 object-cover rounded-xl shadow-lg recipe-image">
             </div>
 
             <!-- Recipe Details -->

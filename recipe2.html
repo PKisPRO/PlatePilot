@@ -3,18 +3,35 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Quinoa Buddha Bowl - VitaMeal</title>
+    <title>Quinoa Buddha Bowl - PlatePilot</title>
+    <meta name="description" content="PlatePilot: Quinoa Buddha Bowl - A vibrant, nutritious bowl recipe with nutrition info, comments, and AI-powered wellness assistant.">
+    <meta property="og:title" content="Quinoa Buddha Bowl - PlatePilot">
+    <meta property="og:description" content="A vibrant, nutritious bowl recipe with nutrition info, comments, and AI-powered wellness assistant.">
+    <meta property="og:image" content="https://images.unsplash.com/photo-1512621776951-a57141f2eefd">
+    <meta property="og:type" content="article">
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:title" content="Quinoa Buddha Bowl - PlatePilot">
+    <meta name="twitter:description" content="A vibrant, nutritious bowl recipe with nutrition info, comments, and AI-powered wellness assistant.">
+    <meta name="twitter:image" content="https://images.unsplash.com/photo-1512621776951-a57141f2eefd">
     <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            darkMode: 'class',
+            theme: { extend: { colors: {} } }
+        }
+    </script>
     <style>
-        .recipe-image {
-            transition: transform 0.3s ease-in-out;
-        }
-        .recipe-image:hover {
-            transform: scale(1.02);
-        }
+        .recipe-image { transition: transform 0.3s; }
+        .recipe-image:hover { transform: scale(1.02); }
+        .floating-ai-btn { position: fixed; bottom: 2rem; right: 2rem; z-index: 50; }
+        .tooltip { position: relative; cursor: pointer; }
+        .tooltip .tooltip-text { visibility: hidden; width: 120px; background: #222; color: #fff; text-align: center; border-radius: 6px; padding: 5px 0; position: absolute; z-index: 100; bottom: 125%; left: 50%; margin-left: -60px; opacity: 0; transition: opacity 0.3s; }
+        .tooltip:hover .tooltip-text { visibility: visible; opacity: 1; }
+        .back-to-top { position: fixed; bottom: 5rem; right: 2rem; z-index: 40; display: none; }
+        .back-to-top.show { display: block; }
     </style>
 </head>
-<body class="bg-gray-50 dark:bg-gray-900">
+<body class="bg-gray-50 dark:bg-gray-900 min-h-screen">
     <!-- Navigation Bar -->
     <nav class="bg-white dark:bg-gray-900 shadow p-4 flex justify-between items-center sticky top-0 z-50">
         <div class="text-2xl font-bold text-green-600">VitaMeal</div>
