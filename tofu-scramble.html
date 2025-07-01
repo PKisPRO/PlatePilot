@@ -3,178 +3,246 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Tofu Scramble - VitaMeal</title>
+    <title>Tofu Scramble - PlatePilot</title>
+    <meta name="description" content="PlatePilot: Tofu Scramble - A protein-rich vegan breakfast recipe with nutrition info, comments, and AI-powered wellness assistant.">
+    <meta property="og:title" content="Tofu Scramble - PlatePilot">
+    <meta property="og:description" content="A protein-rich vegan breakfast recipe with nutrition info, comments, and AI-powered wellness assistant.">
+    <meta property="og:image" content="https://images.unsplash.com/photo-1512621776951-a57141f2eefd">
+    <meta property="og:type" content="article">
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:title" content="Tofu Scramble - PlatePilot">
+    <meta name="twitter:description" content="A protein-rich vegan breakfast recipe with nutrition info, comments, and AI-powered wellness assistant.">
+    <meta name="twitter:image" content="https://images.unsplash.com/photo-1512621776951-a57141f2eefd">
     <script src="https://cdn.tailwindcss.com"></script>
     <script>
         tailwind.config = {
             darkMode: 'class',
             theme: {
                 extend: {
-                    colors: {
-                        // You can add custom colors here if needed
-                    }
+                    colors: {}
                 }
             }
         }
     </script>
+    <style>
+        .recipe-image { transition: transform 0.3s; }
+        .recipe-image:hover { transform: scale(1.02); }
+        .floating-ai-btn { position: fixed; bottom: 2rem; right: 2rem; z-index: 50; }
+        .tooltip { position: relative; cursor: pointer; }
+        .tooltip .tooltip-text { visibility: hidden; width: 120px; background: #222; color: #fff; text-align: center; border-radius: 6px; padding: 5px 0; position: absolute; z-index: 100; bottom: 125%; left: 50%; margin-left: -60px; opacity: 0; transition: opacity 0.3s; }
+        .tooltip:hover .tooltip-text { visibility: visible; opacity: 1; }
+        .back-to-top { position: fixed; bottom: 5rem; right: 2rem; z-index: 40; display: none; }
+        .back-to-top.show { display: block; }
+    </style>
 </head>
 <body class="bg-gray-50 dark:bg-gray-900 min-h-screen">
     <!-- Navigation Bar -->
     <nav class="bg-white dark:bg-gray-900 shadow-md sticky top-0 z-50">
         <div class="container mx-auto px-4">
             <div class="flex justify-between items-center h-16">
-                <a href="index.html" class="text-2xl font-bold text-green-600 dark:text-green-400 hover:text-green-700 dark:hover:text-green-300 transition-colors">
-                    VitaMeal
-                </a>
+                <a href="index.html" class="text-2xl font-bold text-green-600 dark:text-green-400 hover:text-green-700 dark:hover:text-green-300 transition-colors">PlatePilot</a>
                 <div class="hidden md:flex items-center space-x-8">
                     <a href="index.html" class="text-gray-700 dark:text-gray-300 hover:text-green-600 dark:hover:text-green-400 transition-colors">Home</a>
                     <a href="recipes.html" class="text-green-600 dark:text-green-400 font-medium">Recipes</a>
-                    <a href="upload-recipe.html" class="text-gray-700 dark:text-gray-300 hover:text-green-600 dark:hover:text-green-400 transition-colors">Share Recipe</a>
                     <a href="games.html" class="text-gray-700 dark:text-gray-300 hover:text-green-600 dark:hover:text-green-400 transition-colors">Games</a>
                     <a href="secret-recipes.html" class="text-gray-700 dark:text-gray-300 hover:text-green-600 dark:hover:text-green-400 transition-colors">Secret Recipes</a>
                     <a href="diet-planner.html" class="text-gray-700 dark:text-gray-300 hover:text-green-600 dark:hover:text-green-400 transition-colors">Diet Planner</a>
-                    <button onclick="toggleDarkMode()" class="p-2 rounded-lg bg-gray-200 dark:bg-gray-700 hover:bg-gray-300 dark:hover:bg-gray-600 transition-colors">
+                    <button onclick="toggleDarkMode()" class="p-2 rounded-lg bg-gray-200 dark:bg-gray-700 hover:bg-gray-300 dark:hover:bg-gray-600 transition-colors" aria-label="Toggle dark mode">
                         <span class="dark:hidden">🌙</span>
                         <span class="hidden dark:inline">☀️</span>
                     </button>
                 </div>
+                <button class="md:hidden p-2 rounded-lg hover:bg-gray-200 dark:hover:bg-gray-700 transition-colors" onclick="toggleMobileMenu()" aria-label="Open mobile menu">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 text-gray-700 dark:text-gray-300" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16" /></svg>
+                </button>
+            </div>
+            <div id="mobileMenu" class="md:hidden hidden pb-4">
+                <div class="flex flex-col space-y-4">
+                    <a href="index.html" class="text-gray-700 dark:text-gray-300 hover:text-green-600 dark:hover:text-green-400 transition-colors">Home</a>
+                    <a href="recipes.html" class="text-green-600 dark:text-green-400 font-medium">Recipes</a>
+                    <a href="games.html" class="text-gray-700 dark:text-gray-300 hover:text-green-600 dark:hover:text-green-400 transition-colors">Games</a>
+                    <a href="secret-recipes.html" class="text-gray-700 dark:text-gray-300 hover:text-green-600 dark:hover:text-green-400 transition-colors">Secret Recipes</a>
+                    <a href="diet-planner.html" class="text-gray-700 dark:text-gray-300 hover:text-green-600 dark:hover:text-green-400 transition-colors">Diet Planner</a>
+                </div>
             </div>
         </div>
     </nav>
-
-    <!-- Recipe Content -->
-    <main class="container mx-auto px-4 py-8">
-        <div class="max-w-4xl mx-auto">
-            <h1 class="text-4xl font-bold text-gray-800 dark:text-white mb-4">Tofu Scramble</h1>
-            <p class="text-xl text-gray-600 dark:text-gray-300 mb-8">A protein-rich vegan alternative to scrambled eggs, packed with vegetables and flavorful spices.</p>
-
-            <!-- Recipe Image -->
-            <div class="mb-8">
-                <img src="https://images.unsplash.com/photo-1512621776951-a57141f2eefd" alt="Tofu Scramble" class="w-full h-96 object-cover rounded-lg shadow-lg">
-            </div>
-
-            <!-- Recipe Info -->
-            <div class="grid grid-cols-1 md:grid-cols-3 gap-4 mb-8">
-                <div class="bg-white dark:bg-gray-800 p-4 rounded-lg shadow">
-                    <h3 class="font-semibold text-gray-800 dark:text-white">Prep Time</h3>
-                    <p class="text-gray-600 dark:text-gray-300">10 minutes</p>
+    <!-- Main Content -->
+    <div class="container mx-auto px-4 py-8">
+        <a href="recipes.html" class="inline-flex items-center text-gray-600 dark:text-gray-300 hover:text-green-500 dark:hover:text-green-400 mb-6 no-print" aria-label="Back to Recipes">
+            <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 mr-2" viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M9.707 14.707a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414l4-4a1 1 0 011.414 1.414L7.414 9H15a1 1 0 110 2H7.414l2.293 2.293a1 1 0 010 1.414z" clip-rule="evenodd" /></svg>
+            Back to Recipes
+        </a>
+        <div class="bg-white dark:bg-gray-800 rounded-xl shadow-lg overflow-hidden">
+            <div class="p-6">
+                <h1 class="text-3xl font-bold text-gray-800 dark:text-white mb-4">Tofu Scramble</h1>
+                <div class="flex items-center space-x-4 mb-6">
+                    <span class="inline-block bg-green-100 text-green-800 text-sm px-3 py-1 rounded-full">Vegan</span>
+                    <span class="text-gray-600 dark:text-gray-300">Prep Time: 10 mins</span>
+                    <span class="text-gray-600 dark:text-gray-300">Cook Time: 15 mins</span>
+                    <span class="text-gray-600 dark:text-gray-300">Servings: 2</span>
                 </div>
-                <div class="bg-white dark:bg-gray-800 p-4 rounded-lg shadow">
-                    <h3 class="font-semibold text-gray-800 dark:text-white">Cook Time</h3>
-                    <p class="text-gray-600 dark:text-gray-300">15 minutes</p>
+                <div class="flex flex-wrap gap-4 mb-6">
+                    <button onclick="toggleLike()" class="tooltip flex items-center space-x-2 px-4 py-2 bg-green-500 text-white rounded-lg hover:bg-green-600 transition-colors" aria-label="Like this recipe">
+                        <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M3.172 5.172a4 4 0 015.656 0L10 6.343l1.172-1.171a4 4 0 115.656 5.656L10 17.657l-6.828-6.829a4 4 0 010-5.656z" clip-rule="evenodd" /></svg>
+                        <span id="likeCount">0</span> Likes
+                        <span class="tooltip-text">Like this recipe</span>
+                    </button>
+                    <button onclick="toggleComments()" class="tooltip flex items-center space-x-2 px-4 py-2 bg-blue-500 text-white rounded-lg hover:bg-blue-600 transition-colors" aria-label="Show comments">
+                        <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M18 10c0 3.866-3.582 7-8 7a8.841 8.841 0 01-4.083-.98L2 17l1.338-3.123C2.493 15.042 3 13.574 3 12c0-3.866 3.582-7 8-7s8 3.134 8 7zM7 9H5v2h2V9zm8 0h-2v2h2V9zM9 9h2v2H9V9z" clip-rule="evenodd" /></svg>
+                        <span id="commentCount">0</span> Comments
+                        <span class="tooltip-text">View and add comments</span>
+                    </button>
+                    <button onclick="window.print()" class="tooltip flex items-center space-x-2 px-4 py-2 bg-gray-500 text-white rounded-lg hover:bg-gray-600 transition-colors" aria-label="Print this recipe">
+                        <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M5 4v3H4a2 2 0 00-2 2v3a2 2 0 002 2h1v2a2 2 0 002 2h6a2 2 0 002-2v-2h1a2 2 0 002-2V9a2 2 0 00-2-2h-1V4a2 2 0 00-2-2H7a2 2 0 00-2 2zm8 0H7v3h6V4zm0 8H7v4h6v-4z" clip-rule="evenodd" /></svg>
+                        Print
+                        <span class="tooltip-text">Print this recipe</span>
+                    </button>
+                    <button onclick="openVideoModal()" class="tooltip flex items-center space-x-2 px-4 py-2 bg-red-500 text-white rounded-lg hover:bg-red-600 transition-colors" aria-label="Watch recipe video">
+                        <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zM9.555 7.168A1 1 0 008 8v4a1 1 0 001.555.832l3-2a1 1 0 000-1.664l-3-2z" clip-rule="evenodd" /></svg>
+                        Video
+                        <span class="tooltip-text">Watch recipe video</span>
+                    </button>
+                    <button onclick="shareRecipe()" class="tooltip flex items-center space-x-2 px-4 py-2 bg-yellow-500 text-white rounded-lg hover:bg-yellow-600 transition-colors" aria-label="Share this recipe">
+                        <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" viewBox="0 0 20 20" fill="currentColor"><path d="M15 8a3 3 0 10-2.83-2H8.83A3 3 0 106 8c0 .11.01.22.03.33l5.1 2.55A3 3 0 1015 8z" /></svg>
+                        Share
+                        <span class="tooltip-text">Share this recipe</span>
+                    </button>
                 </div>
-                <div class="bg-white dark:bg-gray-800 p-4 rounded-lg shadow">
-                    <h3 class="font-semibold text-gray-800 dark:text-white">Servings</h3>
-                    <p class="text-gray-600 dark:text-gray-300">2 people</p>
+            </div>
+            <div class="relative">
+                <img src="https://images.unsplash.com/photo-1512621776951-a57141f2eefd" alt="Tofu Scramble" class="w-full h-96 object-cover recipe-image" loading="lazy">
+            </div>
+            <div class="p-6">
+                <div class="mb-8">
+                    <h2 class="text-2xl font-bold text-gray-800 dark:text-white mb-4">Ingredients</h2>
+                    <ul class="list-disc list-inside text-gray-600 dark:text-gray-300 space-y-2">
+                        <li>1 block (14 oz) firm tofu, drained and crumbled</li>
+                        <li>1 onion, diced</li>
+                        <li>1 bell pepper, diced</li>
+                        <li>2 cups spinach, chopped</li>
+                        <li>2 cloves garlic, minced</li>
+                        <li>1 tsp turmeric powder</li>
+                        <li>1/2 tsp cumin powder</li>
+                        <li>1/2 tsp paprika</li>
+                        <li>2 tbsp nutritional yeast</li>
+                        <li>2 tbsp olive oil</li>
+                        <li>Salt and pepper to taste</li>
+                        <li>Fresh herbs for garnish (optional)</li>
+                    </ul>
                 </div>
-            </div>
-
-            <!-- Description -->
-            <div class="bg-white dark:bg-gray-800 p-6 rounded-lg shadow-lg mb-8">
-                <h2 class="text-2xl font-bold text-gray-800 dark:text-white mb-4">Description</h2>
-                <p class="text-gray-600 dark:text-gray-300">
-                    This Tofu Scramble is a delicious and nutritious vegan breakfast option. Made with crumbled tofu, sautéed vegetables, and aromatic spices, it's a satisfying way to start your day with plant-based protein.
-                </p>
-                <div class="mt-4 flex flex-wrap gap-2">
-                    <span class="px-3 py-1 bg-green-100 text-green-800 rounded-full text-sm">Vegetarian</span>
-                    <span class="px-3 py-1 bg-green-100 text-green-800 rounded-full text-sm">Vegan</span>
-                    <span class="px-3 py-1 bg-green-100 text-green-800 rounded-full text-sm">Gluten-Free</span>
-                    <span class="px-3 py-1 bg-green-100 text-green-800 rounded-full text-sm">High Protein</span>
+                <div class="mb-8">
+                    <h2 class="text-2xl font-bold text-gray-800 dark:text-white mb-4">Instructions</h2>
+                    <ol class="list-decimal list-inside text-gray-600 dark:text-gray-300 space-y-2">
+                        <li>Press and drain the tofu to remove excess water.</li>
+                        <li>Heat olive oil in a large skillet over medium heat.</li>
+                        <li>Add onions and cook until translucent, about 3-4 minutes.</li>
+                        <li>Add garlic and cook for 30 seconds until fragrant.</li>
+                        <li>Add bell peppers and cook for 2-3 minutes.</li>
+                        <li>Crumble the tofu into the skillet and add turmeric, cumin, and paprika.</li>
+                        <li>Cook for 5-7 minutes, stirring occasionally.</li>
+                        <li>Add spinach and cook until wilted.</li>
+                        <li>Stir in nutritional yeast and season with salt and pepper.</li>
+                        <li>Garnish with fresh herbs if desired and serve hot.</li>
+                    </ol>
                 </div>
-            </div>
-
-            <!-- Ingredients -->
-            <div class="bg-white dark:bg-gray-800 p-6 rounded-lg shadow-lg mb-8">
-                <h2 class="text-2xl font-bold text-gray-800 dark:text-white mb-4">Ingredients</h2>
-                <ul class="list-disc list-inside text-gray-600 dark:text-gray-300 space-y-2">
-                    <li>1 block (14 oz) firm tofu, drained and crumbled</li>
-                    <li>1 onion, diced</li>
-                    <li>1 bell pepper, diced</li>
-                    <li>2 cups spinach, chopped</li>
-                    <li>2 cloves garlic, minced</li>
-                    <li>1 tsp turmeric powder</li>
-                    <li>1/2 tsp cumin powder</li>
-                    <li>1/2 tsp paprika</li>
-                    <li>2 tbsp nutritional yeast</li>
-                    <li>2 tbsp olive oil</li>
-                    <li>Salt and pepper to taste</li>
-                    <li>Fresh herbs for garnish (optional)</li>
-                </ul>
-            </div>
-
-            <!-- Instructions -->
-            <div class="bg-white dark:bg-gray-800 p-6 rounded-lg shadow-lg mb-8">
-                <h2 class="text-2xl font-bold text-gray-800 dark:text-white mb-4">Instructions</h2>
-                <ol class="list-decimal list-inside text-gray-600 dark:text-gray-300 space-y-2">
-                    <li>Press and drain the tofu to remove excess water.</li>
-                    <li>Heat olive oil in a large skillet over medium heat.</li>
-                    <li>Add onions and cook until translucent, about 3-4 minutes.</li>
-                    <li>Add garlic and cook for 30 seconds until fragrant.</li>
-                    <li>Add bell peppers and cook for 2-3 minutes.</li>
-                    <li>Crumble the tofu into the skillet and add turmeric, cumin, and paprika.</li>
-                    <li>Cook for 5-7 minutes, stirring occasionally.</li>
-                    <li>Add spinach and cook until wilted.</li>
-                    <li>Stir in nutritional yeast and season with salt and pepper.</li>
-                    <li>Garnish with fresh herbs if desired and serve hot.</li>
-                </ol>
-            </div>
-
-            <!-- Nutritional Information -->
-            <div class="bg-white dark:bg-gray-800 p-6 rounded-lg shadow-lg mb-8">
-                <h2 class="text-2xl font-bold text-gray-800 dark:text-white mb-4">Nutritional Information</h2>
-                <div class="grid grid-cols-2 md:grid-cols-4 gap-4">
-                    <div class="text-center">
-                        <p class="text-gray-600 dark:text-gray-300">Calories</p>
-                        <p class="text-xl font-semibold text-gray-800 dark:text-white">280</p>
+                <div class="mb-8">
+                    <h2 class="text-2xl font-bold text-gray-800 dark:text-white mb-4">Nutritional Information</h2>
+                    <div class="grid grid-cols-2 md:grid-cols-4 gap-4">
+                        <div class="text-center">
+                            <p class="text-gray-600 dark:text-gray-300">Calories</p>
+                            <p class="text-xl font-semibold text-gray-800 dark:text-white">280</p>
+                        </div>
+                        <div class="text-center">
+                            <p class="text-gray-600 dark:text-gray-300">Protein</p>
+                            <p class="text-xl font-semibold text-gray-800 dark:text-white">20g</p>
+                        </div>
+                        <div class="text-center">
+                            <p class="text-gray-600 dark:text-gray-300">Carbs</p>
+                            <p class="text-xl font-semibold text-gray-800 dark:text-white">15g</p>
+                        </div>
+                        <div class="text-center">
+                            <p class="text-gray-600 dark:text-gray-300">Fat</p>
+                            <p class="text-xl font-semibold text-gray-800 dark:text-white">18g</p>
+                        </div>
                     </div>
-                    <div class="text-center">
-                        <p class="text-gray-600 dark:text-gray-300">Protein</p>
-                        <p class="text-xl font-semibold text-gray-800 dark:text-white">20g</p>
+                </div>
+                <div class="mb-8">
+                    <h2 class="text-2xl font-bold text-gray-800 dark:text-white mb-4">Tips for Perfect Tofu Scramble</h2>
+                    <ul class="list-disc list-inside text-gray-600 dark:text-gray-300 space-y-2">
+                        <li>Press tofu well to remove excess water for better texture.</li>
+                        <li>Use firm or extra-firm tofu for the best results.</li>
+                        <li>Don't overcook the vegetables to maintain their crunch.</li>
+                        <li>Add nutritional yeast for a cheesy flavor.</li>
+                        <li>Serve with toast or wrap in a tortilla for a complete meal.</li>
+                    </ul>
+                </div>
+                <div class="flex items-center space-x-4 mb-4">
+                    <span class="text-gray-500 dark:text-gray-400 text-sm">Recipe by <span class="font-semibold">PlatePilot Team</span></span>
+                    <button onclick="shareRecipe()" class="tooltip px-3 py-1 bg-yellow-500 text-white rounded-full hover:bg-yellow-600 transition-colors" aria-label="Share this recipe">
+                        <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 inline" viewBox="0 0 20 20" fill="currentColor"><path d="M15 8a3 3 0 10-2.83-2H8.83A3 3 0 106 8c0 .11.01.22.03.33l5.1 2.55A3 3 0 1015 8z" /></svg>
+                        <span class="tooltip-text">Share this recipe</span>
+                    </button>
+                </div>
+                <!-- Comments Section -->
+                <div id="commentsSection" class="mt-8">
+                    <h2 class="text-2xl font-bold text-gray-800 dark:text-white mb-4">Comments</h2>
+                    <div class="mb-4">
+                        <textarea id="commentInput" class="w-full p-3 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-700 text-gray-800 dark:text-white" rows="3" placeholder="Share your thoughts..." aria-label="Add a comment"></textarea>
+                        <button onclick="addComment()" class="mt-2 px-4 py-2 bg-green-500 text-white rounded-lg hover:bg-green-600 transition-colors">Post Comment</button>
                     </div>
-                    <div class="text-center">
-                        <p class="text-gray-600 dark:text-gray-300">Carbs</p>
-                        <p class="text-xl font-semibold text-gray-800 dark:text-white">15g</p>
-                    </div>
-                    <div class="text-center">
-                        <p class="text-gray-600 dark:text-gray-300">Fat</p>
-                        <p class="text-xl font-semibold text-gray-800 dark:text-white">18g</p>
-                    </div>
+                    <div id="commentsList" class="space-y-4"></div>
                 </div>
             </div>
-
-            <!-- Tips -->
-            <div class="bg-white dark:bg-gray-800 p-6 rounded-lg shadow-lg mb-8">
-                <h2 class="text-2xl font-bold text-gray-800 dark:text-white mb-4">Tips for Perfect Tofu Scramble</h2>
-                <ul class="list-disc list-inside text-gray-600 dark:text-gray-300 space-y-2">
-                    <li>Press tofu well to remove excess water for better texture.</li>
-                    <li>Use firm or extra-firm tofu for the best results.</li>
-                    <li>Don't overcook the vegetables to maintain their crunch.</li>
-                    <li>Add nutritional yeast for a cheesy flavor.</li>
-                    <li>Serve with toast or wrap in a tortilla for a complete meal.</li>
-                </ul>
-            </div>
-
-            <!-- Comments Section -->
-            <div class="bg-white dark:bg-gray-800 p-6 rounded-lg shadow-lg">
-                <h2 class="text-2xl font-bold text-gray-800 dark:text-white mb-4">Comments</h2>
-                <div id="comments" class="space-y-4 mb-6">
-                    <!-- Comments will be loaded here -->
+            <!-- Video Modal -->
+            <div id="videoModal" class="fixed inset-0 bg-black bg-opacity-50 hidden items-center justify-center z-50">
+                <div class="bg-white dark:bg-gray-800 p-4 rounded-lg w-11/12 max-w-4xl">
+                    <div class="flex justify-between items-center mb-4">
+                        <h3 class="text-xl font-bold text-gray-800 dark:text-white">Recipe Video</h3>
+                        <button onclick="closeVideoModal()" class="text-gray-500 hover:text-gray-700 dark:text-gray-400 dark:hover:text-gray-200" aria-label="Close video modal">
+                            <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" /></svg>
+                        </button>
+                    </div>
+                    <div class="aspect-w-16 aspect-h-9">
+                        <iframe id="recipeVideo" class="w-full h-96" src="https://www.youtube.com/embed/your-video-id" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+                    </div>
                 </div>
-                <form id="commentForm" class="space-y-4">
-                    <textarea id="commentText" class="w-full p-3 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-700 text-gray-700 dark:text-gray-300" rows="3" placeholder="Share your thoughts..."></textarea>
-                    <button type="submit" class="bg-green-500 text-white px-6 py-2 rounded-lg hover:bg-green-600 transition-colors">Post Comment</button>
-                </form>
             </div>
         </div>
-    </main>
-
+    </div>
+    <!-- Floating AI Assistant Button -->
+    <button class="floating-ai-btn bg-green-600 hover:bg-green-700 text-white p-4 rounded-full shadow-lg transition-colors" onclick="openAIAssistant()" aria-label="Open AI Assistant">
+        <svg xmlns="http://www.w3.org/2000/svg" class="h-7 w-7" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4" /></svg>
+    </button>
+    <!-- AI Assistant Modal -->
+    <div id="aiAssistantModal" class="fixed inset-0 bg-black bg-opacity-50 hidden items-center justify-center z-50">
+        <div class="bg-white dark:bg-gray-900 p-6 rounded-lg w-11/12 max-w-lg flex flex-col">
+            <div class="flex justify-between items-center mb-4">
+                <h3 class="text-xl font-bold text-gray-800 dark:text-white">PlatePilot AI Assistant</h3>
+                <button onclick="closeAIAssistant()" class="text-gray-500 hover:text-gray-700 dark:text-gray-400 dark:hover:text-gray-200" aria-label="Close AI Assistant">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" /></svg>
+                </button>
+            </div>
+            <div class="flex-1 overflow-y-auto mb-4" id="aiChatHistory">
+                <div class="text-gray-500 text-sm mb-2">How can I help you with this recipe or your wellness journey?</div>
+            </div>
+            <form onsubmit="sendAIMessage(event)" class="flex">
+                <input id="aiUserInput" type="text" class="flex-1 p-2 border border-gray-300 dark:border-gray-700 rounded-l-lg bg-white dark:bg-gray-800 text-gray-800 dark:text-white" placeholder="Ask me anything..." aria-label="Ask AI Assistant">
+                <button type="submit" class="bg-green-600 hover:bg-green-700 text-white px-4 py-2 rounded-r-lg">Send</button>
+            </form>
+        </div>
+    </div>
+    <!-- Back to Top Button -->
+    <button id="backToTopBtn" class="back-to-top bg-green-600 hover:bg-green-700 text-white p-3 rounded-full shadow-lg transition-colors" onclick="scrollToTop()" aria-label="Back to top">
+        <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 15l7-7 7 7" /></svg>
+    </button>
     <!-- Footer -->
     <footer class="bg-gray-800 text-white py-8 mt-12">
         <div class="container mx-auto px-4">
             <div class="grid grid-cols-1 md:grid-cols-4 gap-8">
                 <div>
-                    <h3 class="text-xl font-bold mb-4">VitaMeal</h3>
-                    <p class="text-gray-400">Your partner in healthy living.</p>
+                    <h3 class="text-xl font-bold mb-4">PlatePilot</h3>
+                    <p class="text-gray-400">Pilot your plate. Powered by AI. Fueled by wellness.</p>
                 </div>
                 <div>
                     <h4 class="font-semibold mb-4">Quick Links</h4>
@@ -189,7 +257,7 @@
                 <div>
                     <h4 class="font-semibold mb-4">Contact</h4>
                     <ul class="space-y-2 text-gray-400">
-                        <li>Email: vitameal.happy@gmail.com</li>
+                        <li>Email: platepilot.ai@gmail.com</li>
                         <li>Phone: +91 9251681626</li>
                     </ul>
                 </div>
@@ -202,125 +270,104 @@
                     </div>
                 </div>
             </div>
-            <div class="border-t border-gray-700 mt-8 pt-8 text-center text-gray-400">
-                <p>&copy; 2024 VitaMeal. All rights reserved.</p>
-            </div>
         </div>
     </footer>
-
-    <!-- Video Modal -->
-    <div id="videoModal" class="fixed inset-0 bg-black bg-opacity-50 hidden items-center justify-center z-50">
-        <div class="bg-white dark:bg-gray-800 p-4 rounded-lg w-11/12 max-w-4xl">
-            <div class="flex justify-between items-center mb-4">
-                <h3 class="text-xl font-bold text-gray-800 dark:text-white">Recipe Video</h3>
-                <button onclick="closeVideoModal()" class="text-gray-500 hover:text-gray-700 dark:text-gray-400 dark:hover:text-gray-200">
-                    <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
-                    </svg>
-                </button>
-            </div>
-            <div class="aspect-w-16 aspect-h-9">
-                <iframe id="recipeVideo" class="w-full h-96" src="" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
-            </div>
-        </div>
-    </div>
-
     <script>
-        // Set base path for GitHub Pages
-        const basePath = '/PlatePilot';
-        
-        // Update navigation links
-        document.addEventListener('DOMContentLoaded', function() {
-            document.querySelectorAll('a[href]').forEach(link => {
-                const href = link.getAttribute('href');
-                if (href.startsWith('index.html') || 
-                    href.startsWith('recipes.html') || 
-                    href.startsWith('upload-recipe.html') || 
-                    href.startsWith('games.html') || 
-                    href.startsWith('secret-recipes.html') || 
-                    href.startsWith('diet-planner.html')) {
-                    if (!href.includes(basePath)) {
-                        link.href = basePath + '/' + href;
-                    }
-                }
-            });
-            
-            // Initialize dark mode
-            if (localStorage.getItem('darkMode') === 'true') {
-                document.documentElement.classList.add('dark');
+        // Dark mode
+        if (localStorage.getItem('darkMode') === 'true' || (!localStorage.getItem('darkMode') && window.matchMedia('(prefers-color-scheme: dark)').matches)) {
+            document.documentElement.classList.add('dark');
+        }
+        function toggleDarkMode() {
+            document.documentElement.classList.toggle('dark');
+            localStorage.setItem('darkMode', document.documentElement.classList.contains('dark'));
+        }
+        function toggleMobileMenu() {
+            const menu = document.getElementById('mobileMenu');
+            menu.classList.toggle('hidden');
+        }
+        // Like functionality
+        let likes = parseInt(localStorage.getItem('tofu_scramble_likes') || '0');
+        document.getElementById('likeCount').textContent = likes;
+        function toggleLike() {
+            likes = (likes + 1) % 2;
+            localStorage.setItem('tofu_scramble_likes', likes.toString());
+            document.getElementById('likeCount').textContent = likes;
+        }
+        // Comments functionality
+        let comments = JSON.parse(localStorage.getItem('tofu_scramble_comments') || '[]');
+        const commentsList = document.getElementById('commentsList');
+        const commentInput = document.getElementById('commentInput');
+        function displayComments() {
+            commentsList.innerHTML = comments.map(comment => `<div class='bg-gray-100 dark:bg-gray-700 p-4 rounded-lg'><p class='text-gray-800 dark:text-white'>${comment}</p></div>`).join('');
+            document.getElementById('commentCount').textContent = comments.length;
+        }
+        function addComment() {
+            const value = commentInput.value.trim();
+            if (value) {
+                comments.push(value);
+                localStorage.setItem('tofu_scramble_comments', JSON.stringify(comments));
+                commentInput.value = '';
+                displayComments();
             }
-            
-            // Toggle dark mode
-            window.toggleDarkMode = function() {
-                if (document.documentElement.classList.contains('dark')) {
-                    document.documentElement.classList.remove('dark');
-                    localStorage.setItem('darkMode', 'false');
-                } else {
-                    document.documentElement.classList.add('dark');
-                    localStorage.setItem('darkMode', 'true');
-                }
-            };
-            
-            // Mobile menu toggle
-            window.toggleMobileMenu = function() {
-                const mobileMenu = document.getElementById('mobileMenu');
-                mobileMenu.classList.toggle('hidden');
-            };
-
-            // Comments functionality
-            const commentForm = document.getElementById('commentForm');
-            const commentsContainer = document.getElementById('comments');
-            
-            // Load comments
-            function loadComments() {
-                const comments = JSON.parse(localStorage.getItem('tofu-scramble-comments')) || [];
-                commentsContainer.innerHTML = comments.map(comment => `
-                    <div class="bg-gray-50 dark:bg-gray-700 p-4 rounded-lg">
-                        <p class="text-gray-600 dark:text-gray-300">${comment}</p>
-                    </div>
-                `).join('');
-            }
-            
-            // Save comment
-            commentForm.addEventListener('submit', function(e) {
-                e.preventDefault();
-                const commentText = document.getElementById('commentText').value.trim();
-                if (commentText) {
-                    const comments = JSON.parse(localStorage.getItem('tofu-scramble-comments')) || [];
-                    comments.push(commentText);
-                    localStorage.setItem('tofu-scramble-comments', JSON.stringify(comments));
-                    document.getElementById('commentText').value = '';
-                    loadComments();
-                }
-            });
-            
-            // Initial load of comments
-            loadComments();
-        });
-
-        // Video modal functionality
+        }
+        function toggleComments() {
+            const section = document.getElementById('commentsSection');
+            section.classList.toggle('hidden');
+        }
+        displayComments();
+        // Video modal
         function openVideoModal() {
-            const modal = document.getElementById('videoModal');
-            const video = document.getElementById('recipeVideo');
-            video.src = 'https://www.youtube.com/embed/your-video-id'; // Replace with actual video ID
-            modal.classList.remove('hidden');
-            modal.classList.add('flex');
+            document.getElementById('videoModal').classList.remove('hidden');
+            document.getElementById('videoModal').classList.add('flex');
         }
-
         function closeVideoModal() {
-            const modal = document.getElementById('videoModal');
-            const video = document.getElementById('recipeVideo');
-            video.src = '';
-            modal.classList.add('hidden');
-            modal.classList.remove('flex');
+            document.getElementById('videoModal').classList.add('hidden');
+            document.getElementById('videoModal').classList.remove('flex');
         }
-
-        // Close modal when clicking outside
-        document.getElementById('videoModal').addEventListener('click', function(e) {
-            if (e.target === this) {
-                closeVideoModal();
+        // Share functionality
+        function shareRecipe() {
+            if (navigator.share) {
+                navigator.share({ title: 'Tofu Scramble - PlatePilot', url: window.location.href });
+            } else {
+                navigator.clipboard.writeText(window.location.href);
+                alert('Link copied to clipboard!');
             }
-        });
+        }
+        // AI Assistant
+        function openAIAssistant() {
+            document.getElementById('aiAssistantModal').classList.remove('hidden');
+            document.getElementById('aiAssistantModal').classList.add('flex');
+        }
+        function closeAIAssistant() {
+            document.getElementById('aiAssistantModal').classList.add('hidden');
+            document.getElementById('aiAssistantModal').classList.remove('flex');
+        }
+        async function sendAIMessage(event) {
+            event.preventDefault();
+            const input = document.getElementById('aiUserInput');
+            const chat = document.getElementById('aiChatHistory');
+            const userMsg = input.value.trim();
+            if (!userMsg) return;
+            chat.innerHTML += `<div class='mb-2 text-right'><span class='inline-block bg-green-100 text-green-800 px-3 py-1 rounded-full'>${userMsg}</span></div>`;
+            input.value = '';
+            // Simulate AI response (replace with real API call)
+            setTimeout(() => {
+                chat.innerHTML += `<div class='mb-2 text-left'><span class='inline-block bg-gray-100 text-gray-800 px-3 py-1 rounded-full'>I'm here to help! (AI response placeholder)</span></div>`;
+                chat.scrollTop = chat.scrollHeight;
+            }, 800);
+        }
+        // Back to Top
+        const backToTopBtn = document.getElementById('backToTopBtn');
+        window.onscroll = function() {
+            if (document.body.scrollTop > 300 || document.documentElement.scrollTop > 300) {
+                backToTopBtn.classList.add('show');
+            } else {
+                backToTopBtn.classList.remove('show');
+            }
+        };
+        function scrollToTop() {
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+        }
     </script>
 </body>
 </html> 
