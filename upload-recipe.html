@@ -313,92 +313,70 @@
                 return;
             }
             
+            // Add ingredient field
+            function addIngredient() {
+                const list = document.getElementById('ingredientsList');
+                const div = document.createElement('div');
+                div.className = 'flex gap-2';
+                div.innerHTML = `<input type="text" name="ingredients[]" required class="flex-1 rounded-md border-gray-300 shadow-sm focus:border-green-500 focus:ring-green-500 dark:bg-gray-700 dark:border-gray-600 dark:text-white" placeholder="Enter ingredient"><button type="button" onclick="removeIngredient(this)" class="text-red-500 hover:text-red-700"><svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" /></svg></button>`;
+                list.appendChild(div);
+            }
+            function removeIngredient(btn) {
+                btn.parentElement.remove();
+            }
+            // Add instruction field
+            function addInstruction() {
+                const list = document.getElementById('instructionsList');
+                const div = document.createElement('div');
+                div.className = 'flex gap-2';
+                div.innerHTML = `<textarea name="instructions[]" required rows="2" class="flex-1 rounded-md border-gray-300 shadow-sm focus:border-green-500 focus:ring-green-500 dark:bg-gray-700 dark:border-gray-600 dark:text-white" placeholder="Enter instruction step"></textarea><button type="button" onclick="removeInstruction(this)" class="text-red-500 hover:text-red-700"><svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" /></svg></button>`;
+                list.appendChild(div);
+            }
+            function removeInstruction(btn) {
+                btn.parentElement.remove();
+            }
+
             // Handle form submission
             const form = document.getElementById('recipeForm');
             form.addEventListener('submit', function(e) {
                 e.preventDefault();
-                
-                // Get form data
-                const formData = new FormData(form);
-                const recipe = {
-                    name: formData.get('name'),
-                    description: formData.get('description'),
-                    prepTime: formData.get('prepTime'),
-                    cookTime: formData.get('cookTime'),
-                    servings: formData.get('servings'),
-                    ingredients: formData.get('ingredients').split('\n').filter(i => i.trim()),
-                    instructions: formData.get('instructions').split('\n').filter(i => i.trim()),
-                    nutrition: {
-                        calories: formData.get('calories'),
-                        protein: formData.get('protein'),
-                        carbs: formData.get('carbs'),
-                        fat: formData.get('fat')
-                    },
-                    image: formData.get('image'),
-                    author: user.name,
-                    date: new Date().toISOString()
-                };
-                
-                // Save recipe
-                const recipes = JSON.parse(localStorage.getItem('recipes')) || [];
-                recipes.push(recipe);
-                localStorage.setItem('recipes', JSON.stringify(recipes));
-                
-                // Redirect to recipes page
+                // Gather form data
+                const form = e.target;
+                const name = form.recipeName.value.trim();
+                const description = form.recipeDescription.value.trim();
+                const prepTime = form.prepTime.value;
+                const cookTime = form.cookTime.value;
+                const servings = form.servings.value;
+                const ingredients = Array.from(form.querySelectorAll('input[name="ingredients[]"]')).map(i => i.value.trim()).filter(Boolean);
+                const instructions = Array.from(form.querySelectorAll('textarea[name="instructions[]"]')).map(i => i.value.trim()).filter(Boolean);
+                const calories = form.calories.value;
+                const protein = form.protein.value;
+                const carbs = form.carbs.value;
+                const fiber = form.fiber.value;
+                // For simplicity, we'll skip image/video upload and just store the name
+                // Save to localStorage
+                const userRecipes = JSON.parse(localStorage.getItem('userRecipes') || '[]');
+                userRecipes.push({
+                    name,
+                    description,
+                    prepTime,
+                    cookTime,
+                    servings,
+                    ingredients,
+                    instructions,
+                    calories,
+                    protein,
+                    carbs,
+                    fiber,
+                    createdAt: new Date().toISOString()
+                });
+                localStorage.setItem('userRecipes', JSON.stringify(userRecipes));
+                // Show success message
+                alert('Recipe submitted successfully!');
+                // Optionally redirect to recipes page
                 window.location.href = basePath + '/recipes.html';
             });
         });
-        
-        function addIngredient() {
-            const ingredientsList = document.getElementById('ingredientsList');
-            const newIngredient = document.createElement('div');
-            newIngredient.className = 'flex gap-2';
-            newIngredient.innerHTML = `
-                <input type="text" name="ingredients[]" required
-                    class="flex-1 rounded-md border-gray-300 shadow-sm focus:border-green-500 focus:ring-green-500 dark:bg-gray-700 dark:border-gray-600 dark:text-white"
-                    placeholder="Enter ingredient">
-                <button type="button" onclick="removeIngredient(this)" class="text-red-500 hover:text-red-700">
-                    <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
-                    </svg>
-                </button>
-            `;
-            ingredientsList.appendChild(newIngredient);
-        }
-        
-        function removeIngredient(button) {
-            button.parentElement.remove();
-        }
-        
-        function addInstruction() {
-            const instructionsList = document.getElementById('instructionsList');
-            const newInstruction = document.createElement('div');
-            newInstruction.className = 'flex gap-2';
-            newInstruction.innerHTML = `
-                <textarea name="instructions[]" required rows="2"
-                    class="flex-1 rounded-md border-gray-300 shadow-sm focus:border-green-500 focus:ring-green-500 dark:bg-gray-700 dark:border-gray-600 dark:text-white"
-                    placeholder="Enter instruction step"></textarea>
-                <button type="button" onclick="removeInstruction(this)" class="text-red-500 hover:text-red-700">
-                    <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
-                    </svg>
-                </button>
-            `;
-            instructionsList.appendChild(newInstruction);
-        }
-        
-        function removeInstruction(button) {
-            button.parentElement.remove();
-        }
-
-        function openAIAssistant() {
-            document.getElementById('aiAssistantModal').classList.remove('hidden');
-            document.getElementById('aiAssistantModal').classList.add('flex');
-        }
-        function closeAIAssistant() {
-            document.getElementById('aiAssistantModal').classList.add('hidden');
-            document.getElementById('aiAssistantModal').classList.remove('flex');
-        }
     </script>
 </body>
 </html> 
