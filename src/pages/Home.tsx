@@ -7,7 +7,7 @@ const Home: React.FC = () => {
       {/* Hero Section */}
       <div className="text-center py-16 px-4 sm:px-6 lg:px-8">
         <h1 className="text-4xl sm:text-5xl md:text-6xl font-bold text-gray-900 dark:text-white mb-6">
-          Welcome to <span className="text-green-600 dark:text-green-400">VitaMeal</span>
+          Welcome to <span className="text-green-600 dark:text-green-400">PlatePilot</span>
         </h1>
         <p className="text-xl text-gray-600 dark:text-gray-300 max-w-3xl mx-auto mb-8">
           Your ultimate destination for healthy recipes, interactive games, and personalized diet planning.

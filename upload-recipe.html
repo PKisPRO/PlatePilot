@@ -355,8 +355,8 @@
                 const fiber = form.fiber.value;
                 // For simplicity, we'll skip image/video upload and just store the name
                 // Save to localStorage
-                const userRecipes = JSON.parse(localStorage.getItem('userRecipes') || '[]');
-                userRecipes.push({
+                const recipes = JSON.parse(localStorage.getItem('recipes') || '[]');
+                recipes.push({
                     name,
                     description,
                     prepTime,
@@ -370,7 +370,7 @@
                     fiber,
                     createdAt: new Date().toISOString()
                 });
-                localStorage.setItem('userRecipes', JSON.stringify(userRecipes));
+                localStorage.setItem('recipes', JSON.stringify(recipes));
                 // Show success message
                 alert('Recipe submitted successfully!');
                 // Optionally redirect to recipes page
