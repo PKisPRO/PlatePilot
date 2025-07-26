@@ -26,6 +26,11 @@
             }
         }
     </script>
+    <!-- Language System -->
+    <script src="translations.js"></script>
+    <script src="translations-extended.js"></script>
+    <script src="translations-more.js"></script>
+    <script src="language-selector.js"></script>
     <style>
         .recipe-image { transition: transform 0.3s; }
         .recipe-image:hover { transform: scale(1.02); }
@@ -46,11 +51,12 @@
                     PlatePilot
                 </a>
                 <div class="hidden md:flex items-center space-x-8">
-                    <a href="index.html" class="text-gray-700 dark:text-gray-300 hover:text-green-600 dark:hover:text-green-400 transition-colors">Home</a>
-                    <a href="recipes.html" class="text-green-600 dark:text-green-400 font-medium">Recipes</a>
-                    <a href="games.html" class="text-gray-700 dark:text-gray-300 hover:text-green-600 dark:hover:text-green-400 transition-colors">Games</a>
-                    <a href="secret-recipes.html" class="text-gray-700 dark:text-gray-300 hover:text-green-600 dark:hover:text-green-400 transition-colors">Secret Recipes</a>
-                    <a href="diet-planner.html" class="text-gray-700 dark:text-gray-300 hover:text-green-600 dark:hover:text-green-400 transition-colors">Diet Planner</a>
+                    <a href="index.html" class="text-gray-700 dark:text-gray-300 hover:text-green-600 dark:hover:text-green-400 transition-colors" data-translate="nav.home">Home</a>
+                    <a href="recipes.html" class="text-green-600 dark:text-green-400 font-medium" data-translate="nav.recipes">Recipes</a>
+                    <a href="games.html" class="text-gray-700 dark:text-gray-300 hover:text-green-600 dark:hover:text-green-400 transition-colors" data-translate="nav.games">Games</a>
+                    <a href="secret-recipes.html" class="text-gray-700 dark:text-gray-300 hover:text-green-600 dark:hover:text-green-400 transition-colors" data-translate="nav.secret_recipes">Secret Recipes</a>
+                    <a href="diet-planner.html" class="text-gray-700 dark:text-gray-300 hover:text-green-600 dark:hover:text-green-400 transition-colors" data-translate="nav.diet_planner">Diet Planner</a>
+                    <!-- Language Selector will be inserted here by JavaScript -->
                     <button onclick="toggleDarkMode()" class="p-2 rounded-lg bg-gray-200 dark:bg-gray-700 hover:bg-gray-300 dark:hover:bg-gray-600 transition-colors">
                         <span class="dark:hidden">🌙</span>
                         <span class="hidden dark:inline">☀️</span>
@@ -66,11 +72,11 @@
             <!-- Mobile Menu -->
             <div id="mobileMenu" class="md:hidden hidden pb-4">
                 <div class="flex flex-col space-y-4">
-                    <a href="index.html" class="text-gray-700 dark:text-gray-300 hover:text-green-600 dark:hover:text-green-400 transition-colors">Home</a>
-                    <a href="recipes.html" class="text-green-600 dark:text-green-400 font-medium">Recipes</a>
-                    <a href="games.html" class="text-gray-700 dark:text-gray-300 hover:text-green-600 dark:hover:text-green-400 transition-colors">Games</a>
-                    <a href="secret-recipes.html" class="text-gray-700 dark:text-gray-300 hover:text-green-600 dark:hover:text-green-400 transition-colors">Secret Recipes</a>
-                    <a href="diet-planner.html" class="text-gray-700 dark:text-gray-300 hover:text-green-600 dark:hover:text-green-400 transition-colors">Diet Planner</a>
+                    <a href="index.html" class="text-gray-700 dark:text-gray-300 hover:text-green-600 dark:hover:text-green-400 transition-colors" data-translate="nav.home">Home</a>
+                    <a href="recipes.html" class="text-green-600 dark:text-green-400 font-medium" data-translate="nav.recipes">Recipes</a>
+                    <a href="games.html" class="text-gray-700 dark:text-gray-300 hover:text-green-600 dark:hover:text-green-400 transition-colors" data-translate="nav.games">Games</a>
+                    <a href="secret-recipes.html" class="text-gray-700 dark:text-gray-300 hover:text-green-600 dark:hover:text-green-400 transition-colors" data-translate="nav.secret_recipes">Secret Recipes</a>
+                    <a href="diet-planner.html" class="text-gray-700 dark:text-gray-300 hover:text-green-600 dark:hover:text-green-400 transition-colors" data-translate="nav.diet_planner">Diet Planner</a>
                 </div>
             </div>
         </div>
@@ -81,8 +87,8 @@
         <div class="max-w-4xl mx-auto">
             <!-- Recipe Header -->
             <div class="text-center mb-12">
-                <h1 class="text-4xl font-bold text-gray-800 dark:text-white mb-4">Overnight Oats</h1>
-                <p class="text-xl text-gray-600 dark:text-gray-300">A make-ahead breakfast that's both nutritious and delicious</p>
+                <h1 class="text-4xl font-bold text-gray-800 dark:text-white mb-4" data-translate="recipe.overnight_oats.title">Overnight Oats</h1>
+                <p class="text-xl text-gray-600 dark:text-gray-300" data-translate="recipe.overnight_oats.description">A make-ahead breakfast that's both nutritious and delicious</p>
             </div>
 
             <!-- Recipe Image -->
@@ -94,15 +100,15 @@
             <div class="grid grid-cols-1 md:grid-cols-3 gap-8 mb-12">
                 <div class="bg-white dark:bg-gray-800 p-6 rounded-xl shadow-lg">
                     <h3 class="text-lg font-semibold text-gray-800 dark:text-white mb-2">Prep Time</h3>
-                    <p class="text-gray-600 dark:text-gray-300">5 minutes</p>
+                    <p class="text-xl text-gray-600 dark:text-gray-300 mb-8" data-translate="recipe.overnight_oats.description">5 minutes</p>
                 </div>
                 <div class="bg-white dark:bg-gray-800 p-6 rounded-xl shadow-lg">
                     <h3 class="text-lg font-semibold text-gray-800 dark:text-white mb-2">Rest Time</h3>
-                    <p class="text-gray-600 dark:text-gray-300">8 hours</p>
+                    <p class="text-xl text-gray-600 dark:text-gray-300 mb-8" data-translate="recipe.overnight_oats.description">5 minutes</p>
                 </div>
                 <div class="bg-white dark:bg-gray-800 p-6 rounded-xl shadow-lg">
                     <h3 class="text-lg font-semibold text-gray-800 dark:text-white mb-2">Calories</h3>
-                    <p class="text-gray-600 dark:text-gray-300">320 per serving</p>
+                    <p class="text-xl text-gray-600 dark:text-gray-300 mb-8" data-translate="recipe.overnight_oats.description">5 minutes</p>
                 </div>
             </div>
 
@@ -147,23 +153,23 @@
                 <ol class="space-y-6">
                     <li class="flex items-start">
                         <span class="flex-shrink-0 w-8 h-8 bg-green-500 text-white rounded-full flex items-center justify-center mr-4">1</span>
-                        <p class="text-gray-700 dark:text-gray-300">In a jar or container, combine oats, milk, chia seeds, honey (or maple syrup), vanilla extract, and salt.</p>
+                        <p class="text-xl text-gray-600 dark:text-gray-300 mb-8" data-translate="recipe.overnight_oats.description">5 minutes</p>
                     </li>
                     <li class="flex items-start">
                         <span class="flex-shrink-0 w-8 h-8 bg-green-500 text-white rounded-full flex items-center justify-center mr-4">2</span>
-                        <p class="text-gray-700 dark:text-gray-300">Stir well to combine all ingredients.</p>
+                        <p class="text-xl text-gray-600 dark:text-gray-300 mb-8" data-translate="recipe.overnight_oats.description">5 minutes</p>
                     </li>
                     <li class="flex items-start">
                         <span class="flex-shrink-0 w-8 h-8 bg-green-500 text-white rounded-full flex items-center justify-center mr-4">3</span>
-                        <p class="text-gray-700 dark:text-gray-300">Seal the container and refrigerate overnight or for at least 8 hours.</p>
+                        <p class="text-xl text-gray-600 dark:text-gray-300 mb-8" data-translate="recipe.overnight_oats.description">5 minutes</p>
                     </li>
                     <li class="flex items-start">
                         <span class="flex-shrink-0 w-8 h-8 bg-green-500 text-white rounded-full flex items-center justify-center mr-4">4</span>
-                        <p class="text-gray-700 dark:text-gray-300">In the morning, stir the oats and add more milk if needed to achieve desired consistency.</p>
+                        <p class="text-xl text-gray-600 dark:text-gray-300 mb-8" data-translate="recipe.overnight_oats.description">5 minutes</p>
                     </li>
                     <li class="flex items-start">
                         <span class="flex-shrink-0 w-8 h-8 bg-green-500 text-white rounded-full flex items-center justify-center mr-4">5</span>
-                        <p class="text-gray-700 dark:text-gray-300">Top with your favorite toppings and enjoy cold or warm.</p>
+                        <p class="text-xl text-gray-600 dark:text-gray-300 mb-8" data-translate="recipe.overnight_oats.description">5 minutes</p>
                     </li>
                 </ol>
             </div>
@@ -174,19 +180,19 @@
                 <div class="grid grid-cols-2 md:grid-cols-4 gap-6">
                     <div>
                         <h3 class="text-lg font-semibold text-gray-800 dark:text-white mb-2">Calories</h3>
-                        <p class="text-gray-600 dark:text-gray-300">320</p>
+                        <p class="text-xl text-gray-600 dark:text-gray-300 mb-8" data-translate="recipe.overnight_oats.description">5 minutes</p>
                     </div>
                     <div>
                         <h3 class="text-lg font-semibold text-gray-800 dark:text-white mb-2">Protein</h3>
-                        <p class="text-gray-600 dark:text-gray-300">12g</p>
+                        <p class="text-xl text-gray-600 dark:text-gray-300 mb-8" data-translate="recipe.overnight_oats.description">5 minutes</p>
                     </div>
                     <div>
                         <h3 class="text-lg font-semibold text-gray-800 dark:text-white mb-2">Carbs</h3>
-                        <p class="text-gray-600 dark:text-gray-300">54g</p>
+                        <p class="text-xl text-gray-600 dark:text-gray-300 mb-8" data-translate="recipe.overnight_oats.description">5 minutes</p>
                     </div>
                     <div>
                         <h3 class="text-lg font-semibold text-gray-800 dark:text-white mb-2">Fiber</h3>
-                        <p class="text-gray-600 dark:text-gray-300">8g</p>
+                        <p class="text-xl text-gray-600 dark:text-gray-300 mb-8" data-translate="recipe.overnight_oats.description">5 minutes</p>
                     </div>
                 </div>
             </div>
@@ -199,7 +205,7 @@
             <div class="grid grid-cols-1 md:grid-cols-4 gap-8">
                 <div>
                     <h3 class="text-xl font-bold mb-4">PlatePilot</h3>
-                    <p class="text-gray-400">Your partner in healthy living.</p>
+                    <p class="text-xl text-gray-600 dark:text-gray-300 mb-8" data-translate="recipe.overnight_oats.description">5 minutes</p>
                 </div>
                 <div>
                     <h4 class="font-semibold mb-4">Quick Links</h4>

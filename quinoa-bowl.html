@@ -26,6 +26,11 @@
             }
         }
     </script>
+    <!-- Language System -->
+    <script src="translations.js"></script>
+    <script src="translations-extended.js"></script>
+    <script src="translations-more.js"></script>
+    <script src="language-selector.js"></script>
     <style>
         .recipe-image { transition: transform 0.3s; }
         .recipe-image:hover { transform: scale(1.02); }
@@ -46,12 +51,13 @@
                     PlatePilot
                 </a>
                 <div class="hidden md:flex items-center space-x-8">
-                    <a href="index.html" class="text-gray-700 dark:text-gray-300 hover:text-green-600 dark:hover:text-green-400 transition-colors">Home</a>
-                    <a href="recipes.html" class="text-green-600 dark:text-green-400 font-medium">Recipes</a>
-                    <a href="upload-recipe.html" class="text-gray-700 dark:text-gray-300 hover:text-green-600 dark:hover:text-green-400 transition-colors">Share Recipe</a>
-                    <a href="games.html" class="text-gray-700 dark:text-gray-300 hover:text-green-600 dark:hover:text-green-400 transition-colors">Games</a>
-                    <a href="secret-recipes.html" class="text-gray-700 dark:text-gray-300 hover:text-green-600 dark:hover:text-green-400 transition-colors">Secret Recipes</a>
-                    <a href="diet-planner.html" class="text-gray-700 dark:text-gray-300 hover:text-green-600 dark:hover:text-green-400 transition-colors">Diet Planner</a>
+                    <a href="index.html" class="text-gray-700 dark:text-gray-300 hover:text-green-600 dark:hover:text-green-400 transition-colors" data-translate="nav.home">Home</a>
+                    <a href="recipes.html" class="text-green-600 dark:text-green-400 font-medium" data-translate="nav.recipes">Recipes</a>
+                    <a href="upload-recipe.html" class="text-gray-700 dark:text-gray-300 hover:text-green-600 dark:hover:text-green-400 transition-colors" data-translate="nav.share_recipe">Share Recipe</a>
+                    <a href="games.html" class="text-gray-700 dark:text-gray-300 hover:text-green-600 dark:hover:text-green-400 transition-colors" data-translate="nav.games">Games</a>
+                    <a href="secret-recipes.html" class="text-gray-700 dark:text-gray-300 hover:text-green-600 dark:hover:text-green-400 transition-colors" data-translate="nav.secret_recipes">Secret Recipes</a>
+                    <a href="diet-planner.html" class="text-gray-700 dark:text-gray-300 hover:text-green-600 dark:hover:text-green-400 transition-colors" data-translate="nav.diet_planner">Diet Planner</a>
+                    <!-- Language Selector will be inserted here by JavaScript -->
                     <button onclick="toggleDarkMode()" class="p-2 rounded-lg bg-gray-200 dark:bg-gray-700 hover:bg-gray-300 dark:hover:bg-gray-600 transition-colors">
                         <span class="dark:hidden">🌙</span>
                         <span class="hidden dark:inline">☀️</span>
@@ -81,8 +87,8 @@
     <!-- Recipe Content -->
     <main class="container mx-auto px-4 py-8">
         <div class="max-w-4xl mx-auto">
-            <h1 class="text-4xl font-bold text-gray-800 dark:text-white mb-4">Quinoa Bowl</h1>
-            <p class="text-xl text-gray-600 dark:text-gray-300 mb-8">A nutritious and colorful bowl packed with protein-rich quinoa, fresh vegetables, and a zesty dressing.</p>
+            <h1 class="text-4xl font-bold text-gray-800 dark:text-white mb-4" data-translate="recipe.quinoa_bowl.title">Quinoa Bowl</h1>
+            <p class="text-xl text-gray-600 dark:text-gray-300 mb-8" data-translate="recipe.quinoa_bowl.description">A nutritious and colorful bowl packed with protein-rich quinoa, fresh vegetables, and a zesty dressing.</p>
 
             <!-- Recipe Image -->
             <div class="mb-8">
@@ -93,15 +99,15 @@
             <div class="grid grid-cols-1 md:grid-cols-3 gap-4 mb-8">
                 <div class="bg-white dark:bg-gray-800 p-4 rounded-lg shadow">
                     <h3 class="font-semibold text-gray-800 dark:text-white">Prep Time</h3>
-                    <p class="text-gray-600 dark:text-gray-300">15 minutes</p>
+                    <p class="text-xl text-gray-600 dark:text-gray-300 mb-8" data-translate="recipe.quinoa_bowl.description">A nutritious and colorful bowl packed with protein-rich quinoa, fresh vegetables, and a zesty dressing.</p>
                 </div>
                 <div class="bg-white dark:bg-gray-800 p-4 rounded-lg shadow">
                     <h3 class="font-semibold text-gray-800 dark:text-white">Cook Time</h3>
-                    <p class="text-gray-600 dark:text-gray-300">20 minutes</p>
+                    <p class="text-xl text-gray-600 dark:text-gray-300 mb-8" data-translate="recipe.quinoa_bowl.description">A nutritious and colorful bowl packed with protein-rich quinoa, fresh vegetables, and a zesty dressing.</p>
                 </div>
                 <div class="bg-white dark:bg-gray-800 p-4 rounded-lg shadow">
                     <h3 class="font-semibold text-gray-800 dark:text-white">Servings</h3>
-                    <p class="text-gray-600 dark:text-gray-300">2 people</p>
+                    <p class="text-xl text-gray-600 dark:text-gray-300 mb-8" data-translate="recipe.quinoa_bowl.description">A nutritious and colorful bowl packed with protein-rich quinoa, fresh vegetables, and a zesty dressing.</p>
                 </div>
             </div>
 
@@ -160,20 +166,20 @@
                 <h2 class="text-2xl font-bold text-gray-800 dark:text-white mb-4">Nutritional Information</h2>
                 <div class="grid grid-cols-2 md:grid-cols-4 gap-4">
                     <div class="text-center">
-                        <p class="text-gray-600 dark:text-gray-300">Calories</p>
-                        <p class="text-xl font-semibold text-gray-800 dark:text-white">420</p>
+                        <p class="text-xl text-gray-600 dark:text-gray-300 mb-8" data-translate="recipe.quinoa_bowl.description">A nutritious and colorful bowl packed with protein-rich quinoa, fresh vegetables, and a zesty dressing.</p>
+                        <p class="text-xl text-gray-600 dark:text-gray-300 mb-8" data-translate="recipe.quinoa_bowl.description">A nutritious and colorful bowl packed with protein-rich quinoa, fresh vegetables, and a zesty dressing.</p>
                     </div>
                     <div class="text-center">
-                        <p class="text-gray-600 dark:text-gray-300">Protein</p>
-                        <p class="text-xl font-semibold text-gray-800 dark:text-white">15g</p>
+                        <p class="text-xl text-gray-600 dark:text-gray-300 mb-8" data-translate="recipe.quinoa_bowl.description">A nutritious and colorful bowl packed with protein-rich quinoa, fresh vegetables, and a zesty dressing.</p>
+                        <p class="text-xl text-gray-600 dark:text-gray-300 mb-8" data-translate="recipe.quinoa_bowl.description">A nutritious and colorful bowl packed with protein-rich quinoa, fresh vegetables, and a zesty dressing.</p>
                     </div>
                     <div class="text-center">
-                        <p class="text-gray-600 dark:text-gray-300">Carbs</p>
-                        <p class="text-xl font-semibold text-gray-800 dark:text-white">58g</p>
+                        <p class="text-xl text-gray-600 dark:text-gray-300 mb-8" data-translate="recipe.quinoa_bowl.description">A nutritious and colorful bowl packed with protein-rich quinoa, fresh vegetables, and a zesty dressing.</p>
+                        <p class="text-xl text-gray-600 dark:text-gray-300 mb-8" data-translate="recipe.quinoa_bowl.description">A nutritious and colorful bowl packed with protein-rich quinoa, fresh vegetables, and a zesty dressing.</p>
                     </div>
                     <div class="text-center">
-                        <p class="text-gray-600 dark:text-gray-300">Fat</p>
-                        <p class="text-xl font-semibold text-gray-800 dark:text-white">18g</p>
+                        <p class="text-xl text-gray-600 dark:text-gray-300 mb-8" data-translate="recipe.quinoa_bowl.description">A nutritious and colorful bowl packed with protein-rich quinoa, fresh vegetables, and a zesty dressing.</p>
+                        <p class="text-xl text-gray-600 dark:text-gray-300 mb-8" data-translate="recipe.quinoa_bowl.description">A nutritious and colorful bowl packed with protein-rich quinoa, fresh vegetables, and a zesty dressing.</p>
                     </div>
                 </div>
             </div>
@@ -210,7 +216,7 @@
             <div class="grid grid-cols-1 md:grid-cols-4 gap-8">
                 <div>
                     <h3 class="text-xl font-bold mb-4">PlatePilot</h3>
-                    <p class="text-gray-400">Your partner in healthy living.</p>
+                    <p class="text-xl text-gray-600 dark:text-gray-300 mb-8" data-translate="recipe.quinoa_bowl.description">A nutritious and colorful bowl packed with protein-rich quinoa, fresh vegetables, and a zesty dressing.</p>
                 </div>
                 <div>
                     <h4 class="font-semibold mb-4">Quick Links</h4>
@@ -295,7 +301,7 @@
                 const comments = JSON.parse(localStorage.getItem('quinoa-bowl-comments')) || [];
                 commentsContainer.innerHTML = comments.map(comment => `
                     <div class="bg-gray-50 dark:bg-gray-700 p-4 rounded-lg">
-                        <p class="text-gray-600 dark:text-gray-300">${comment}</p>
+                        <p class="text-xl text-gray-600 dark:text-gray-300 mb-8" data-translate="recipe.quinoa_bowl.description">A nutritious and colorful bowl packed with protein-rich quinoa, fresh vegetables, and a zesty dressing.</p>
                     </div>
                 `).join('');
             }
