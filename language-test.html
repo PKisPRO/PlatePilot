@@ -1,0 +1,260 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Language System Test - PlatePilot</title>
+    <meta name="description" content="Test page for PlatePilot language system">
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            darkMode: 'class',
+            theme: {
+                extend: {
+                    colors: {
+                        // You can add custom colors here if needed
+                    }
+                }
+            }
+        }
+    </script>
+    <!-- Language System -->
+    <script src="translations.js"></script>
+    <script src="translations-extended.js"></script>
+    <script src="translations-more.js"></script>
+    <script src="language-selector.js"></script>
+    <style>
+        .language-test-card {
+            transition: all 0.3s ease-in-out;
+        }
+        .language-test-card:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.1);
+        }
+    </style>
+</head>
+<body class="bg-gray-50 dark:bg-gray-900 min-h-screen">
+    <!-- Navigation Bar -->
+    <nav class="bg-white dark:bg-gray-900 shadow-md sticky top-0 z-50">
+        <div class="container mx-auto px-4">
+            <div class="flex justify-between items-center h-16">
+                <a href="index.html" class="text-2xl font-bold text-green-600 dark:text-green-400 hover:text-green-700 dark:hover:text-green-300 transition-colors">
+                    PlatePilot
+                </a>
+                <div class="hidden md:flex items-center space-x-8">
+                    <a href="index.html" class="text-gray-700 dark:text-gray-300 hover:text-green-600 dark:hover:text-green-400 transition-colors" data-translate="home">Home</a>
+                    <a href="recipes.html" class="text-gray-700 dark:text-gray-300 hover:text-green-600 dark:hover:text-green-400 transition-colors" data-translate="recipes">Recipes</a>
+                    <a href="games.html" class="text-gray-700 dark:text-gray-300 hover:text-green-600 dark:hover:text-green-400 transition-colors" data-translate="games">Games</a>
+                    <a href="diet-planner.html" class="text-gray-700 dark:text-gray-300 hover:text-green-600 dark:hover:text-green-400 transition-colors" data-translate="dietPlanner">Diet Planner</a>
+                    <!-- Language Selector will be inserted here by JavaScript -->
+                    <button onclick="toggleDarkMode()" class="p-2 rounded-lg bg-gray-200 dark:bg-gray-700 hover:bg-gray-300 dark:hover:bg-gray-600 transition-colors">
+                        <span class="dark:hidden">🌙</span>
+                        <span class="hidden dark:inline">☀️</span>
+                    </button>
+                </div>
+                <!-- Mobile Menu Button -->
+                <button class="md:hidden p-2 rounded-lg hover:bg-gray-200 dark:hover:bg-gray-700 transition-colors" onclick="toggleMobileMenu()">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 text-gray-700 dark:text-gray-300" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16" />
+                    </svg>
+                </button>
+            </div>
+            <!-- Mobile Menu -->
+            <div id="mobileMenu" class="md:hidden hidden pb-4">
+                <div class="flex flex-col space-y-4">
+                    <a href="index.html" class="text-gray-700 dark:text-gray-300 hover:text-green-600 dark:hover:text-green-400 transition-colors" data-translate="home">Home</a>
+                    <a href="recipes.html" class="text-gray-700 dark:text-gray-300 hover:text-green-600 dark:hover:text-green-400 transition-colors" data-translate="recipes">Recipes</a>
+                    <a href="games.html" class="text-gray-700 dark:text-gray-300 hover:text-green-600 dark:hover:text-green-400 transition-colors" data-translate="games">Games</a>
+                    <a href="diet-planner.html" class="text-gray-700 dark:text-gray-300 hover:text-green-600 dark:hover:text-green-400 transition-colors" data-translate="dietPlanner">Diet Planner</a>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Hero Section -->
+    <section class="bg-gradient-to-r from-green-500 to-blue-500 text-white py-20">
+        <div class="container mx-auto px-4 text-center">
+            <h1 class="text-4xl font-bold mb-6" data-translate="heroTitle">Your Journey to Healthy Living Starts Here</h1>
+            <p class="text-xl mb-8 max-w-2xl mx-auto" data-translate="heroSubtitle">Discover delicious recipes, interactive games, and personalized meal plans to help you achieve your health goals.</p>
+            <div class="flex flex-wrap justify-center gap-4">
+                <a href="recipes.html" class="bg-white text-green-500 px-8 py-3 rounded-lg font-semibold hover:bg-gray-100 transition-colors" data-translate="exploreRecipes">
+                    Explore Recipes
+                </a>
+                <a href="diet-planner.html" class="bg-transparent border-2 border-white text-white px-8 py-3 rounded-lg font-semibold hover:bg-white hover:text-green-500 transition-colors" data-translate="startMealPlanning">
+                    Start Meal Planning
+                </a>
+            </div>
+        </div>
+    </section>
+
+    <!-- Language Test Section -->
+    <section class="py-20">
+        <div class="container mx-auto px-4">
+            <h2 class="text-3xl font-bold text-center text-gray-800 dark:text-white mb-12">🌍 Language System Test</h2>
+            <p class="text-center text-gray-600 dark:text-gray-300 mb-12 max-w-3xl mx-auto">
+                This page demonstrates the comprehensive language system with support for 50+ languages. 
+                Use the language selector in the navigation bar to switch between different languages.
+            </p>
+            
+            <!-- Language Features Grid -->
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-8 mb-16">
+                <div class="language-test-card bg-white dark:bg-gray-800 rounded-xl p-6 text-center">
+                    <div class="w-16 h-16 bg-green-100 dark:bg-green-900 rounded-full flex items-center justify-center mx-auto mb-4">
+                        <span class="text-2xl">🇮🇳</span>
+                    </div>
+                    <h3 class="text-xl font-bold text-gray-800 dark:text-white mb-2">Indian Languages</h3>
+                    <p class="text-gray-600 dark:text-gray-300">Complete support for 15 major Indian languages including Hindi, Bengali, Telugu, Marathi, Tamil, and more.</p>
+                </div>
+
+                <div class="language-test-card bg-white dark:bg-gray-800 rounded-xl p-6 text-center">
+                    <div class="w-16 h-16 bg-blue-100 dark:bg-blue-900 rounded-full flex items-center justify-center mx-auto mb-4">
+                        <span class="text-2xl">🌏</span>
+                    </div>
+                    <h3 class="text-xl font-bold text-gray-800 dark:text-white mb-2">Global Languages</h3>
+                    <p class="text-gray-600 dark:text-gray-300">Support for 35+ international languages including Chinese, Japanese, Korean, Arabic, and European languages.</p>
+                </div>
+
+                <div class="language-test-card bg-white dark:bg-gray-800 rounded-xl p-6 text-center">
+                    <div class="w-16 h-16 bg-purple-100 dark:bg-purple-900 rounded-full flex items-center justify-center mx-auto mb-4">
+                        <span class="text-2xl">⚡</span>
+                    </div>
+                    <h3 class="text-xl font-bold text-gray-800 dark:text-white mb-2">Smart Features</h3>
+                    <p class="text-gray-600 dark:text-gray-300">Language persistence, search functionality, responsive design, and accessibility features.</p>
+                </div>
+            </div>
+
+            <!-- Translation Examples -->
+            <div class="bg-white dark:bg-gray-800 rounded-xl p-8 shadow-lg">
+                <h3 class="text-2xl font-bold text-gray-800 dark:text-white mb-6 text-center">Translation Examples</h3>
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
+                    <div>
+                        <h4 class="font-semibold text-gray-800 dark:text-white mb-4">Navigation Elements</h4>
+                        <ul class="space-y-2 text-gray-600 dark:text-gray-300">
+                            <li><strong data-translate="home">Home</strong> - Main page link</li>
+                            <li><strong data-translate="recipes">Recipes</strong> - Recipe collection</li>
+                            <li><strong data-translate="games">Games</strong> - Interactive games</li>
+                            <li><strong data-translate="dietPlanner">Diet Planner</strong> - Meal planning tool</li>
+                        </ul>
+                    </div>
+                    <div>
+                        <h4 class="font-semibold text-gray-800 dark:text-white mb-4">Content Elements</h4>
+                        <ul class="space-y-2 text-gray-600 dark:text-gray-300">
+                            <li><strong data-translate="exploreRecipes">Explore Recipes</strong> - Call to action</li>
+                            <li><strong data-translate="startMealPlanning">Start Meal Planning</strong> - Feature button</li>
+                            <li><strong data-translate="readyToStart">Ready to Start Your Healthy Journey?</strong> - Section title</li>
+                            <li><strong data-translate="getStarted">Get Started</strong> - Action button</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Language Statistics -->
+    <section class="bg-gray-100 dark:bg-gray-800 py-20">
+        <div class="container mx-auto px-4">
+            <h2 class="text-3xl font-bold text-center text-gray-800 dark:text-white mb-12">Language Coverage Statistics</h2>
+            <div class="grid grid-cols-1 md:grid-cols-4 gap-8">
+                <div class="text-center">
+                    <div class="text-4xl font-bold text-green-600 dark:text-green-400 mb-2">50+</div>
+                    <div class="text-gray-600 dark:text-gray-300">Total Languages</div>
+                </div>
+                <div class="text-center">
+                    <div class="text-4xl font-bold text-blue-600 dark:text-blue-400 mb-2">15</div>
+                    <div class="text-gray-600 dark:text-gray-300">Indian Languages</div>
+                </div>
+                <div class="text-center">
+                    <div class="text-4xl font-bold text-purple-600 dark:text-purple-400 mb-2">35+</div>
+                    <div class="text-gray-600 dark:text-gray-300">International Languages</div>
+                </div>
+                <div class="text-center">
+                    <div class="text-4xl font-bold text-orange-600 dark:text-orange-400 mb-2">100%</div>
+                    <div class="text-gray-600 dark:text-gray-300">Accessibility</div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="bg-gray-800 text-white py-8">
+        <div class="container mx-auto px-4">
+            <div class="grid grid-cols-1 md:grid-cols-4 gap-8">
+                <div>
+                    <h3 class="text-xl font-bold mb-4">PlatePilot</h3>
+                    <p class="text-gray-400" data-translate="tagline">Pilot your plate. Powered by AI. Fueled by wellness.</p>
+                </div>
+                <div>
+                    <h4 class="font-semibold mb-4" data-translate="quickLinks">Quick Links</h4>
+                    <ul class="space-y-2">
+                        <li><a href="index.html" class="text-gray-400 hover:text-white transition-colors" data-translate="home">Home</a></li>
+                        <li><a href="recipes.html" class="text-gray-400 hover:text-white transition-colors" data-translate="recipes">Recipes</a></li>
+                        <li><a href="games.html" class="text-gray-400 hover:text-white transition-colors" data-translate="games">Games</a></li>
+                        <li><a href="diet-planner.html" class="text-gray-400 hover:text-white transition-colors" data-translate="dietPlanner">Diet Planner</a></li>
+                    </ul>
+                </div>
+                <div>
+                    <h4 class="font-semibold mb-4" data-translate="contact">Contact</h4>
+                    <ul class="space-y-2 text-gray-400">
+                        <li data-translate="email">Email: platepilot.11@gmail.com</li>
+                        <li data-translate="phone">Phone: +91 9251681626</li>
+                    </ul>
+                </div>
+                <div>
+                    <h4 class="font-semibold mb-4" data-translate="followUs">Follow Us</h4>
+                    <div class="flex space-x-4">
+                        <a href="#" class="text-gray-400 hover:text-white transition-colors" data-translate="facebook">Facebook</a>
+                        <a href="#" class="text-gray-400 hover:text-white transition-colors" data-translate="twitter">Twitter</a>
+                        <a href="#" class="text-gray-400 hover:text-white transition-colors" data-translate="instagram">Instagram</a>
+                    </div>
+                </div>
+            </div>
+            <div class="border-t border-gray-700 mt-8 pt-8 text-center text-gray-400">
+                <p data-translate="copyright">&copy; 2024 PlatePilot. All rights reserved.</p>
+            </div>
+        </div>
+    </footer>
+
+    <script>
+        // Set base path for GitHub Pages
+        const basePath = '/PlatePilot';
+        
+        // Update all navigation links
+        document.addEventListener('DOMContentLoaded', function() {
+            // Update navigation links
+            document.querySelectorAll('a[href]').forEach(link => {
+                const href = link.getAttribute('href');
+                if (href.startsWith('index.html') || 
+                    href.startsWith('recipes.html') || 
+                    href.startsWith('games.html') || 
+                    href.startsWith('diet-planner.html')) {
+                    if (!href.includes(basePath)) {
+                        link.href = basePath + '/' + href;
+                    }
+                }
+            });
+            
+            // Initialize dark mode
+            if (localStorage.getItem('darkMode') === 'true') {
+                document.documentElement.classList.add('dark');
+            }
+            
+            // Toggle dark mode
+            window.toggleDarkMode = function() {
+                if (document.documentElement.classList.contains('dark')) {
+                    document.documentElement.classList.remove('dark');
+                    localStorage.setItem('darkMode', 'false');
+                } else {
+                    document.documentElement.classList.add('dark');
+                    localStorage.setItem('darkMode', 'true');
+                }
+            };
+            
+            // Mobile menu toggle
+            window.toggleMobileMenu = function() {
+                const mobileMenu = document.getElementById('mobileMenu');
+                mobileMenu.classList.toggle('hidden');
+            };
+        });
+    </script>
+</body>
+</html> 
