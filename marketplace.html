@@ -304,7 +304,14 @@
             document.getElementById('orderConfirmModal').classList.remove('flex');
             updateCartCount();
         }
-        document.addEventListener('DOMContentLoaded', updateCartCount);
+        document.addEventListener('DOMContentLoaded', function() {
+            // Render listings immediately and update cart count
+            loadListings();
+            updateCartCount();
+            if (window.languageSelector) {
+                window.languageSelector.applyLanguage(window.languageSelector.currentLanguage);
+            }
+        });
     </script>
     <footer class="bg-gray-800 text-white py-8 mt-12">
         <div class="container mx-auto px-4">
