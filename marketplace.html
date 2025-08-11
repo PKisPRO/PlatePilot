@@ -22,8 +22,8 @@
     </nav>
     <section class="py-16">
         <div class="container mx-auto px-4">
-            <h1 class="text-3xl font-bold text-green-600 mb-8 text-center">Organic Marketplace</h1>
-            <p class="text-gray-700 dark:text-gray-300 mb-8 text-center max-w-2xl mx-auto">Browse verified organic fruits and vegetables grown by rural farmers and communities. Support healthy living and fair trade!</p>
+            <h1 class="text-3xl font-bold text-green-600 mb-8 text-center" data-translate="marketplaceTitle">Organic Marketplace</h1>
+            <p class="text-gray-700 dark:text-gray-300 mb-8 text-center max-w-2xl mx-auto" data-translate="marketplaceDesc">Browse verified organic fruits and vegetables grown by rural farmers and communities. Support healthy living and fair trade!</p>
             <div class="mb-8 flex flex-col md:flex-row gap-4 justify-center items-center">
                 <input id="searchInput" type="text" placeholder="Search produce or seller..." class="w-full md:w-1/3 p-3 rounded-lg border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-700 text-gray-800 dark:text-gray-200 focus:outline-none">
                 <button onclick="loadListings()" class="bg-green-600 text-white px-6 py-3 rounded-lg font-semibold hover:bg-green-700 transition-colors">Search</button>
@@ -136,17 +136,21 @@
                 card.innerHTML = `
                     <img src="${listing.image}" alt="${listing.produceName}" class="w-full h-48 object-cover rounded-lg mb-4 border border-gray-200 dark:border-gray-700" onerror="this.src='https://via.placeholder.com/300x200?text=No+Image'">
                     <h2 class="text-2xl font-bold text-green-600 mb-2">${listing.produceName}</h2>
-                    <div class="mb-2 text-gray-700 dark:text-gray-300">Type: <span class="font-semibold">${listing.produceType}</span></div>
-                    <div class="mb-2 text-gray-700 dark:text-gray-300">Quantity: <span class="font-semibold">${listing.quantity} kg</span></div>
-                    <div class="mb-2 text-gray-700 dark:text-gray-300">Price: <span class="font-semibold">₹${listing.price} / kg</span> <span class="ml-2 inline-block bg-yellow-200 text-yellow-800 text-xs font-bold px-2 py-1 rounded">2x Market Rate (Organic)</span></div>
-                    <div class="mb-2 text-gray-700 dark:text-gray-300">Farmer: <span class="font-semibold">${listing.name}</span></div>
+                    <div class="mb-2 text-gray-700 dark:text-gray-300" data-translate="type">Type</div>: <span class="font-semibold">${listing.produceType}</span>
+                    <div class="mb-2 text-gray-700 dark:text-gray-300" data-translate="quantity">Quantity</div>: <span class="font-semibold">${listing.quantity} kg</span>
+                    <div class="mb-2 text-gray-700 dark:text-gray-300" data-translate="price">Price</div>: <span class="font-semibold">₹${listing.price} / kg</span> <span class="ml-2 inline-block bg-yellow-200 text-yellow-800 text-xs font-bold px-2 py-1 rounded" data-translate="organicBadge">2x Market Rate (Organic)</span>
+                    <div class="mb-2 text-gray-700 dark:text-gray-300" data-translate="farmer">Farmer</div>: <span class="font-semibold">${listing.name}</span>
                     <div class="flex gap-2 mt-4">
-                        <button onclick="addToCart('${listing.produceName}')" class="bg-green-600 text-white px-4 py-2 rounded-lg font-semibold hover:bg-green-700 transition-colors">Add to Cart</button>
-                        <button onclick="buyNow('${listing.produceName}')" class="bg-blue-600 text-white px-4 py-2 rounded-lg font-semibold hover:bg-blue-700 transition-colors">Buy Now</button>
+                        <button data-translate="addToCart" onclick="addToCart('${listing.produceName}')" class="bg-green-600 text-white px-4 py-2 rounded-lg font-semibold hover:bg-green-700 transition-colors">Add to Cart</button>
+                        <button data-translate="buyNow" onclick="buyNow('${listing.produceName}')" class="bg-blue-600 text-white px-4 py-2 rounded-lg font-semibold hover:bg-blue-700 transition-colors">Buy Now</button>
                     </div>
                 `;
                 grid.appendChild(card);
             });
+            // Apply language to new dynamic content
+            if (window.languageSelector) {
+                window.languageSelector.applyLanguage(window.languageSelector.currentLanguage);
+            }
         }
         // Cart logic
         function getCart() {

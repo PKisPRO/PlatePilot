@@ -62,17 +62,30 @@
     <nav class="bg-white dark:bg-gray-900 shadow-md sticky top-0 z-50">
         <div class="container mx-auto px-4">
             <div class="flex justify-between items-center h-16">
-                <a href="index.html" class="text-2xl font-bold text-green-600 dark:text-green-400 hover:text-green-700 dark:hover:text-green-300 transition-colors">
-                    PlatePilot
-                </a>
-                <div class="hidden md:flex items-center space-x-8">
-                    <a href="index.html" class="text-gray-700 dark:text-gray-300 hover:text-green-600 dark:hover:text-green-400 transition-colors">Home</a>
-                    <a href="recipes.html" class="text-gray-700 dark:text-gray-300 hover:text-green-600 dark:hover:text-green-400 transition-colors">Recipes</a>
-                    <a href="leaderboard.html" class="text-gray-700 dark:text-gray-300 hover:text-green-600 dark:hover:text-green-400 transition-colors">Leaderboard</a>
-                    <a href="upload-recipe.html" class="text-gray-700 dark:text-gray-300 hover:text-green-600 dark:hover:text-green-400 transition-colors">Share Recipe</a>
-                    <a href="games.html" class="text-green-600 dark:text-green-400 font-medium">Games</a>
-                    <a href="secret-recipes.html" class="text-gray-700 dark:text-gray-300 hover:text-green-600 dark:hover:text-green-400 transition-colors">Secret Recipes</a>
-                    <a href="diet-planner.html" class="text-gray-700 dark:text-gray-300 hover:text-green-600 dark:hover:text-green-400 transition-colors">Diet Planner</a>
+                <a href="index.html" class="text-2xl font-bold text-green-600 dark:text-green-400 hover:text-green-700 dark:hover:text-green-300 transition-colors" data-translate="home">PlatePilot</a>
+                <div class="hidden md:flex items-center space-x-4">
+                    <a href="index.html" class="text-gray-700 dark:text-gray-300 hover:text-green-600 dark:hover:text-green-400 font-bold transition-colors" data-translate="home">Home</a>
+                    <a href="marketplace.html" class="bg-green-600 text-white px-4 py-2 rounded-lg font-semibold hover:bg-green-700 transition-colors" data-translate="marketplace">Marketplace</a>
+                    <a href="seller-onboarding.html" class="bg-blue-600 text-white px-4 py-2 rounded-lg font-semibold hover:bg-blue-700 transition-colors" data-translate="becomeSeller">Become a Seller</a>
+                    <!-- Recipes Dropdown -->
+                    <div class="relative group">
+                        <button class="text-gray-700 dark:text-gray-300 hover:text-green-600 dark:hover:text-green-400 transition-colors font-semibold flex items-center">Recipes <svg class="w-4 h-4 ml-1" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"/></svg></button>
+                        <div class="absolute left-0 mt-2 w-48 bg-white dark:bg-gray-800 rounded-lg shadow-lg opacity-0 group-hover:opacity-100 group-focus-within:opacity-100 pointer-events-none group-hover:pointer-events-auto group-focus-within:pointer-events-auto transition-opacity z-50">
+                            <a href="recipes.html" class="block px-4 py-2 text-gray-700 dark:text-gray-300 hover:bg-green-100 dark:hover:bg-green-900 rounded-t-lg" data-translate="recipes">All Recipes</a>
+                            <a href="upload-recipe.html" class="block px-4 py-2 text-gray-700 dark:text-gray-300 hover:bg-green-100 dark:hover:bg-green-900" data-translate="shareRecipe">Share Recipe</a>
+                            <a href="leaderboard.html" class="block px-4 py-2 text-gray-700 dark:text-gray-300 hover:bg-green-100 dark:hover:bg-green-900 rounded-b-lg" data-translate="leaderboard">Leaderboard</a>
+                        </div>
+                    </div>
+                    <!-- More Dropdown -->
+                    <div class="relative group">
+                        <button class="text-gray-700 dark:text-gray-300 hover:text-green-600 dark:hover:text-green-400 transition-colors font-semibold flex items-center">More <svg class="w-4 h-4 ml-1" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"/></svg></button>
+                        <div class="absolute left-0 mt-2 w-48 bg-white dark:bg-gray-800 rounded-lg shadow-lg opacity-0 group-hover:opacity-100 group-focus-within:opacity-100 pointer-events-none group-hover:pointer-events-auto group-focus-within:pointer-events-auto transition-opacity z-50">
+                            <a href="games.html" class="block px-4 py-2 text-gray-700 dark:text-gray-300 hover:bg-green-100 dark:hover:bg-green-900 rounded-t-lg" data-translate="games">Games</a>
+                            <a href="secret-recipes.html" class="block px-4 py-2 text-gray-700 dark:text-gray-300 hover:bg-green-100 dark:hover:bg-green-900" data-translate="secretRecipes">Secret Recipes</a>
+                            <a href="diet-planner.html" class="block px-4 py-2 text-gray-700 dark:text-gray-300 hover:bg-green-100 dark:hover:bg-green-900 rounded-b-lg" data-translate="dietPlanner">Diet Planner</a>
+                        </div>
+                    </div>
+                    <div id="languageSelectorContainer" class="ml-4"></div>
                     <button onclick="toggleDarkMode()" class="p-2 rounded-lg bg-gray-200 dark:bg-gray-700 hover:bg-gray-300 dark:hover:bg-gray-600 transition-colors">
                         <span class="dark:hidden">🌙</span>
                         <span class="hidden dark:inline">☀️</span>
@@ -88,13 +101,32 @@
             <!-- Mobile Menu -->
             <div id="mobileMenu" class="md:hidden hidden pb-4">
                 <div class="flex flex-col space-y-4">
-                    <a href="index.html" class="text-gray-700 dark:text-gray-300 hover:text-green-600 dark:hover:text-green-400 transition-colors">Home</a>
-                    <a href="recipes.html" class="text-gray-700 dark:text-gray-300 hover:text-green-600 dark:hover:text-green-400 transition-colors">Recipes</a>
-                    <a href="leaderboard.html" class="text-gray-700 dark:text-gray-300 hover:text-green-600 dark:hover:text-green-400 transition-colors">Leaderboard</a>
-                    <a href="upload-recipe.html" class="text-gray-700 dark:text-gray-300 hover:text-green-600 dark:hover:text-green-400 transition-colors">Share Recipe</a>
-                    <a href="games.html" class="text-green-600 dark:text-green-400 font-medium">Games</a>
-                    <a href="secret-recipes.html" class="text-gray-700 dark:text-gray-300 hover:text-green-600 dark:hover:text-green-400 transition-colors">Secret Recipes</a>
-                    <a href="diet-planner.html" class="text-gray-700 dark:text-gray-300 hover:text-green-600 dark:hover:text-green-400 transition-colors">Diet Planner</a>
+                    <a href="index.html" class="text-gray-700 dark:text-gray-300 hover:text-green-600 dark:hover:text-green-400 font-bold transition-colors" data-translate="home">Home</a>
+                    <a href="marketplace.html" class="bg-green-600 text-white px-4 py-2 rounded-lg font-semibold hover:bg-green-700 transition-colors" data-translate="marketplace">Marketplace</a>
+                    <a href="seller-onboarding.html" class="bg-blue-600 text-white px-4 py-2 rounded-lg font-semibold hover:bg-blue-700 transition-colors" data-translate="becomeSeller">Become a Seller</a>
+                    <!-- Recipes Dropdown (Collapsible) -->
+                    <div>
+                        <button onclick="toggleMobileDropdown('recipesDropdown')" class="flex items-center justify-between w-full text-gray-700 dark:text-gray-300 font-semibold py-2 px-2 rounded hover:bg-green-100 dark:hover:bg-green-900 transition-colors">Recipes <svg class="w-4 h-4 ml-1 inline" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"/></svg></button>
+                        <div id="recipesDropdown" class="hidden flex flex-col ml-4 mt-2 space-y-2">
+                            <a href="recipes.html" class="text-gray-700 dark:text-gray-300 hover:text-green-600 dark:hover:text-green-400" data-translate="recipes">All Recipes</a>
+                            <a href="upload-recipe.html" class="text-gray-700 dark:text-gray-300 hover:text-green-600 dark:hover:text-green-400" data-translate="shareRecipe">Share Recipe</a>
+                            <a href="leaderboard.html" class="text-gray-700 dark:text-gray-300 hover:text-green-600 dark:hover:text-green-400" data-translate="leaderboard">Leaderboard</a>
+                        </div>
+                    </div>
+                    <!-- More Dropdown (Collapsible) -->
+                    <div>
+                        <button onclick="toggleMobileDropdown('moreDropdown')" class="flex items-center justify-between w-full text-gray-700 dark:text-gray-300 font-semibold py-2 px-2 rounded hover:bg-green-100 dark:hover:bg-green-900 transition-colors">More <svg class="w-4 h-4 ml-1 inline" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"/></svg></button>
+                        <div id="moreDropdown" class="hidden flex flex-col ml-4 mt-2 space-y-2">
+                            <a href="games.html" class="text-gray-700 dark:text-gray-300 hover:text-green-600 dark:hover:text-green-400" data-translate="games">Games</a>
+                            <a href="secret-recipes.html" class="text-gray-700 dark:text-gray-300 hover:text-green-600 dark:hover:text-green-400" data-translate="secretRecipes">Secret Recipes</a>
+                            <a href="diet-planner.html" class="text-gray-700 dark:text-gray-300 hover:text-green-600 dark:hover:text-green-400" data-translate="dietPlanner">Diet Planner</a>
+                        </div>
+                    </div>
+                    <div id="languageSelectorContainer" class="mt-2"></div>
+                    <button onclick="toggleDarkMode()" class="p-2 rounded-lg bg-gray-200 dark:bg-gray-700 hover:bg-gray-300 dark:hover:bg-gray-600 transition-colors w-12 self-center">
+                        <span class="dark:hidden">🌙</span>
+                        <span class="hidden dark:inline">☀️</span>
+                    </button>
                 </div>
             </div>
         </div>
@@ -103,8 +135,8 @@
     <!-- Header -->
     <header class="bg-green-500 text-white py-16">
         <div class="container mx-auto px-4 text-center">
-            <h1 class="text-4xl font-bold mb-4">Nutrition Games</h1>
-            <p class="text-xl mb-8">Learn about healthy eating through fun and interactive games</p>
+            <h1 class="text-4xl font-bold mb-4" data-translate="gamesTitle">Nutrition Games</h1>
+            <p class="text-xl mb-8" data-translate="gamesSubtitle">Learn about healthy eating through fun and interactive games</p>
         </div>
     </header>
 
@@ -115,11 +147,9 @@
             <div class="bg-white dark:bg-gray-800 rounded-xl overflow-hidden shadow-lg">
                 <img src="https://images.unsplash.com/photo-1490818387583-1baba5e638af" alt="Food Pyramid Game" class="w-full h-48 object-cover">
                 <div class="p-6">
-                    <h3 class="text-xl font-bold text-gray-800 dark:text-white mb-2">Food Pyramid Challenge</h3>
-                    <p class="text-gray-600 dark:text-gray-300 mb-4">Learn about the food pyramid and build a balanced meal.</p>
-                    <button class="bg-green-500 text-white px-6 py-2 rounded-lg hover:bg-green-600 transition-colors">
-                        Play Now
-                    </button>
+                    <h3 class="text-xl font-bold text-gray-800 dark:text-white mb-2" data-translate="foodPyramidChallenge">Food Pyramid Challenge</h3>
+                    <p class="text-gray-600 dark:text-gray-300 mb-4" data-translate="foodPyramidDescription">Learn about the food pyramid and build a balanced meal.</p>
+                    <button class="bg-green-500 text-white px-6 py-2 rounded-lg hover:bg-green-600 transition-colors" data-translate="playNow">Play Now</button>
                 </div>
             </div>
 
@@ -127,11 +157,9 @@
             <div class="bg-white dark:bg-gray-800 rounded-xl overflow-hidden shadow-lg">
                 <img src="https://images.unsplash.com/photo-1505576399279-565b52d4ac71" alt="Nutrition Quiz" class="w-full h-48 object-cover">
                 <div class="p-6">
-                    <h3 class="text-xl font-bold text-gray-800 dark:text-white mb-2">Nutrition Quiz</h3>
-                    <p class="text-gray-600 dark:text-gray-300 mb-4">Test your knowledge about healthy eating and nutrition.</p>
-                    <button class="bg-green-500 text-white px-6 py-2 rounded-lg hover:bg-green-600 transition-colors">
-                        Start Quiz
-                    </button>
+                    <h3 class="text-xl font-bold text-gray-800 dark:text-white mb-2" data-translate="nutritionQuiz">Nutrition Quiz</h3>
+                    <p class="text-gray-600 dark:text-gray-300 mb-4" data-translate="nutritionQuizDescription">Test your knowledge about healthy eating and nutrition.</p>
+                    <button class="bg-green-500 text-white px-6 py-2 rounded-lg hover:bg-green-600 transition-colors" data-translate="startQuiz">Start Quiz</button>
                 </div>
             </div>
 
@@ -139,11 +167,9 @@
             <div class="bg-white dark:bg-gray-800 rounded-xl overflow-hidden shadow-lg">
                 <img src="https://images.unsplash.com/photo-1495521821757-a1efb6729352" alt="Recipe Memory Game" class="w-full h-48 object-cover">
                 <div class="p-6">
-                    <h3 class="text-xl font-bold text-gray-800 dark:text-white mb-2">Recipe Memory Game</h3>
-                    <p class="text-gray-600 dark:text-gray-300 mb-4">Match ingredients and create healthy recipes.</p>
-                    <button class="bg-green-500 text-white px-6 py-2 rounded-lg hover:bg-green-600 transition-colors">
-                        Play Now
-                    </button>
+                    <h3 class="text-xl font-bold text-gray-800 dark:text-white mb-2" data-translate="recipeMemoryGame">Recipe Memory Game</h3>
+                    <p class="text-gray-600 dark:text-gray-300 mb-4" data-translate="recipeMemoryGameDescription">Match ingredients and create healthy recipes.</p>
+                    <button class="bg-green-500 text-white px-6 py-2 rounded-lg hover:bg-green-600 transition-colors" data-translate="playNow">Play Now</button>
                 </div>
             </div>
         </div>
@@ -154,37 +180,37 @@
         <div class="container mx-auto px-4">
             <div class="grid grid-cols-1 md:grid-cols-4 gap-8">
                 <div>
-                    <h3 class="text-xl font-bold mb-4">PlatePilot</h3>
-                    <p class="text-gray-400">Pilot your plate. Powered by AI. Fueled by wellness.</p>
+                    <h3 class="text-xl font-bold mb-4" data-translate="footerPlatePilot">PlatePilot</h3>
+                    <p class="text-gray-400" data-translate="footerDescription">Pilot your plate. Powered by AI. Fueled by wellness.</p>
                 </div>
                 <div>
-                    <h4 class="font-semibold mb-4">Quick Links</h4>
+                    <h4 class="font-semibold mb-4" data-translate="footerQuickLinks">Quick Links</h4>
                     <ul class="space-y-2">
-                        <li><a href="index.html" class="text-gray-400 hover:text-white transition-colors">Home</a></li>
-                        <li><a href="recipes.html" class="text-gray-400 hover:text-white transition-colors">Recipes</a></li>
-                        <li><a href="games.html" class="text-gray-400 hover:text-white transition-colors">Games</a></li>
-                        <li><a href="secret-recipes.html" class="text-gray-400 hover:text-white transition-colors">Secret Recipes</a></li>
-                        <li><a href="diet-planner.html" class="text-gray-400 hover:text-white transition-colors">Diet Planner</a></li>
+                        <li><a href="index.html" class="text-gray-400 hover:text-white transition-colors" data-translate="home">Home</a></li>
+                        <li><a href="recipes.html" class="text-gray-400 hover:text-white transition-colors" data-translate="recipes">Recipes</a></li>
+                        <li><a href="games.html" class="text-gray-400 hover:text-white transition-colors" data-translate="games">Games</a></li>
+                        <li><a href="secret-recipes.html" class="text-gray-400 hover:text-white transition-colors" data-translate="secretRecipes">Secret Recipes</a></li>
+                        <li><a href="diet-planner.html" class="text-gray-400 hover:text-white transition-colors" data-translate="dietPlanner">Diet Planner</a></li>
                     </ul>
                 </div>
                 <div>
-                    <h4 class="font-semibold mb-4">Contact</h4>
+                    <h4 class="font-semibold mb-4" data-translate="footerContact">Contact</h4>
                     <ul class="space-y-2 text-gray-400">
-                        <li>Email: platepilot.11@gmail.com</li>
-                        <li>Phone: +91 9251681626</li>
+                        <li data-translate="footerEmail">Email: platepilot.11@gmail.com</li>
+                        <li data-translate="footerPhone">Phone: +91 9251681626</li>
                     </ul>
                 </div>
                 <div>
-                    <h4 class="font-semibold mb-4">Follow Us</h4>
+                    <h4 class="font-semibold mb-4" data-translate="footerFollowUs">Follow Us</h4>
                     <div class="flex space-x-4">
-                        <a href="#" class="text-gray-400 hover:text-white transition-colors">Facebook</a>
-                        <a href="#" class="text-gray-400 hover:text-white transition-colors">Twitter</a>
-                        <a href="#" class="text-gray-400 hover:text-white transition-colors">Instagram</a>
+                        <a href="#" class="text-gray-400 hover:text-white transition-colors" data-translate="footerFacebook">Facebook</a>
+                        <a href="#" class="text-gray-400 hover:text-white transition-colors" data-translate="footerTwitter">Twitter</a>
+                        <a href="#" class="text-gray-400 hover:text-white transition-colors" data-translate="footerInstagram">Instagram</a>
                     </div>
                 </div>
             </div>
             <div class="border-t border-gray-700 mt-8 pt-8 text-center text-gray-400">
-                <p>&copy; 2024 PlatePilot. All rights reserved.</p>
+                <p data-translate="footerCopyright">&copy; 2024 PlatePilot. All rights reserved.</p>
             </div>
         </div>
     </footer>
@@ -200,10 +226,10 @@
     <!-- AI Assistant Modal (placeholder) -->
     <div id="aiAssistantModal" class="fixed inset-0 bg-black bg-opacity-50 hidden items-center justify-center z-50">
         <div class="bg-white dark:bg-gray-800 p-8 rounded-xl max-w-lg w-full shadow-2xl flex flex-col items-center">
-            <h3 class="text-2xl font-bold mb-4 text-gray-800 dark:text-white">AI Assistant</h3>
-            <p class="text-gray-600 dark:text-gray-300 mb-6">Hi! I'm your PlatePilot AI. How can I help you today?</p>
+            <h3 class="text-2xl font-bold mb-4 text-gray-800 dark:text-white" data-translate="aiAssistantTitle">AI Assistant</h3>
+            <p class="text-gray-600 dark:text-gray-300 mb-6" data-translate="aiAssistantDescription">Hi! I'm your PlatePilot AI. How can I help you today?</p>
             <input type="text" placeholder="Ask me anything..." class="w-full p-3 border border-gray-300 dark:border-gray-600 rounded-lg mb-4 bg-white dark:bg-gray-700 text-gray-700 dark:text-gray-300">
-            <button onclick="closeAIAssistant()" class="bg-green-500 text-white px-6 py-2 rounded-lg hover:bg-green-600">Close</button>
+            <button onclick="closeAIAssistant()" class="bg-green-500 text-white px-6 py-2 rounded-lg hover:bg-green-600" data-translate="aiAssistantClose">Close</button>
         </div>
     </div>
 

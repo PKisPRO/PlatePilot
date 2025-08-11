@@ -37,24 +37,33 @@
     <nav class="bg-white dark:bg-gray-900 shadow-md sticky top-0 z-50">
         <div class="container mx-auto px-4">
             <div class="flex justify-between items-center h-16">
-                <a href="index.html" class="text-2xl font-bold text-green-600 dark:text-green-400 hover:text-green-700 dark:hover:text-green-300 transition-colors">
-                    PlatePilot
-                </a>
-                <div class="hidden md:flex items-center space-x-8">
-                    <a href="index.html" class="text-gray-700 dark:text-gray-300 hover:text-green-600 dark:hover:text-green-400 transition-colors">Home</a>
-                    <a href="recipes.html" class="text-gray-700 dark:text-gray-300 hover:text-green-600 dark:hover:text-green-400 transition-colors">Recipes</a>
-                    <a href="leaderboard.html" class="text-gray-700 dark:text-gray-300 hover:text-green-600 dark:hover:text-green-400 transition-colors">Leaderboard</a>
-                    <a href="upload-recipe.html" class="text-gray-700 dark:text-gray-300 hover:text-green-600 dark:hover:text-green-400 transition-colors">Share Recipe</a>
-                    <a href="games.html" class="text-gray-700 dark:text-gray-300 hover:text-green-600 dark:hover:text-green-400 transition-colors">Games</a>
-                    <a href="secret-recipes.html" class="text-gray-700 dark:text-gray-300 hover:text-green-600 dark:hover:text-green-400 transition-colors">Secret Recipes</a>
-                    <a href="diet-planner.html" class="text-green-600 dark:text-green-400 font-medium">Diet Planner</a>
-                    <span id="welcomeMessage" class="text-gray-700 dark:text-gray-300"></span>
+                <a href="index.html" class="text-2xl font-bold text-green-600 dark:text-green-400 hover:text-green-700 dark:hover:text-green-300 transition-colors" data-translate="home">PlatePilot</a>
+                <div class="hidden md:flex items-center space-x-4">
+                    <a href="index.html" class="text-gray-700 dark:text-gray-300 hover:text-green-600 dark:hover:text-green-400 font-bold transition-colors" data-translate="home">Home</a>
+                    <a href="marketplace.html" class="bg-green-600 text-white px-4 py-2 rounded-lg font-semibold hover:bg-green-700 transition-colors" data-translate="marketplace">Marketplace</a>
+                    <a href="seller-onboarding.html" class="bg-blue-600 text-white px-4 py-2 rounded-lg font-semibold hover:bg-blue-700 transition-colors" data-translate="becomeSeller">Become a Seller</a>
+                    <!-- Recipes Dropdown -->
+                    <div class="relative group">
+                        <button class="text-gray-700 dark:text-gray-300 hover:text-green-600 dark:hover:text-green-400 transition-colors font-semibold flex items-center">Recipes <svg class="w-4 h-4 ml-1" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"/></svg></button>
+                        <div class="absolute left-0 mt-2 w-48 bg-white dark:bg-gray-800 rounded-lg shadow-lg opacity-0 group-hover:opacity-100 group-focus-within:opacity-100 pointer-events-none group-hover:pointer-events-auto group-focus-within:pointer-events-auto transition-opacity z-50">
+                            <a href="recipes.html" class="block px-4 py-2 text-gray-700 dark:text-gray-300 hover:bg-green-100 dark:hover:bg-green-900 rounded-t-lg" data-translate="recipes">All Recipes</a>
+                            <a href="upload-recipe.html" class="block px-4 py-2 text-gray-700 dark:text-gray-300 hover:bg-green-100 dark:hover:bg-green-900" data-translate="shareRecipe">Share Recipe</a>
+                            <a href="leaderboard.html" class="block px-4 py-2 text-gray-700 dark:text-gray-300 hover:bg-green-100 dark:hover:bg-green-900 rounded-b-lg" data-translate="leaderboard">Leaderboard</a>
+                        </div>
+                    </div>
+                    <!-- More Dropdown -->
+                    <div class="relative group">
+                        <button class="text-gray-700 dark:text-gray-300 hover:text-green-600 dark:hover:text-green-400 transition-colors font-semibold flex items-center">More <svg class="w-4 h-4 ml-1" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"/></svg></button>
+                        <div class="absolute left-0 mt-2 w-48 bg-white dark:bg-gray-800 rounded-lg shadow-lg opacity-0 group-hover:opacity-100 group-focus-within:opacity-100 pointer-events-none group-hover:pointer-events-auto group-focus-within:pointer-events-auto transition-opacity z-50">
+                            <a href="games.html" class="block px-4 py-2 text-gray-700 dark:text-gray-300 hover:bg-green-100 dark:hover:bg-green-900 rounded-t-lg" data-translate="games">Games</a>
+                            <a href="secret-recipes.html" class="block px-4 py-2 text-gray-700 dark:text-gray-300 hover:bg-green-100 dark:hover:bg-green-900" data-translate="secretRecipes">Secret Recipes</a>
+                            <a href="diet-planner.html" class="block px-4 py-2 text-gray-700 dark:text-gray-300 hover:bg-green-100 dark:hover:bg-green-900 rounded-b-lg" data-translate="dietPlanner">Diet Planner</a>
+                        </div>
+                    </div>
+                    <div id="languageSelectorContainer" class="ml-4"></div>
                     <button onclick="toggleDarkMode()" class="p-2 rounded-lg bg-gray-200 dark:bg-gray-700 hover:bg-gray-300 dark:hover:bg-gray-600 transition-colors">
                         <span class="dark:hidden">🌙</span>
                         <span class="hidden dark:inline">☀️</span>
-                    </button>
-                    <button onclick="logout()" class="text-gray-700 dark:text-gray-300 hover:text-green-600 dark:hover:text-green-400 transition-colors">
-                        Logout
                     </button>
                 </div>
                 <!-- Mobile Menu Button -->
@@ -67,17 +76,31 @@
             <!-- Mobile Menu -->
             <div id="mobileMenu" class="md:hidden hidden pb-4">
                 <div class="flex flex-col space-y-4">
-                    <a href="index.html" class="text-gray-700 dark:text-gray-300 hover:text-green-600 dark:hover:text-green-400 transition-colors">Home</a>
-                    <a href="recipes.html" class="text-gray-700 dark:text-gray-300 hover:text-green-600 dark:hover:text-green-400 transition-colors">Recipes</a>
-                    <a href="leaderboard.html" class="text-gray-700 dark:text-gray-300 hover:text-green-600 dark:hover:text-green-400 transition-colors">Leaderboard</a>
-                    <a href="upload-recipe.html" class="text-gray-700 dark:text-gray-300 hover:text-green-600 dark:hover:text-green-400 transition-colors">Share Recipe</a>
-                    <a href="games.html" class="text-gray-700 dark:text-gray-300 hover:text-green-600 dark:hover:text-green-400 transition-colors">Games</a>
-                    <a href="secret-recipes.html" class="text-gray-700 dark:text-gray-300 hover:text-green-600 dark:hover:text-green-400 transition-colors">Secret Recipes</a>
-                    <a href="diet-planner.html" class="text-green-600 dark:text-green-400 font-medium">Diet Planner</a>
-                    <button onclick="toggleDarkMode()" class="flex items-center space-x-2 text-gray-700 dark:text-gray-300 hover:text-green-600 dark:hover:text-green-400 transition-colors">
+                    <a href="index.html" class="text-gray-700 dark:text-gray-300 hover:text-green-600 dark:hover:text-green-400 font-bold transition-colors" data-translate="home">Home</a>
+                    <a href="marketplace.html" class="bg-green-600 text-white px-4 py-2 rounded-lg font-semibold hover:bg-green-700 transition-colors" data-translate="marketplace">Marketplace</a>
+                    <a href="seller-onboarding.html" class="bg-blue-600 text-white px-4 py-2 rounded-lg font-semibold hover:bg-blue-700 transition-colors" data-translate="becomeSeller">Become a Seller</a>
+                    <!-- Recipes Dropdown (Collapsible) -->
+                    <div>
+                        <button onclick="toggleMobileDropdown('recipesDropdown')" class="flex items-center justify-between w-full text-gray-700 dark:text-gray-300 font-semibold py-2 px-2 rounded hover:bg-green-100 dark:hover:bg-green-900 transition-colors">Recipes <svg class="w-4 h-4 ml-1 inline" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"/></svg></button>
+                        <div id="recipesDropdown" class="hidden flex flex-col ml-4 mt-2 space-y-2">
+                            <a href="recipes.html" class="text-gray-700 dark:text-gray-300 hover:text-green-600 dark:hover:text-green-400" data-translate="recipes">All Recipes</a>
+                            <a href="upload-recipe.html" class="text-gray-700 dark:text-gray-300 hover:text-green-600 dark:hover:text-green-400" data-translate="shareRecipe">Share Recipe</a>
+                            <a href="leaderboard.html" class="text-gray-700 dark:text-gray-300 hover:text-green-600 dark:hover:text-green-400" data-translate="leaderboard">Leaderboard</a>
+                        </div>
+                    </div>
+                    <!-- More Dropdown (Collapsible) -->
+                    <div>
+                        <button onclick="toggleMobileDropdown('moreDropdown')" class="flex items-center justify-between w-full text-gray-700 dark:text-gray-300 font-semibold py-2 px-2 rounded hover:bg-green-100 dark:hover:bg-green-900 transition-colors">More <svg class="w-4 h-4 ml-1 inline" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"/></svg></button>
+                        <div id="moreDropdown" class="hidden flex flex-col ml-4 mt-2 space-y-2">
+                            <a href="games.html" class="text-gray-700 dark:text-gray-300 hover:text-green-600 dark:hover:text-green-400" data-translate="games">Games</a>
+                            <a href="secret-recipes.html" class="text-gray-700 dark:text-gray-300 hover:text-green-600 dark:hover:text-green-400" data-translate="secretRecipes">Secret Recipes</a>
+                            <a href="diet-planner.html" class="text-gray-700 dark:text-gray-300 hover:text-green-600 dark:hover:text-green-400" data-translate="dietPlanner">Diet Planner</a>
+                        </div>
+                    </div>
+                    <div id="languageSelectorContainer" class="mt-2"></div>
+                    <button onclick="toggleDarkMode()" class="p-2 rounded-lg bg-gray-200 dark:bg-gray-700 hover:bg-gray-300 dark:hover:bg-gray-600 transition-colors w-12 self-center">
                         <span class="dark:hidden">🌙</span>
                         <span class="hidden dark:inline">☀️</span>
-                        <span>Toggle Theme</span>
                     </button>
                 </div>
             </div>
@@ -87,8 +110,8 @@
     <!-- Header -->
     <header class="bg-green-500 text-white py-16">
         <div class="container mx-auto px-4 text-center">
-            <h1 class="text-4xl font-bold mb-4">Diet Planner</h1>
-            <p class="text-xl mb-8">Create your personalized meal plan</p>
+            <h1 class="text-4xl font-bold mb-4" data-translate="dietPlannerTitle">Diet Planner</h1>
+            <p class="text-xl mb-8" data-translate="dietPlannerSubtitle">Create your personalized meal plan</p>
         </div>
     </header>
 
@@ -96,75 +119,71 @@
     <div class="container mx-auto px-4 py-12">
         <!-- Meal Plan Form -->
         <div class="bg-white dark:bg-gray-800 rounded-xl shadow-lg p-6 mb-8">
-            <h2 class="text-2xl font-bold text-gray-800 dark:text-white mb-6">Create Your Meal Plan</h2>
+            <h2 class="text-2xl font-bold text-gray-800 dark:text-white mb-6" data-translate="createMealPlan">Create Your Meal Plan</h2>
             <form id="mealPlanForm" class="space-y-6">
             <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
                 <div>
-                        <label class="block text-gray-700 dark:text-gray-300 mb-2">Goal</label>
+                        <label class="block text-gray-700 dark:text-gray-300 mb-2" data-translate="goal">Goal</label>
                         <select id="goal" class="w-full p-2 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-700 text-gray-700 dark:text-gray-300">
-                            <option value="weight-loss">Weight Loss</option>
-                            <option value="muscle-gain">Muscle Gain</option>
-                            <option value="maintenance">Maintenance</option>
-                            <option value="healthy-eating">Healthy Eating</option>
+                            <option value="weight-loss" data-translate="weightLoss">Weight Loss</option>
+                            <option value="muscle-gain" data-translate="muscleGain">Muscle Gain</option>
+                            <option value="maintenance" data-translate="maintenance">Maintenance</option>
+                            <option value="healthy-eating" data-translate="healthyEating">Healthy Eating</option>
                         </select>
                 </div>
                 <div>
-                    <label class="block text-gray-700 dark:text-gray-300 mb-2">Activity Level</label>
+                    <label class="block text-gray-700 dark:text-gray-300 mb-2" data-translate="activityLevel">Activity Level</label>
                         <select id="activityLevel" class="w-full p-2 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-700 text-gray-700 dark:text-gray-300">
-                            <option value="sedentary">Sedentary</option>
-                            <option value="light">Lightly Active</option>
-                            <option value="moderate">Moderately Active</option>
-                            <option value="very">Very Active</option>
+                            <option value="sedentary" data-translate="sedentary">Sedentary</option>
+                            <option value="light" data-translate="lightlyActive">Lightly Active</option>
+                            <option value="moderate" data-translate="moderatelyActive">Moderately Active</option>
+                            <option value="very" data-translate="veryActive">Very Active</option>
                     </select>
                 </div>
                 <div>
-                        <label class="block text-gray-700 dark:text-gray-300 mb-2">Dietary Preferences</label>
+                        <label class="block text-gray-700 dark:text-gray-300 mb-2" data-translate="dietaryPreferences">Dietary Preferences</label>
                         <div class="space-y-2">
                             <label class="flex items-center">
                                 <input type="checkbox" id="vegetarian" class="mr-2">
-                                <span class="text-gray-700 dark:text-gray-300">Vegetarian</span>
+                                <span class="text-gray-700 dark:text-gray-300" data-translate="vegetarian">Vegetarian</span>
                             </label>
                             <label class="flex items-center">
                                 <input type="checkbox" id="vegan" class="mr-2">
-                                <span class="text-gray-700 dark:text-gray-300">Vegan</span>
+                                <span class="text-gray-700 dark:text-gray-300" data-translate="vegan">Vegan</span>
                             </label>
                             <label class="flex items-center">
                                 <input type="checkbox" id="glutenFree" class="mr-2">
-                                <span class="text-gray-700 dark:text-gray-300">Gluten-Free</span>
+                                <span class="text-gray-700 dark:text-gray-300" data-translate="glutenFree">Gluten-Free</span>
                             </label>
             </div>
                     </div>
                     <div>
-                        <label class="block text-gray-700 dark:text-gray-300 mb-2">Meals per Day</label>
+                        <label class="block text-gray-700 dark:text-gray-300 mb-2" data-translate="mealsPerDay">Meals per Day</label>
                         <select id="mealsPerDay" class="w-full p-2 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-700 text-gray-700 dark:text-gray-300">
-                            <option value="3">3 Meals</option>
-                            <option value="4">4 Meals</option>
-                            <option value="5">5 Meals</option>
-                            <option value="6">6 Meals</option>
+                            <option value="3" data-translate="threeMeals">3 Meals</option>
+                            <option value="4" data-translate="fourMeals">4 Meals</option>
+                            <option value="5" data-translate="fiveMeals">5 Meals</option>
+                            <option value="6" data-translate="sixMeals">6 Meals</option>
                         </select>
                     </div>
                     <div>
-                        <label class="block text-gray-700 dark:text-gray-300 mb-2">Calorie Target</label>
-                        <input type="number" id="calorieTarget" class="w-full p-2 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-700 text-gray-700 dark:text-gray-300" placeholder="Enter daily calorie target">
+                        <label class="block text-gray-700 dark:text-gray-300 mb-2" data-translate="calorieTarget">Calorie Target</label>
+                        <input type="number" id="calorieTarget" class="w-full p-2 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-700 text-gray-700 dark:text-gray-300" placeholder="Enter daily calorie target" data-translate="calorieTargetPlaceholder">
                     </div>
                     <div>
-                        <label class="block text-gray-700 dark:text-gray-300 mb-2">Allergies/Restrictions</label>
-                        <input type="text" id="allergies" class="w-full p-2 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-700 text-gray-700 dark:text-gray-300" placeholder="Enter any allergies or restrictions">
+                        <label class="block text-gray-700 dark:text-gray-300 mb-2" data-translate="allergiesRestrictions">Allergies/Restrictions</label>
+                        <input type="text" id="allergies" class="w-full p-2 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-700 text-gray-700 dark:text-gray-300" placeholder="Enter any allergies or restrictions" data-translate="allergiesPlaceholder">
                     </div>
                 </div>
-                <button type="submit" class="w-full bg-green-500 text-white py-3 rounded-lg hover:bg-green-600 transition-colors">
-                    Generate Meal Plan
-                    </button>
+                <button type="submit" class="w-full bg-green-500 text-white py-3 rounded-lg hover:bg-green-600 transition-colors" data-translate="generateMealPlan">Generate Meal Plan</button>
             </form>
         </div>
 
         <!-- Meal Plan Display -->
         <div id="mealPlanDisplay" class="bg-white dark:bg-gray-800 rounded-xl shadow-lg p-6 hidden">
             <div class="flex justify-between items-center mb-6">
-                <h2 class="text-2xl font-bold text-gray-800 dark:text-white">Your AI-Generated Meal Plan</h2>
-                <button onclick="saveMealPlan()" class="bg-green-500 text-white px-4 py-2 rounded-lg hover:bg-green-600 transition-colors">
-                    Save Plan
-                </button>
+                <h2 class="text-2xl font-bold text-gray-800 dark:text-white" data-translate="aiGeneratedMealPlan">Your AI-Generated Meal Plan</h2>
+                <button onclick="saveMealPlan()" class="bg-green-500 text-white px-4 py-2 rounded-lg hover:bg-green-600 transition-colors" data-translate="savePlan">Save Plan</button>
             </div>
             <div id="mealPlanContent" class="space-y-8">
                 <!-- Meal plan will be dynamically inserted here -->
@@ -177,28 +196,28 @@
         <div class="container mx-auto px-4">
             <div class="grid grid-cols-1 md:grid-cols-4 gap-8">
                 <div>
-                    <h3 class="text-xl font-bold mb-4">PlatePilot</h3>
-                    <p class="text-gray-400">Pilot your plate. Powered by AI. Fueled by wellness.</p>
+                    <h3 class="text-xl font-bold mb-4" data-translate="platePilot">PlatePilot</h3>
+                    <p class="text-gray-400" data-translate="platePilotDescription">Pilot your plate. Powered by AI. Fueled by wellness.</p>
                 </div>
                 <div>
-                    <h4 class="font-semibold mb-4">Quick Links</h4>
+                    <h4 class="font-semibold mb-4" data-translate="quickLinks">Quick Links</h4>
                     <ul class="space-y-2">
-                        <li><a href="index.html" class="text-gray-400 hover:text-white transition-colors">Home</a></li>
-                        <li><a href="recipes.html" class="text-gray-400 hover:text-white transition-colors">Recipes</a></li>
-                        <li><a href="games.html" class="text-gray-400 hover:text-white transition-colors">Games</a></li>
-                        <li><a href="secret-recipes.html" class="text-gray-400 hover:text-white transition-colors">Secret Recipes</a></li>
-                        <li><a href="diet-planner.html" class="text-gray-400 hover:text-white transition-colors">Diet Planner</a></li>
+                        <li><a href="index.html" class="text-gray-400 hover:text-white transition-colors" data-translate="home">Home</a></li>
+                        <li><a href="recipes.html" class="text-gray-400 hover:text-white transition-colors" data-translate="recipes">Recipes</a></li>
+                        <li><a href="games.html" class="text-gray-400 hover:text-white transition-colors" data-translate="games">Games</a></li>
+                        <li><a href="secret-recipes.html" class="text-gray-400 hover:text-white transition-colors" data-translate="secretRecipes">Secret Recipes</a></li>
+                        <li><a href="diet-planner.html" class="text-gray-400 hover:text-white transition-colors" data-translate="dietPlanner">Diet Planner</a></li>
                     </ul>
                 </div>
                 <div>
-                    <h4 class="font-semibold mb-4">Contact</h4>
+                    <h4 class="font-semibold mb-4" data-translate="contact">Contact</h4>
                     <ul class="space-y-2 text-gray-400">
-                        <li>Email: platepilot.11@gmail.com</li>
-                        <li>Phone: +91 9251681626</li>
+                        <li data-translate="email">Email: platepilot.11@gmail.com</li>
+                        <li data-translate="phone">Phone: +91 9251681626</li>
                     </ul>
                 </div>
                 <div>
-                    <h4 class="font-semibold mb-4">Follow Us</h4>
+                    <h4 class="font-semibold mb-4" data-translate="followUs">Follow Us</h4>
                     <div class="flex space-x-4">
                         <a href="#" class="text-gray-400 hover:text-white transition-colors">Facebook</a>
                         <a href="#" class="text-gray-400 hover:text-white transition-colors">Twitter</a>
@@ -207,7 +226,7 @@
                 </div>
             </div>
             <div class="border-t border-gray-700 mt-8 pt-8 text-center text-gray-400">
-                <p>&copy; 2024 PlatePilot. All rights reserved.</p>
+                <p data-translate="copyright">&copy; 2024 PlatePilot. All rights reserved.</p>
             </div>
         </div>
     </footer>
@@ -223,10 +242,10 @@
     <!-- AI Assistant Modal (placeholder) -->
     <div id="aiAssistantModal" class="fixed inset-0 bg-black bg-opacity-50 hidden items-center justify-center z-50">
         <div class="bg-white dark:bg-gray-800 p-8 rounded-xl max-w-lg w-full shadow-2xl flex flex-col items-center">
-            <h3 class="text-2xl font-bold mb-4 text-gray-800 dark:text-white">AI Assistant</h3>
-            <p class="text-gray-600 dark:text-gray-300 mb-6">Hi! I'm your PlatePilot AI. How can I help you today?</p>
+            <h3 class="text-2xl font-bold mb-4 text-gray-800 dark:text-white" data-translate="aiAssistant">AI Assistant</h3>
+            <p class="text-gray-600 dark:text-gray-300 mb-6" data-translate="aiAssistantIntro">Hi! I'm your PlatePilot AI. How can I help you today?</p>
             <input type="text" placeholder="Ask me anything..." class="w-full p-3 border border-gray-300 dark:border-gray-600 rounded-lg mb-4 bg-white dark:bg-gray-700 text-gray-700 dark:text-gray-300">
-            <button onclick="closeAIAssistant()" class="bg-green-500 text-white px-6 py-2 rounded-lg hover:bg-green-600">Close</button>
+            <button onclick="closeAIAssistant()" class="bg-green-500 text-white px-6 py-2 rounded-lg hover:bg-green-600" data-translate="close">Close</button>
         </div>
     </div>
 
@@ -433,6 +452,12 @@
             window.toggleMobileMenu = function() {
                 const mobileMenu = document.getElementById('mobileMenu');
                 mobileMenu.classList.toggle('hidden');
+            };
+
+            // Mobile dropdown toggles
+            window.toggleMobileDropdown = function(dropdownId) {
+                const dropdown = document.getElementById(dropdownId);
+                dropdown.classList.toggle('hidden');
             };
             
             // Check login status

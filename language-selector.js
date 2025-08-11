@@ -103,7 +103,17 @@ class LanguageSelector {
                 contact: 'Contact',
                 followUs: 'Follow Us',
                 allRightsReserved: 'All rights reserved.',
-                language: 'Language'
+                language: 'Language',
+                // Marketplace additions
+                marketplaceTitle: 'Organic Marketplace',
+                marketplaceDesc: 'Browse verified organic fruits and vegetables grown by rural farmers and communities. Support healthy living and fair trade!',
+                type: 'Type',
+                quantity: 'Quantity',
+                price: 'Price',
+                organicBadge: '2x Market Rate (Organic)',
+                farmer: 'Farmer',
+                addToCart: 'Add to Cart',
+                buyNow: 'Buy Now'
             },
             hi: {
                 home: 'होम',
@@ -126,7 +136,17 @@ class LanguageSelector {
                 contact: 'संपर्क',
                 followUs: 'हमें फॉलो करें',
                 allRightsReserved: 'सर्वाधिकार सुरक्षित।',
-                language: 'भाषा'
+                language: 'भाषा',
+                // Marketplace additions
+                marketplaceTitle: 'जैविक बाज़ार',
+                marketplaceDesc: 'ग्रामीण किसानों और समुदायों द्वारा उगाई गई प्रमाणित जैविक फल और सब्ज़ियाँ देखें। स्वस्थ जीवन और निष्पक्ष व्यापार का समर्थन करें!',
+                type: 'प्रकार',
+                quantity: 'मात्रा',
+                price: 'मूल्य',
+                organicBadge: '2x बाज़ार दर (जैविक)',
+                farmer: 'किसान',
+                addToCart: 'कार्ट में डालें',
+                buyNow: 'अभी खरीदें'
             }
             // Add more languages here...
         };
