@@ -13,7 +13,11 @@
                 PlatePilot
             </a>
             <div id="languageSelectorContainer" class="ml-4"></div>
-            <a href="index.html" class="bg-green-600 text-white px-4 py-2 rounded-lg font-semibold hover:bg-green-700 transition-colors">Back to Home</a>
+            <button onclick="openCart()" class="relative bg-green-600 text-white px-4 py-2 rounded-lg font-semibold hover:bg-green-700 transition-colors flex items-center">
+                <svg class="w-6 h-6 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 3h2l.4 2M7 13h10l4-8H5.4M7 13l-1.35 2.7A1 1 0 007 17h10a1 1 0 00.95-.68L19 13M7 13V6a1 1 0 011-1h5a1 1 0 011 1v7" /></svg>
+                Cart <span id="cartCount" class="ml-1 bg-white text-green-600 rounded-full px-2 text-xs font-bold">0</span>
+            </button>
+            <a href="index.html" class="bg-green-600 text-white px-4 py-2 rounded-lg font-semibold hover:bg-green-700 transition-colors ml-2">Back to Home</a>
         </div>
     </nav>
     <section class="py-16">
@@ -28,6 +32,41 @@
             <div id="noResults" class="hidden text-center text-gray-500 dark:text-gray-400 mt-12">No listings found.</div>
         </div>
     </section>
+    <!-- Cart Modal -->
+    <div id="cartModal" class="fixed inset-0 bg-black bg-opacity-50 hidden items-center justify-center z-50">
+        <div class="bg-white dark:bg-gray-800 p-8 rounded-xl max-w-lg w-full shadow-2xl flex flex-col items-center">
+            <h3 class="text-2xl font-bold mb-4 text-gray-800 dark:text-white">Your Cart</h3>
+            <div id="cartItems" class="w-full mb-4"></div>
+            <div id="cartTotal" class="w-full text-right font-bold mb-4"></div>
+            <button onclick="checkout()" class="bg-green-600 text-white px-6 py-2 rounded-lg hover:bg-green-700 mb-2">Checkout</button>
+            <button onclick="closeCart()" class="bg-gray-300 dark:bg-gray-700 text-gray-800 dark:text-gray-200 px-6 py-2 rounded-lg hover:bg-gray-400 dark:hover:bg-gray-600 mt-2">Close</button>
+        </div>
+    </div>
+    <!-- Checkout Modal -->
+    <div id="checkoutModal" class="fixed inset-0 bg-black bg-opacity-50 hidden items-center justify-center z-50">
+        <div class="bg-white dark:bg-gray-800 p-8 rounded-xl max-w-lg w-full shadow-2xl flex flex-col items-center">
+            <h3 class="text-2xl font-bold mb-4 text-gray-800 dark:text-white">Checkout</h3>
+            <div class="w-full mb-4">
+                <label class="block mb-2 font-semibold">Select Payment Method:</label>
+                <select id="paymentMethod" class="w-full p-2 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-700 text-gray-700 dark:text-gray-300 mb-4">
+                    <option value="upi">UPI</option>
+                    <option value="card">Credit/Debit Card</option>
+                    <option value="wallet">Wallet</option>
+                    <option value="cod">Cash on Delivery</option>
+                </select>
+            </div>
+            <button onclick="confirmOrder()" class="bg-green-600 text-white px-6 py-2 rounded-lg hover:bg-green-700 mb-2">Confirm Order</button>
+            <button onclick="closeCheckout()" class="bg-gray-300 dark:bg-gray-700 text-gray-800 dark:text-gray-200 px-6 py-2 rounded-lg hover:bg-gray-400 dark:hover:bg-gray-600 mt-2">Cancel</button>
+        </div>
+    </div>
+    <!-- Order Confirmation Modal -->
+    <div id="orderConfirmModal" class="fixed inset-0 bg-black bg-opacity-50 hidden items-center justify-center z-50">
+        <div class="bg-white dark:bg-gray-800 p-8 rounded-xl max-w-lg w-full shadow-2xl flex flex-col items-center">
+            <h3 class="text-2xl font-bold mb-4 text-gray-800 dark:text-white">Order Confirmed!</h3>
+            <p class="mb-6 text-gray-700 dark:text-gray-300">Thank you for your purchase. Your order will be delivered soon!</p>
+            <button onclick="closeOrderConfirm()" class="bg-green-600 text-white px-6 py-2 rounded-lg hover:bg-green-700">Close</button>
+        </div>
+    </div>
     <script>
         // Dummy products for demo
         const demoListings = [
@@ -100,15 +139,101 @@
                     <div class="mb-2 text-gray-700 dark:text-gray-300">Type: <span class="font-semibold">${listing.produceType}</span></div>
                     <div class="mb-2 text-gray-700 dark:text-gray-300">Quantity: <span class="font-semibold">${listing.quantity} kg</span></div>
                     <div class="mb-2 text-gray-700 dark:text-gray-300">Price: <span class="font-semibold">₹${listing.price} / kg</span> <span class="ml-2 inline-block bg-yellow-200 text-yellow-800 text-xs font-bold px-2 py-1 rounded">2x Market Rate (Organic)</span></div>
-                    <div class="mb-2 text-gray-700 dark:text-gray-300">Seller: <span class="font-semibold">${listing.name}</span></div>
-                    <div class="mb-2 text-gray-700 dark:text-gray-300">Contact: <span class="font-semibold">${listing.contact}</span></div>
-                    <div class="mb-2 text-gray-700 dark:text-gray-300">Land: <span class="font-semibold">${listing.organicLand} / ${listing.totalLand} bigha organic</span></div>
-                    <button onclick="alert('Contact seller at: ${listing.contact}')" class="mt-4 bg-green-600 text-white px-4 py-2 rounded-lg font-semibold hover:bg-green-700 transition-colors">Contact Seller</button>
+                    <div class="mb-2 text-gray-700 dark:text-gray-300">Farmer: <span class="font-semibold">${listing.name}</span></div>
+                    <div class="flex gap-2 mt-4">
+                        <button onclick="addToCart('${listing.produceName}')" class="bg-green-600 text-white px-4 py-2 rounded-lg font-semibold hover:bg-green-700 transition-colors">Add to Cart</button>
+                        <button onclick="buyNow('${listing.produceName}')" class="bg-blue-600 text-white px-4 py-2 rounded-lg font-semibold hover:bg-blue-700 transition-colors">Buy Now</button>
+                    </div>
                 `;
                 grid.appendChild(card);
             });
         }
-        document.addEventListener('DOMContentLoaded', loadListings);
+        // Cart logic
+        function getCart() {
+            return JSON.parse(localStorage.getItem('cart')) || [];
+        }
+        function setCart(cart) {
+            localStorage.setItem('cart', JSON.stringify(cart));
+            updateCartCount();
+        }
+        function updateCartCount() {
+            const cart = getCart();
+            document.getElementById('cartCount').textContent = cart.length;
+        }
+        function addToCart(produceName) {
+            const listings = JSON.parse(localStorage.getItem('sellerListings')) || [];
+            const item = listings.find(l => l.produceName === produceName);
+            if (!item) return;
+            let cart = getCart();
+            cart.push(item);
+            setCart(cart);
+            alert('Added to cart!');
+        }
+        function buyNow(produceName) {
+            addToCart(produceName);
+            openCart();
+        }
+        function openCart() {
+            renderCart();
+            document.getElementById('cartModal').classList.remove('hidden');
+            document.getElementById('cartModal').classList.add('flex');
+        }
+        function closeCart() {
+            document.getElementById('cartModal').classList.add('hidden');
+            document.getElementById('cartModal').classList.remove('flex');
+        }
+        function renderCart() {
+            const cart = getCart();
+            const cartItemsDiv = document.getElementById('cartItems');
+            const cartTotalDiv = document.getElementById('cartTotal');
+            if (cart.length === 0) {
+                cartItemsDiv.innerHTML = '<p class="text-gray-600 dark:text-gray-300">Your cart is empty.</p>';
+                cartTotalDiv.textContent = '';
+                return;
+            }
+            let total = 0;
+            cartItemsDiv.innerHTML = cart.map((item, idx) => {
+                total += item.price;
+                return `<div class='flex justify-between items-center mb-2'><span>${item.produceName} (${item.quantity}kg)</span><span>₹${item.price}</span><button onclick='removeFromCart(${idx})' class='ml-2 text-red-500 hover:underline'>Remove</button></div>`;
+            }).join('');
+            cartTotalDiv.textContent = 'Total: ₹' + total;
+        }
+        function removeFromCart(idx) {
+            let cart = getCart();
+            cart.splice(idx, 1);
+            setCart(cart);
+            renderCart();
+        }
+        // Checkout flow
+        function checkout() {
+            closeCart();
+            document.getElementById('checkoutModal').classList.remove('hidden');
+            document.getElementById('checkoutModal').classList.add('flex');
+        }
+        function closeCheckout() {
+            document.getElementById('checkoutModal').classList.add('hidden');
+            document.getElementById('checkoutModal').classList.remove('flex');
+        }
+        function confirmOrder() {
+            // Simulate order storage
+            let orders = JSON.parse(localStorage.getItem('orders')) || [];
+            orders.push({
+                cart: getCart(),
+                payment: document.getElementById('paymentMethod').value,
+                date: new Date().toISOString()
+            });
+            localStorage.setItem('orders', JSON.stringify(orders));
+            setCart([]);
+            closeCheckout();
+            document.getElementById('orderConfirmModal').classList.remove('hidden');
+            document.getElementById('orderConfirmModal').classList.add('flex');
+        }
+        function closeOrderConfirm() {
+            document.getElementById('orderConfirmModal').classList.add('hidden');
+            document.getElementById('orderConfirmModal').classList.remove('flex');
+            updateCartCount();
+        }
+        document.addEventListener('DOMContentLoaded', updateCartCount);
     </script>
     <footer class="bg-gray-800 text-white py-8 mt-12">
         <div class="container mx-auto px-4">
