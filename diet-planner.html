@@ -284,46 +284,43 @@
             const allergies = document.getElementById('allergies').value.toLowerCase();
 
             // Calculate daily macro targets based on goal
-            let macroTargets = {
-                protein: 0,
-                carbs: 0,
-                fat: 0
-            };
-
+            let macroTargets = { protein: 0, carbs: 0, fat: 0 };
             switch(goal) {
-                case 'weight-loss':
-                    macroTargets = { protein: 0.4, carbs: 0.3, fat: 0.3 };
-                    break;
-                case 'muscle-gain':
-                    macroTargets = { protein: 0.4, carbs: 0.4, fat: 0.2 };
-                    break;
-                case 'maintenance':
-                    macroTargets = { protein: 0.3, carbs: 0.4, fat: 0.3 };
-                    break;
-                case 'healthy-eating':
-                    macroTargets = { protein: 0.3, carbs: 0.45, fat: 0.25 };
-                    break;
+                case 'weight-loss': macroTargets = { protein: 0.4, carbs: 0.3, fat: 0.3 }; break;
+                case 'muscle-gain': macroTargets = { protein: 0.4, carbs: 0.4, fat: 0.2 }; break;
+                case 'maintenance': macroTargets = { protein: 0.3, carbs: 0.4, fat: 0.3 }; break;
+                case 'healthy-eating': macroTargets = { protein: 0.3, carbs: 0.45, fat: 0.25 }; break;
             }
+
+            // Distribute calories/macros per meal
+            const mealTypes = ['breakfast', 'lunch', 'dinner'];
+            if (mealsPerDay > 3) mealTypes.push('snacks');
+            const caloriesPerMeal = Math.round(calorieTarget / mealsPerDay);
+            const proteinPerMeal = Math.round((calorieTarget * macroTargets.protein / 4) / mealsPerDay);
+            const carbsPerMeal = Math.round((calorieTarget * macroTargets.carbs / 4) / mealsPerDay);
+            const fatPerMeal = Math.round((calorieTarget * macroTargets.fat / 9) / mealsPerDay);
+
+            // Track used meals to avoid repeats
+            const usedMeals = { breakfast: [], lunch: [], dinner: [], snacks: [] };
 
             // Generate meal plan for each day
             const days = ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday', 'Sunday'];
             let mealPlanHTML = '';
 
             days.forEach(day => {
+                let dailyTotals = { calories: 0, protein: 0, carbs: 0, fat: 0 };
                 mealPlanHTML += `
                     <div class="mb-8">
                         <h3 class="text-xl font-semibold text-gray-800 dark:text-white mb-4">${day}</h3>
                         <div class="grid grid-cols-1 md:grid-cols-${mealsPerDay} gap-4">
                 `;
-
-                // Add meals based on mealsPerDay
-                const mealTypes = ['breakfast', 'lunch', 'dinner'];
-                if (mealsPerDay > 3) {
-                    mealTypes.push('snacks');
-                }
-
                 mealTypes.forEach(mealType => {
-                    const meal = selectMeal(mealType, isVegetarian, isVegan, isGlutenFree, allergies);
+                    const meal = selectBestMeal(mealType, isVegetarian, isVegan, isGlutenFree, allergies, caloriesPerMeal, proteinPerMeal, carbsPerMeal, fatPerMeal, usedMeals[mealType]);
+                    usedMeals[mealType].push(meal.name); // Avoid repeat
+                    dailyTotals.calories += meal.calories;
+                    dailyTotals.protein += meal.protein;
+                    dailyTotals.carbs += meal.carbs;
+                    dailyTotals.fat += meal.fat;
                     mealPlanHTML += `
                         <div class="bg-gray-50 dark:bg-gray-700 p-4 rounded-lg">
                             <h4 class="font-medium text-gray-800 dark:text-white mb-2">${mealType.charAt(0).toUpperCase() + mealType.slice(1)}</h4>
@@ -334,8 +331,10 @@
                         </div>
                     `;
                 });
-
                 mealPlanHTML += `
+                        </div>
+                        <div class="mt-4 text-right text-sm text-gray-700 dark:text-gray-300 font-semibold">
+                            Daily Total: ${dailyTotals.calories} cal | P: ${dailyTotals.protein}g | C: ${dailyTotals.carbs}g | F: ${dailyTotals.fat}g
                         </div>
                     </div>
                 `;
@@ -345,15 +344,16 @@
             document.getElementById('mealPlanDisplay').classList.remove('hidden');
         }
 
-        function selectMeal(mealType, isVegetarian, isVegan, isGlutenFree, allergies) {
+        // Improved meal selection: pick closest to target macros/calories, avoid repeats
+        function selectBestMeal(mealType, isVegetarian, isVegan, isGlutenFree, allergies, calTarget, pTarget, cTarget, fTarget, used) {
             let availableMeals = mealDatabase[mealType].filter(meal => {
                 if (isVegan && !meal.vegan) return false;
                 if (isVegetarian && !meal.vegetarian) return false;
                 if (isGlutenFree && !meal.glutenFree) return false;
                 if (allergies && meal.name.toLowerCase().includes(allergies)) return false;
+                if (used && used.includes(meal.name)) return false;
                 return true;
             });
-
             if (availableMeals.length === 0) {
                 return {
                     name: "Custom meal (consult nutritionist)",
@@ -363,8 +363,13 @@
                     fat: 0
                 };
             }
-
-            return availableMeals[Math.floor(Math.random() * availableMeals.length)];
+            // Pick meal closest to target macros/calories
+            availableMeals.sort((a, b) => {
+                const aDiff = Math.abs(a.calories - calTarget) + Math.abs(a.protein - pTarget) + Math.abs(a.carbs - cTarget) + Math.abs(a.fat - fTarget);
+                const bDiff = Math.abs(b.calories - calTarget) + Math.abs(b.protein - pTarget) + Math.abs(b.carbs - cTarget) + Math.abs(b.fat - fTarget);
+                return aDiff - bDiff;
+            });
+            return availableMeals[0];
         }
 
         function saveMealPlan() {

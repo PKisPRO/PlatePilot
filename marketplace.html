@@ -1,0 +1,121 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Marketplace - PlatePilot</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+</head>
+<body class="bg-gray-50 dark:bg-gray-900 min-h-screen">
+    <nav class="bg-white dark:bg-gray-900 shadow-md sticky top-0 z-50">
+        <div class="container mx-auto px-4 flex justify-between items-center h-16">
+            <a href="index.html" class="text-2xl font-bold text-green-600 dark:text-green-400 hover:text-green-700 dark:hover:text-green-300 transition-colors">
+                PlatePilot
+            </a>
+            <div id="languageSelectorContainer" class="ml-4"></div>
+            <a href="index.html" class="bg-green-600 text-white px-4 py-2 rounded-lg font-semibold hover:bg-green-700 transition-colors">Back to Home</a>
+        </div>
+    </nav>
+    <section class="py-16">
+        <div class="container mx-auto px-4">
+            <h1 class="text-3xl font-bold text-green-600 mb-8 text-center">Organic Marketplace</h1>
+            <p class="text-gray-700 dark:text-gray-300 mb-8 text-center max-w-2xl mx-auto">Browse verified organic fruits and vegetables grown by rural farmers and communities. Support healthy living and fair trade!</p>
+            <div class="mb-8 flex flex-col md:flex-row gap-4 justify-center items-center">
+                <input id="searchInput" type="text" placeholder="Search produce or seller..." class="w-full md:w-1/3 p-3 rounded-lg border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-700 text-gray-800 dark:text-gray-200 focus:outline-none">
+                <button onclick="loadListings()" class="bg-green-600 text-white px-6 py-3 rounded-lg font-semibold hover:bg-green-700 transition-colors">Search</button>
+            </div>
+            <div id="listingsGrid" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8"></div>
+            <div id="noResults" class="hidden text-center text-gray-500 dark:text-gray-400 mt-12">No listings found.</div>
+        </div>
+    </section>
+    <script>
+        // Dummy products for demo
+        const demoListings = [
+            {
+                name: "Ramesh Kumar",
+                contact: "ramesh.farmer@example.com",
+                totalLand: 10,
+                organicLand: 2,
+                produceName: "Organic Tomatoes",
+                produceType: "Vegetable",
+                quantity: 100,
+                price: 60,
+                image: "https://images.unsplash.com/photo-1502741338009-cac2772e18bc?auto=format&fit=crop&w=400&q=80",
+                date: new Date().toISOString()
+            },
+            {
+                name: "Sita Devi",
+                contact: "sita.devi@example.com",
+                totalLand: 8,
+                organicLand: 3,
+                produceName: "Organic Mangoes",
+                produceType: "Fruit",
+                quantity: 50,
+                price: 120,
+                image: "https://images.unsplash.com/photo-1465101046530-73398c7f28ca?auto=format&fit=crop&w=400&q=80",
+                date: new Date().toISOString()
+            },
+            {
+                name: "Mahesh Singh",
+                contact: "mahesh.singh@example.com",
+                totalLand: 12,
+                organicLand: 4,
+                produceName: "Organic Spinach",
+                produceType: "Vegetable",
+                quantity: 80,
+                price: 40,
+                image: "https://images.unsplash.com/photo-1504674900247-0877df9cc836?auto=format&fit=crop&w=400&q=80",
+                date: new Date().toISOString()
+            }
+        ];
+        if (!localStorage.getItem('sellerListings') || JSON.parse(localStorage.getItem('sellerListings')).length === 0) {
+            localStorage.setItem('sellerListings', JSON.stringify(demoListings));
+        }
+        function loadListings() {
+            const search = document.getElementById('searchInput').value.toLowerCase();
+            const listings = JSON.parse(localStorage.getItem('sellerListings')) || [];
+            const grid = document.getElementById('listingsGrid');
+            const noResults = document.getElementById('noResults');
+            grid.innerHTML = '';
+            let filtered = listings;
+            if (search) {
+                filtered = listings.filter(l =>
+                    l.produceName.toLowerCase().includes(search) ||
+                    l.name.toLowerCase().includes(search) ||
+                    l.produceType.toLowerCase().includes(search)
+                );
+            }
+            if (filtered.length === 0) {
+                noResults.classList.remove('hidden');
+                return;
+            } else {
+                noResults.classList.add('hidden');
+            }
+            filtered.forEach(listing => {
+                const card = document.createElement('div');
+                card.className = 'bg-white dark:bg-gray-800 rounded-xl shadow-lg p-6 flex flex-col';
+                card.innerHTML = `
+                    <img src="${listing.image}" alt="${listing.produceName}" class="w-full h-48 object-cover rounded-lg mb-4 border border-gray-200 dark:border-gray-700" onerror="this.src='https://via.placeholder.com/300x200?text=No+Image'">
+                    <h2 class="text-2xl font-bold text-green-600 mb-2">${listing.produceName}</h2>
+                    <div class="mb-2 text-gray-700 dark:text-gray-300">Type: <span class="font-semibold">${listing.produceType}</span></div>
+                    <div class="mb-2 text-gray-700 dark:text-gray-300">Quantity: <span class="font-semibold">${listing.quantity} kg</span></div>
+                    <div class="mb-2 text-gray-700 dark:text-gray-300">Price: <span class="font-semibold">₹${listing.price} / kg</span> <span class="ml-2 inline-block bg-yellow-200 text-yellow-800 text-xs font-bold px-2 py-1 rounded">2x Market Rate (Organic)</span></div>
+                    <div class="mb-2 text-gray-700 dark:text-gray-300">Seller: <span class="font-semibold">${listing.name}</span></div>
+                    <div class="mb-2 text-gray-700 dark:text-gray-300">Contact: <span class="font-semibold">${listing.contact}</span></div>
+                    <div class="mb-2 text-gray-700 dark:text-gray-300">Land: <span class="font-semibold">${listing.organicLand} / ${listing.totalLand} bigha organic</span></div>
+                    <button onclick="alert('Contact seller at: ${listing.contact}')" class="mt-4 bg-green-600 text-white px-4 py-2 rounded-lg font-semibold hover:bg-green-700 transition-colors">Contact Seller</button>
+                `;
+                grid.appendChild(card);
+            });
+        }
+        document.addEventListener('DOMContentLoaded', loadListings);
+    </script>
+    <footer class="bg-gray-800 text-white py-8 mt-12">
+        <div class="container mx-auto px-4">
+            <div class="mt-8 text-center text-gray-400 text-sm">
+                <p>🌐 PlatePilot supports 50+ languages for accessibility. Need help? <a href="mailto:platepilot.11@gmail.com" class="underline hover:text-white">Contact us</a>.</p>
+            </div>
+        </div>
+    </footer>
+</body>
+</html>
