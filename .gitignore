@@ -1,4 +1,11 @@
-.DS_Store
-node_modules/
+# Local configuration files with sensitive data
+ai-config-local.js
+
+# Environment files
 .env
-*.log 
+.env.local
+.env.production
+
+# API keys and secrets
+*.key
+secrets.json

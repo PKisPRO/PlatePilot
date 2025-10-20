@@ -1,0 +1,368 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AI Organic Verification - PlatePilot</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="ai-config.js"></script>
+    <script src="ai-config-local.js"></script>
+    <script>
+        tailwind.config = {
+            darkMode: 'class',
+            theme: {
+                extend: {
+                    colors: {
+                        // You can add custom colors here if needed
+                    }
+                }
+            }
+        }
+    </script>
+</head>
+<body class="bg-gray-50 dark:bg-gray-900 min-h-screen">
+    <!-- Navigation Bar -->
+    <nav class="bg-white dark:bg-gray-900 shadow-md sticky top-0 z-50">
+        <div class="container mx-auto px-4">
+            <div class="flex justify-between items-center h-16">
+                <a href="index.html" class="text-2xl font-bold text-green-600 dark:text-green-400 hover:text-green-700 dark:hover:text-green-300 transition-colors">PlatePilot</a>
+                <div class="hidden md:flex items-center space-x-8">
+                    <a href="index.html" class="text-gray-700 dark:text-gray-300 hover:text-green-600 dark:hover:text-green-400 transition-colors">Home</a>
+                    <a href="recipes.html" class="text-gray-700 dark:text-gray-300 hover:text-green-600 dark:hover:text-green-400 transition-colors">Recipes</a>
+                    <a href="leaderboard.html" class="text-gray-700 dark:text-gray-300 hover:text-green-600 dark:hover:text-green-400 transition-colors">Leaderboard</a>
+                    <a href="upload-recipe.html" class="text-gray-700 dark:text-gray-300 hover:text-green-600 dark:hover:text-green-400 transition-colors">Share Recipe</a>
+                    <a href="games.html" class="text-gray-700 dark:text-gray-300 hover:text-green-600 dark:hover:text-green-400 transition-colors">Games</a>
+                    <a href="secret-recipes.html" class="text-gray-700 dark:text-gray-300 hover:text-green-600 dark:hover:text-green-400 transition-colors">Secret Recipes</a>
+                    <a href="diet-planner.html" class="text-gray-700 dark:text-gray-300 hover:text-green-600 dark:hover:text-green-400 transition-colors">Diet Planner</a>
+                    <a href="ai-verification.html" class="text-green-600 dark:text-green-400 font-medium">AI Verification</a>
+                    <button onclick="toggleDarkMode()" class="p-2 rounded-lg bg-gray-200 dark:bg-gray-700 hover:bg-gray-300 dark:hover:bg-gray-600 transition-colors">
+                        <span class="dark:hidden">🌙</span>
+                        <span class="hidden dark:inline">☀️</span>
+                    </button>
+                </div>
+                <!-- Mobile Menu Button -->
+                <button class="md:hidden p-2 rounded-lg hover:bg-gray-200 dark:hover:bg-gray-700 transition-colors" onclick="toggleMobileMenu()">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 text-gray-700 dark:text-gray-300" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16" />
+                    </svg>
+                </button>
+            </div>
+            <!-- Mobile Menu -->
+            <div id="mobileMenu" class="md:hidden hidden pb-4">
+                <div class="flex flex-col space-y-4">
+                    <a href="index.html" class="text-gray-700 dark:text-gray-300 hover:text-green-600 dark:hover:text-green-400 transition-colors">Home</a>
+                    <a href="recipes.html" class="text-gray-700 dark:text-gray-300 hover:text-green-600 dark:hover:text-green-400 transition-colors">Recipes</a>
+                    <a href="leaderboard.html" class="text-gray-700 dark:text-gray-300 hover:text-green-600 dark:hover:text-green-400 transition-colors">Leaderboard</a>
+                    <a href="upload-recipe.html" class="text-gray-700 dark:text-gray-300 hover:text-green-600 dark:hover:text-green-400 transition-colors">Share Recipe</a>
+                    <a href="games.html" class="text-gray-700 dark:text-gray-300 hover:text-green-600 dark:hover:text-green-400 transition-colors">Games</a>
+                    <a href="secret-recipes.html" class="text-gray-700 dark:text-gray-300 hover:text-green-600 dark:hover:text-green-400 transition-colors">Secret Recipes</a>
+                    <a href="diet-planner.html" class="text-gray-700 dark:text-gray-300 hover:text-green-600 dark:hover:text-green-400 transition-colors">Diet Planner</a>
+                    <a href="ai-verification.html" class="text-green-600 dark:text-green-400 font-medium">AI Verification</a>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Main Content -->
+    <div class="container mx-auto px-4 py-12">
+        <div class="max-w-4xl mx-auto">
+            <!-- Header -->
+            <div class="text-center mb-12">
+                <h1 class="text-4xl font-bold text-gray-800 dark:text-white mb-4">AI Organic Verification</h1>
+                <p class="text-xl text-gray-600 dark:text-gray-300 mb-6">Upload images of your produce to verify organic authenticity using advanced AI analysis</p>
+                <div class="flex items-center justify-center space-x-4 text-sm text-gray-500 dark:text-gray-400">
+                    <div class="flex items-center">
+                        <svg class="w-4 h-4 mr-1 text-green-500" fill="currentColor" viewBox="0 0 20 20">
+                            <path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"></path>
+                        </svg>
+                        Instant Analysis
+                    </div>
+                    <div class="flex items-center">
+                        <svg class="w-4 h-4 mr-1 text-green-500" fill="currentColor" viewBox="0 0 20 20">
+                            <path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"></path>
+                        </svg>
+                        Expert-Level Accuracy
+                    </div>
+                    <div class="flex items-center">
+                        <svg class="w-4 h-4 mr-1 text-green-500" fill="currentColor" viewBox="0 0 20 20">
+                            <path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"></path>
+                        </svg>
+                        Privacy Protected
+                    </div>
+                </div>
+            </div>
+
+            <!-- Upload Section -->
+            <div class="bg-white dark:bg-gray-800 rounded-xl shadow-lg p-8 mb-8">
+                <div class="text-center">
+                    <div id="uploadArea" class="border-2 border-dashed border-gray-300 dark:border-gray-600 rounded-lg p-12 hover:border-green-500 dark:hover:border-green-400 transition-colors cursor-pointer">
+                        <svg class="mx-auto h-16 w-16 text-gray-400 dark:text-gray-500 mb-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 16a4 4 0 01-.88-7.903A5 5 0 1115.9 6L16 6a5 5 0 011 9.9M15 13l-3-3m0 0l-3 3m3-3v12" />
+                        </svg>
+                        <h3 class="text-lg font-medium text-gray-900 dark:text-white mb-2">Upload Produce Images</h3>
+                        <p class="text-gray-500 dark:text-gray-400 mb-4">Drag and drop your images here, or click to browse</p>
+                        <input type="file" id="imageInput" accept="image/*" multiple class="hidden">
+                        <button onclick="document.getElementById('imageInput').click()" class="bg-green-500 text-white px-6 py-2 rounded-lg hover:bg-green-600 transition-colors">
+                            Choose Files
+                        </button>
+                        <p class="text-sm text-gray-400 dark:text-gray-500 mt-2">Supports JPG, PNG, WebP up to 10MB each</p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Results Section -->
+            <div id="resultsSection" class="hidden">
+                <div class="bg-white dark:bg-gray-800 rounded-xl shadow-lg p-8">
+                    <h2 class="text-2xl font-bold text-gray-800 dark:text-white mb-6">Analysis Results</h2>
+                    <div id="resultsContainer" class="space-y-6">
+                        <!-- Results will be populated here -->
+                    </div>
+                </div>
+            </div>
+
+            <!-- How It Works Section -->
+            <div class="bg-white dark:bg-gray-800 rounded-xl shadow-lg p-8 mt-8">
+                <h2 class="text-2xl font-bold text-gray-800 dark:text-white mb-6">How It Works</h2>
+                <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+                    <div class="text-center">
+                        <div class="bg-green-100 dark:bg-green-900 rounded-full w-16 h-16 flex items-center justify-center mx-auto mb-4">
+                            <span class="text-2xl font-bold text-green-600 dark:text-green-400">1</span>
+                        </div>
+                        <h3 class="text-lg font-semibold text-gray-800 dark:text-white mb-2">Upload Images</h3>
+                        <p class="text-gray-600 dark:text-gray-300">Take clear photos of your produce from multiple angles, focusing on leaves, stems, and surface texture.</p>
+                    </div>
+                    <div class="text-center">
+                        <div class="bg-green-100 dark:bg-green-900 rounded-full w-16 h-16 flex items-center justify-center mx-auto mb-4">
+                            <span class="text-2xl font-bold text-green-600 dark:text-green-400">2</span>
+                        </div>
+                        <h3 class="text-lg font-semibold text-gray-800 dark:text-white mb-2">AI Analysis</h3>
+                        <p class="text-gray-600 dark:text-gray-300">Our advanced AI examines visual patterns, discoloration, residue traces, and surface anomalies.</p>
+                    </div>
+                    <div class="text-center">
+                        <div class="bg-green-100 dark:bg-green-900 rounded-full w-16 h-16 flex items-center justify-center mx-auto mb-4">
+                            <span class="text-2xl font-bold text-green-600 dark:text-green-400">3</span>
+                        </div>
+                        <h3 class="text-lg font-semibold text-gray-800 dark:text-white mb-2">Get Results</h3>
+                        <p class="text-gray-600 dark:text-gray-300">Receive detailed analysis with confidence scores and recommendations for further verification if needed.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Footer -->
+    <footer class="bg-gray-800 text-white py-8 mt-12">
+        <div class="container mx-auto px-4">
+            <div class="grid grid-cols-1 md:grid-cols-4 gap-8">
+                <div>
+                    <h3 class="text-xl font-bold mb-4">PlatePilot</h3>
+                    <p class="text-gray-400">Pilot your plate. Powered by AI. Fueled by wellness.</p>
+                </div>
+                <div>
+                    <h4 class="font-semibold mb-4">Quick Links</h4>
+                    <ul class="space-y-2">
+                        <li><a href="index.html" class="text-gray-400 hover:text-white transition-colors">Home</a></li>
+                        <li><a href="recipes.html" class="text-gray-400 hover:text-white transition-colors">Recipes</a></li>
+                        <li><a href="games.html" class="text-gray-400 hover:text-white transition-colors">Games</a></li>
+                        <li><a href="secret-recipes.html" class="text-gray-400 hover:text-white transition-colors">Secret Recipes</a></li>
+                        <li><a href="diet-planner.html" class="text-gray-400 hover:text-white transition-colors">Diet Planner</a></li>
+                    </ul>
+                </div>
+                <div>
+                    <h4 class="font-semibold mb-4">Contact</h4>
+                    <ul class="space-y-2 text-gray-400">
+                        <li>Email: platepilot.11@gmail.com</li>
+                        <li>Phone: +91 9251681626</li>
+                    </ul>
+                </div>
+                <div>
+                    <h4 class="font-semibold mb-4">Follow Us</h4>
+                    <div class="flex space-x-4">
+                        <a href="#" class="text-gray-400 hover:text-white transition-colors">Facebook</a>
+                        <a href="#" class="text-gray-400 hover:text-white transition-colors">Twitter</a>
+                        <a href="#" class="text-gray-400 hover:text-white transition-colors">Instagram</a>
+                    </div>
+                </div>
+            </div>
+            <div class="border-t border-gray-700 mt-8 pt-8 text-center text-gray-400">
+                <p>&copy; 2024 PlatePilot. All rights reserved.</p>
+            </div>
+        </div>
+    </footer>
+
+    <script>
+        // Set base path for GitHub Pages
+        const basePath = '/PlatePilot';
+        
+        // Update all navigation links
+        document.addEventListener('DOMContentLoaded', function() {
+            // Update navigation links
+            document.querySelectorAll('a[href^="index.html"], a[href^="recipes.html"], a[href^="upload-recipe.html"], a[href^="games.html"], a[href^="secret-recipes.html"], a[href^="diet-planner.html"], a[href^="ai-verification.html"]').forEach(link => {
+                if (!link.href.includes(basePath)) {
+                    link.href = basePath + '/' + link.href;
+                }
+            });
+            
+            // Initialize dark mode
+            if (localStorage.getItem('darkMode') === 'true') {
+                document.documentElement.classList.add('dark');
+            }
+            
+            // Toggle dark mode
+            window.toggleDarkMode = function() {
+                if (document.documentElement.classList.contains('dark')) {
+                    document.documentElement.classList.remove('dark');
+                    localStorage.setItem('darkMode', 'false');
+                } else {
+                    document.documentElement.classList.add('dark');
+                    localStorage.setItem('darkMode', 'true');
+                }
+            };
+            
+            // Mobile menu toggle
+            window.toggleMobileMenu = function() {
+                const mobileMenu = document.getElementById('mobileMenu');
+                mobileMenu.classList.toggle('hidden');
+            };
+
+            // File upload handling
+            const uploadArea = document.getElementById('uploadArea');
+            const imageInput = document.getElementById('imageInput');
+            const resultsSection = document.getElementById('resultsSection');
+            const resultsContainer = document.getElementById('resultsContainer');
+
+            // Drag and drop functionality
+            uploadArea.addEventListener('dragover', (e) => {
+                e.preventDefault();
+                uploadArea.classList.add('border-green-500', 'bg-green-50', 'dark:bg-green-900');
+            });
+
+            uploadArea.addEventListener('dragleave', (e) => {
+                e.preventDefault();
+                uploadArea.classList.remove('border-green-500', 'bg-green-50', 'dark:bg-green-900');
+            });
+
+            uploadArea.addEventListener('drop', (e) => {
+                e.preventDefault();
+                uploadArea.classList.remove('border-green-500', 'bg-green-50', 'dark:bg-green-900');
+                const files = Array.from(e.dataTransfer.files).filter(file => file.type.startsWith('image/'));
+                if (files.length > 0) {
+                    processFiles(files);
+                }
+            });
+
+            imageInput.addEventListener('change', (e) => {
+                const files = Array.from(e.target.files);
+                if (files.length > 0) {
+                    processFiles(files);
+                }
+            });
+
+            async function processFiles(files) {
+                resultsContainer.innerHTML = '';
+                resultsSection.classList.remove('hidden');
+                
+                for (const file of files) {
+                    await analyzeImage(file);
+                }
+            }
+
+            async function analyzeImage(file) {
+                // Create result card
+                const resultCard = document.createElement('div');
+                resultCard.className = 'border rounded-lg p-6 bg-gray-50 dark:bg-gray-700';
+                resultCard.innerHTML = `
+                    <div class="flex items-start space-x-4">
+                        <img src="${URL.createObjectURL(file)}" alt="Uploaded image" class="w-24 h-24 object-cover rounded-lg">
+                        <div class="flex-1">
+                            <h3 class="text-lg font-semibold text-gray-800 dark:text-white mb-2">${file.name}</h3>
+                            <div class="flex items-center space-x-2 mb-2">
+                                <div class="animate-spin rounded-full h-4 w-4 border-b-2 border-green-500"></div>
+                                <span class="text-sm text-gray-600 dark:text-gray-300">Analyzing...</span>
+                            </div>
+                            <div id="result-${file.name}" class="text-sm text-gray-600 dark:text-gray-300">
+                                <!-- Results will be populated here -->
+                            </div>
+                        </div>
+                    </div>
+                `;
+                resultsContainer.appendChild(resultCard);
+
+                try {
+                    // Convert image to base64
+                    const base64 = await fileToBase64(file);
+                    
+                    // Call your custom GPT API
+                    const result = await callOrganicVerificationAPI(base64, file.name);
+                    
+                    // Update the result card
+                    const resultDiv = document.getElementById(`result-${file.name}`);
+                    resultDiv.innerHTML = `
+                        <div class="space-y-2">
+                            <div class="flex items-center space-x-2">
+                                <span class="text-sm font-medium">Organic Likelihood:</span>
+                                <span class="text-sm font-bold ${result.confidence >= 70 ? 'text-green-600' : result.confidence >= 40 ? 'text-yellow-600' : 'text-red-600'}">
+                                    ${result.confidence}%
+                                </span>
+                            </div>
+                            <div class="w-full bg-gray-200 dark:bg-gray-600 rounded-full h-2">
+                                <div class="h-2 rounded-full ${result.confidence >= 70 ? 'bg-green-500' : result.confidence >= 40 ? 'bg-yellow-500' : 'bg-red-500'}" 
+                                     style="width: ${result.confidence}%"></div>
+                            </div>
+                            <div class="text-sm">
+                                <strong>Analysis:</strong> ${result.analysis}
+                            </div>
+                            <div class="text-sm">
+                                <strong>Recommendation:</strong> ${result.recommendation}
+                            </div>
+                            ${result.keyFindings && result.keyFindings.length > 0 ? 
+                                `<div class="text-sm">
+                                    <strong>Key Findings:</strong>
+                                    <ul class="list-disc list-inside mt-1">
+                                        ${result.keyFindings.map(finding => `<li>${finding}</li>`).join('')}
+                                    </ul>
+                                </div>` : ''}
+                            ${result.flagged ? '<div class="text-sm text-red-600 font-medium">⚠️ Flagged for expert review</div>' : ''}
+                        </div>
+                    `;
+                } catch (error) {
+                    console.error('Analysis failed:', error);
+                    const resultDiv = document.getElementById(`result-${file.name}`);
+                    resultDiv.innerHTML = `
+                        <div class="text-sm text-red-600">
+                            Analysis failed. Please try again or contact support.
+                        </div>
+                    `;
+                }
+            }
+
+            function fileToBase64(file) {
+                return new Promise((resolve, reject) => {
+                    const reader = new FileReader();
+                    reader.readAsDataURL(file);
+                    reader.onload = () => resolve(reader.result);
+                    reader.onerror = error => reject(error);
+                });
+            }
+
+            async function callOrganicVerificationAPI(base64Image, filename) {
+                try {
+                    // Use the configuration from ai-config.js
+                    const result = await window.callOrganicVerificationAPI(base64Image, filename);
+                    return result;
+                } catch (error) {
+                    console.error('API call failed:', error);
+                    // Fallback response for demo purposes
+                    return {
+                        confidence: Math.floor(Math.random() * 100),
+                        analysis: 'Unable to connect to verification service. Please try again later.',
+                        recommendation: 'Manual review recommended',
+                        keyFindings: ['Service unavailable'],
+                        flagged: true
+                    };
+                }
+            }
+        });
+    </script>
+</body>
+</html>
