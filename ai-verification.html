@@ -322,7 +322,36 @@
                                         ${result.keyFindings.map(finding => `<li>${finding}</li>`).join('')}
                                     </ul>
                                 </div>` : ''}
+                            ${result.heatmapData && Object.keys(result.heatmapData).length > 0 ? 
+                                `<div class="text-sm mt-3">
+                                    <strong>Analysis Heatmap:</strong>
+                                    <div class="grid grid-cols-1 gap-2 mt-2">
+                                        ${Object.entries(result.heatmapData).map(([key, value]) => `
+                                            <div class="flex justify-between items-center">
+                                                <span class="text-xs capitalize">${key.replace('_', ' ')}:</span>
+                                                <div class="flex items-center">
+                                                    <div class="w-16 h-2 bg-gray-200 dark:bg-gray-600 rounded-full mr-2">
+                                                        <div class="h-2 rounded-full ${value > 70 ? 'bg-red-500' : value > 40 ? 'bg-yellow-500' : 'bg-green-500'}" 
+                                                             style="width: ${value}%"></div>
+                                                    </div>
+                                                    <span class="text-xs font-medium">${value}%</span>
+                                                </div>
+                                            </div>
+                                        `).join('')}
+                                    </div>
+                                </div>` : ''}
                             ${result.flagged ? '<div class="text-sm text-red-600 font-medium">⚠️ Flagged for expert review</div>' : ''}
+                            <div class="mt-3 flex space-x-2">
+                                <button onclick="generateReport('${file.name}', ${JSON.stringify(result).replace(/"/g, '&quot;')})" 
+                                        class="bg-blue-500 text-white px-3 py-1 rounded text-xs hover:bg-blue-600">
+                                    📄 Generate Report
+                                </button>
+                                ${result.heatmapData && Object.keys(result.heatmapData).length > 0 ? 
+                                `<button onclick="downloadHeatmap('${file.name}', ${JSON.stringify(result.heatmapData).replace(/"/g, '&quot;')})" 
+                                        class="bg-purple-500 text-white px-3 py-1 rounded text-xs hover:bg-purple-600">
+                                    🗺️ Download Heatmap
+                                </button>` : ''}
+                            </div>
                         </div>
                     `;
                 } catch (error) {
@@ -347,9 +376,79 @@
 
             async function callOrganicVerificationAPI(base64Image, filename) {
                 try {
-                    // Use the configuration from ai-config.js
-                    const result = await window.callOrganicVerificationAPI(base64Image, filename);
-                    return result;
+                    // Wait for AI_CONFIG to be loaded
+                    let attempts = 0;
+                    while (typeof AI_CONFIG === 'undefined' && attempts < 50) {
+                        await new Promise(resolve => setTimeout(resolve, 100));
+                        attempts++;
+                    }
+                    
+                    if (typeof AI_CONFIG === 'undefined') {
+                        throw new Error('AI_CONFIG not loaded');
+                    }
+                    
+                    console.log('Making API call with model:', AI_CONFIG.MODEL_NAME);
+                    
+                    const response = await fetch(AI_CONFIG.API_ENDPOINT, {
+                        method: 'POST',
+                        headers: {
+                            'Content-Type': 'application/json',
+                            'Authorization': `Bearer ${AI_CONFIG.API_KEY}`
+                        },
+                        body: JSON.stringify({
+                            model: AI_CONFIG.MODEL_NAME,
+                            messages: [
+                                {
+                                    role: 'system',
+                                    content: AI_CONFIG.SYSTEM_PROMPT
+                                },
+                                {
+                                    role: 'user',
+                                    content: [
+                                        {
+                                            type: 'text',
+                                            text: `Please analyze this image (${filename}) for organic authenticity. Provide your analysis in the specified JSON format with heatmap data.`
+                                        },
+                                        {
+                                            type: 'image_url',
+                                            image_url: {
+                                                url: base64Image
+                                            }
+                                        }
+                                    ]
+                                }
+                            ],
+                            max_tokens: 1000,
+                            temperature: 0.1
+                        })
+                    });
+
+                    if (!response.ok) {
+                        throw new Error(`API request failed: ${response.status} ${response.statusText}`);
+                    }
+
+                    const data = await response.json();
+                    const content = data.choices[0].message.content;
+                    
+                    console.log('API Response:', content);
+                    
+                    // Try to parse JSON response
+                    try {
+                        const result = JSON.parse(content);
+                        return {
+                            confidence: result.confidence || 50,
+                            analysis: result.analysis || 'Analysis completed',
+                            recommendation: result.recommendation || 'review',
+                            keyFindings: result.key_findings || [],
+                            flagged: result.flagged || false,
+                            heatmapData: result.heatmap_data || {}
+                        };
+                    } catch (parseError) {
+                        console.error('Failed to parse JSON response:', parseError);
+                        // Fallback parsing if JSON format isn't followed
+                        return parseTextResponse(content);
+                    }
+                    
                 } catch (error) {
                     console.error('API call failed:', error);
                     // Fallback response for demo purposes
@@ -358,9 +457,212 @@
                         analysis: 'Unable to connect to verification service. Please try again later.',
                         recommendation: 'Manual review recommended',
                         keyFindings: ['Service unavailable'],
-                        flagged: true
+                        flagged: true,
+                        heatmapData: {}
                     };
                 }
+            }
+
+            function parseTextResponse(content) {
+                const confidenceMatch = content.match(/(\d+)%/);
+                const confidence = confidenceMatch ? parseInt(confidenceMatch[1]) : 50;
+                
+                const analysis = content.split('Analysis:')[1]?.split('Recommendation:')[0]?.trim() || 
+                               content.split('analysis:')[1]?.split('recommendation:')[0]?.trim() || 
+                               'Analysis completed';
+                
+                const recommendation = content.includes('pass') ? 'pass' :
+                                    content.includes('fail') ? 'fail' :
+                                    'review';
+                
+                const flagged = confidence < 70;
+                
+                return {
+                    confidence,
+                    analysis,
+                    recommendation,
+                    keyFindings: [],
+                    flagged,
+                    heatmapData: {}
+                };
+            }
+
+            // Generate detailed verification report
+            function generateReport(filename, result) {
+                // Parse the result string back to object if needed
+                const resultObj = typeof result === 'string' ? JSON.parse(result.replace(/&quot;/g, '"')) : result;
+                
+                const reportData = {
+                    filename: filename,
+                    timestamp: new Date().toISOString(),
+                    verification: {
+                        confidence: resultObj.confidence,
+                        recommendation: resultObj.recommendation,
+                        flagged: resultObj.flagged,
+                        analysis: resultObj.analysis,
+                        keyFindings: resultObj.keyFindings,
+                        heatmapData: resultObj.heatmapData
+                    },
+                    metadata: {
+                        analyzer: 'PlatePilot AI Organic Verification System',
+                        version: '1.0',
+                        model: 'PlatePilot GPT'
+                    }
+                };
+
+                const reportContent = `
+# Organic Verification Report
+**PlatePilot AI Analysis System**
+
+## File Information
+- **Filename:** ${filename}
+- **Analysis Date:** ${new Date().toLocaleString()}
+- **Analyzer:** PlatePilot AI Organic Verification System
+
+## Verification Results
+- **Organic Confidence:** ${resultObj.confidence}%
+- **Recommendation:** ${resultObj.recommendation.toUpperCase()}
+- **Status:** ${resultObj.flagged ? 'FLAGGED FOR EXPERT REVIEW' : 'APPROVED'}
+
+## Detailed Analysis
+${resultObj.analysis}
+
+## Key Findings
+${resultObj.keyFindings && resultObj.keyFindings.length > 0 ? resultObj.keyFindings.map(finding => `- ${finding}`).join('\n') : 'No specific findings reported'}
+
+## Analysis Heatmap
+${resultObj.heatmapData && Object.keys(resultObj.heatmapData).length > 0 ? 
+    Object.entries(resultObj.heatmapData).map(([key, value]) => 
+        `- **${key.replace('_', ' ').toUpperCase()}:** ${value}%`
+    ).join('\n') : 
+    'No heatmap data available'}
+
+## Technical Details
+- **Model Used:** PlatePilot GPT
+- **Analysis Type:** Computer Vision + AI Analysis
+- **Confidence Threshold:** 70% (Pass), 40% (Review), <40% (Fail)
+
+---
+*This report was generated by PlatePilot AI Organic Verification System*
+*For questions or concerns, contact: platepilot.11@gmail.com*
+                `;
+
+                // Create and download the report
+                const blob = new Blob([reportContent], { type: 'text/markdown' });
+                const url = URL.createObjectURL(blob);
+                const a = document.createElement('a');
+                a.href = url;
+                a.download = `organic_verification_report_${filename.replace(/\.[^/.]+$/, '')}_${new Date().toISOString().split('T')[0]}.md`;
+                document.body.appendChild(a);
+                a.click();
+                document.body.removeChild(a);
+                URL.revokeObjectURL(url);
+
+                // Also save JSON data
+                const jsonBlob = new Blob([JSON.stringify(reportData, null, 2)], { type: 'application/json' });
+                const jsonUrl = URL.createObjectURL(jsonBlob);
+                const jsonA = document.createElement('a');
+                jsonA.href = jsonUrl;
+                jsonA.download = `organic_verification_data_${filename.replace(/\.[^/.]+$/, '')}_${new Date().toISOString().split('T')[0]}.json`;
+                document.body.appendChild(jsonA);
+                jsonA.click();
+                document.body.removeChild(jsonA);
+                URL.revokeObjectURL(jsonUrl);
+            }
+
+            // Generate and download heatmap visualization
+            function downloadHeatmap(filename, heatmapData) {
+                // Parse the heatmap data string back to object if needed
+                const data = typeof heatmapData === 'string' ? JSON.parse(heatmapData.replace(/&quot;/g, '"')) : heatmapData;
+                
+                if (!data || Object.keys(data).length === 0) {
+                    alert('No heatmap data available for this analysis.');
+                    return;
+                }
+
+                // Create SVG heatmap
+                const svgWidth = 400;
+                const svgHeight = 300;
+                const margin = 40;
+                const chartWidth = svgWidth - 2 * margin;
+                const chartHeight = svgHeight - 2 * margin;
+
+                const svg = `
+<svg width="${svgWidth}" height="${svgHeight}" xmlns="http://www.w3.org/2000/svg">
+    <defs>
+        <linearGradient id="heatmapGradient" x1="0%" y1="0%" x2="100%" y2="0%">
+            <stop offset="0%" style="stop-color:#10B981;stop-opacity:1" />
+            <stop offset="50%" style="stop-color:#F59E0B;stop-opacity:1" />
+            <stop offset="100%" style="stop-color:#EF4444;stop-opacity:1" />
+        </linearGradient>
+    </defs>
+    
+    <!-- Background -->
+    <rect width="${svgWidth}" height="${svgHeight}" fill="#F9FAFB"/>
+    
+    <!-- Title -->
+    <text x="${svgWidth/2}" y="25" text-anchor="middle" font-family="Arial, sans-serif" font-size="16" font-weight="bold" fill="#374151">
+        Organic Verification Heatmap
+    </text>
+    
+    <!-- Subtitle -->
+    <text x="${svgWidth/2}" y="45" text-anchor="middle" font-family="Arial, sans-serif" font-size="12" fill="#6B7280">
+        ${filename} - ${new Date().toLocaleDateString()}
+    </text>
+    
+    <!-- Heatmap bars -->
+    ${Object.entries(data).map(([key, value], index) => {
+        const barHeight = 30;
+        const barY = margin + 60 + index * (barHeight + 10);
+        const barWidth = (value / 100) * chartWidth;
+        const color = value > 70 ? '#EF4444' : value > 40 ? '#F59E0B' : '#10B981';
+        
+        return `
+            <!-- Bar background -->
+            <rect x="${margin}" y="${barY}" width="${chartWidth}" height="${barHeight}" fill="#E5E7EB" rx="4"/>
+            
+            <!-- Bar fill -->
+            <rect x="${margin}" y="${barY}" width="${barWidth}" height="${barHeight}" fill="${color}" rx="4"/>
+            
+            <!-- Label -->
+            <text x="${margin - 10}" y="${barY + barHeight/2 + 4}" text-anchor="end" font-family="Arial, sans-serif" font-size="12" fill="#374151">
+                ${key.replace('_', ' ').toUpperCase()}
+            </text>
+            
+            <!-- Value -->
+            <text x="${margin + barWidth + 10}" y="${barY + barHeight/2 + 4}" font-family="Arial, sans-serif" font-size="12" font-weight="bold" fill="#374151">
+                ${value}%
+            </text>
+        `;
+    }).join('')}
+    
+    <!-- Legend -->
+    <g transform="translate(${margin}, ${svgHeight - 30})">
+        <text x="0" y="0" font-family="Arial, sans-serif" font-size="10" fill="#6B7280">Legend:</text>
+        <rect x="50" y="-8" width="15" height="15" fill="#10B981" rx="2"/>
+        <text x="70" y="0" font-family="Arial, sans-serif" font-size="10" fill="#6B7280">Good (0-40%)</text>
+        <rect x="130" y="-8" width="15" height="15" fill="#F59E0B" rx="2"/>
+        <text x="150" y="0" font-family="Arial, sans-serif" font-size="10" fill="#6B7280">Moderate (40-70%)</text>
+        <rect x="230" y="-8" width="15" height="15" fill="#EF4444" rx="2"/>
+        <text x="250" y="0" font-family="Arial, sans-serif" font-size="10" fill="#6B7280">Concerning (70-100%)</text>
+    </g>
+    
+    <!-- Footer -->
+    <text x="${svgWidth/2}" y="${svgHeight - 5}" text-anchor="middle" font-family="Arial, sans-serif" font-size="8" fill="#9CA3AF">
+        Generated by PlatePilot AI Organic Verification System
+    </text>
+</svg>`;
+
+                // Create and download the SVG
+                const blob = new Blob([svg], { type: 'image/svg+xml' });
+                const url = URL.createObjectURL(blob);
+                const a = document.createElement('a');
+                a.href = url;
+                a.download = `organic_heatmap_${filename.replace(/\.[^/.]+$/, '')}_${new Date().toISOString().split('T')[0]}.svg`;
+                document.body.appendChild(a);
+                a.click();
+                document.body.removeChild(a);
+                URL.revokeObjectURL(url);
             }
         });
     </script>

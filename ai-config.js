@@ -6,7 +6,7 @@ const AI_CONFIG = {
     API_ENDPOINT: 'https://api.openai.com/v1/chat/completions',
     
     // Your OpenAI API key (keep this secure!)
-    API_KEY: process.env.OPENAI_API_KEY || 'YOUR_OPENAI_API_KEY_HERE',
+    API_KEY: 'YOUR_OPENAI_API_KEY_HERE',
     
     // Your custom GPT model name (if you created a custom one)
     MODEL_NAME: 'PlatePilot', // or your custom model name
@@ -36,7 +36,14 @@ Provide your analysis in this exact JSON format:
     "analysis": "Detailed description of what you observe",
     "recommendation": "pass/review/fail",
     "key_findings": ["finding1", "finding2", "finding3"],
-    "flagged": true/false
+    "flagged": true/false,
+    "heatmap_data": {
+        "discoloration_score": [0-100],
+        "residue_score": [0-100],
+        "texture_score": [0-100],
+        "color_uniformity_score": [0-100],
+        "natural_damage_score": [0-100]
+    }
 }
 
 Be thorough but concise. Confidence should reflect your certainty about the organic status.`,
@@ -96,13 +103,14 @@ async function callOrganicVerificationAPI(base64Image, filename) {
         // Try to parse JSON response
         try {
             const result = JSON.parse(content);
-            return {
-                confidence: result.confidence || 50,
-                analysis: result.analysis || 'Analysis completed',
-                recommendation: result.recommendation || 'review',
-                keyFindings: result.key_findings || [],
-                flagged: result.flagged || false
-            };
+                        return {
+                            confidence: result.confidence || 50,
+                            analysis: result.analysis || 'Analysis completed',
+                            recommendation: result.recommendation || 'review',
+                            keyFindings: result.key_findings || [],
+                            flagged: result.flagged || false,
+                            heatmapData: result.heatmap_data || {}
+                        };
         } catch (parseError) {
             // Fallback parsing if JSON format isn't followed
             return parseTextResponse(content);
@@ -134,7 +142,8 @@ function parseTextResponse(content) {
         analysis,
         recommendation,
         keyFindings: [],
-        flagged
+        flagged,
+        heatmapData: {}
     };
 }
 
