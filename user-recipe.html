@@ -1,0 +1,323 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Recipe - PlatePilot</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <style>
+        .recipe-image {
+            width: 100%;
+            height: 400px;
+            object-fit: cover;
+        }
+        .ingredient-item {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            margin-bottom: 0.5rem;
+        }
+        .instruction-step {
+            display: flex;
+            gap: 1rem;
+            margin-bottom: 1rem;
+        }
+        .step-number {
+            background-color: #10b981;
+            color: white;
+            width: 2rem;
+            height: 2rem;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex-shrink: 0;
+        }
+    </style>
+</head>
+<body class="bg-gray-50 dark:bg-gray-900 min-h-screen">
+    <!-- Navigation Bar -->
+    <nav class="bg-white dark:bg-gray-900 shadow-md sticky top-0 z-50">
+        <div class="container mx-auto px-4">
+            <div class="flex justify-between items-center h-16">
+                <a href="index.html" class="text-2xl font-bold text-green-600 dark:text-green-400 hover:text-green-700 dark:hover:text-green-300 transition-colors">
+                    PlatePilot
+                </a>
+                <div class="hidden md:flex items-center space-x-8">
+                    <a href="index.html" class="text-gray-700 dark:text-gray-300 hover:text-green-600 dark:hover:text-green-400 transition-colors">Home</a>
+                    <a href="recipes.html" class="text-gray-700 dark:text-gray-300 hover:text-green-600 dark:hover:text-green-400 transition-colors">Recipes</a>
+                    <a href="upload-recipe.html" class="text-gray-700 dark:text-gray-300 hover:text-green-600 dark:hover:text-green-400 transition-colors">Share Recipe</a>
+                    <a href="games.html" class="text-gray-700 dark:text-gray-300 hover:text-green-600 dark:hover:text-green-400 transition-colors">Games</a>
+                    <a href="secret-recipes.html" class="text-gray-700 dark:text-gray-300 hover:text-green-600 dark:hover:text-green-400 transition-colors">Secret Recipes</a>
+                    <a href="diet-planner.html" class="text-gray-700 dark:text-gray-300 hover:text-green-600 dark:hover:text-green-400 transition-colors">Diet Planner</a>
+                    <button onclick="toggleDarkMode()" class="p-2 rounded-lg bg-gray-200 dark:bg-gray-700 hover:bg-gray-300 dark:hover:bg-gray-600 transition-colors">
+                        <span class="dark:hidden">🌙</span>
+                        <span class="hidden dark:inline">☀️</span>
+                    </button>
+                </div>
+                <!-- Mobile Menu Button -->
+                <button class="md:hidden p-2 rounded-lg hover:bg-gray-200 dark:hover:bg-gray-700 transition-colors" onclick="toggleMobileMenu()">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 text-gray-700 dark:text-gray-300" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16" />
+                    </svg>
+                </button>
+            </div>
+            <!-- Mobile Menu -->
+            <div id="mobileMenu" class="md:hidden hidden pb-4">
+                <div class="flex flex-col space-y-4">
+                    <a href="index.html" class="text-gray-700 dark:text-gray-300 hover:text-green-600 dark:hover:text-green-400 transition-colors">Home</a>
+                    <a href="recipes.html" class="text-green-600 dark:text-green-400 font-medium">Recipes</a>
+                    <a href="upload-recipe.html" class="text-gray-700 dark:text-gray-300 hover:text-green-600 dark:hover:text-green-400 transition-colors">Share Recipe</a>
+                    <a href="games.html" class="text-gray-700 dark:text-gray-300 hover:text-green-600 dark:hover:text-green-400 transition-colors">Games</a>
+                    <a href="secret-recipes.html" class="text-gray-700 dark:text-gray-300 hover:text-green-600 dark:hover:text-green-400 transition-colors">Secret Recipes</a>
+                    <a href="diet-planner.html" class="text-gray-700 dark:text-gray-300 hover:text-green-600 dark:hover:text-green-400 transition-colors">Diet Planner</a>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Recipe Content -->
+    <div class="container mx-auto px-4 py-8">
+        <div id="recipeContent" class="max-w-4xl mx-auto">
+            <!-- Recipe content will be loaded here -->
+        </div>
+    </div>
+
+    <!-- Footer -->
+    <footer class="bg-gray-800 text-white py-8 mt-12">
+        <div class="container mx-auto px-4">
+            <div class="grid grid-cols-1 md:grid-cols-4 gap-8">
+                <div>
+                    <h3 class="text-xl font-bold mb-4">PlatePilot</h3>
+                    <p class="text-gray-400">Pilot your plate. Powered by AI. Fueled by wellness.</p>
+                </div>
+                <div>
+                    <h4 class="font-semibold mb-4">Quick Links</h4>
+                    <ul class="space-y-2">
+                        <li><a href="index.html" class="text-gray-400 hover:text-white transition-colors">Home</a></li>
+                        <li><a href="recipes.html" class="text-gray-400 hover:text-white transition-colors">Recipes</a></li>
+                        <li><a href="games.html" class="text-gray-400 hover:text-white transition-colors">Games</a></li>
+                        <li><a href="secret-recipes.html" class="text-gray-400 hover:text-white transition-colors">Secret Recipes</a></li>
+                        <li><a href="diet-planner.html" class="text-gray-400 hover:text-white transition-colors">Diet Planner</a></li>
+                    </ul>
+                </div>
+                <div>
+                    <h4 class="font-semibold mb-4">Contact</h4>
+                    <ul class="space-y-2 text-gray-400">
+                        <li>Email: platepilot.11@gmail.com</li>
+                        <li>Phone: +91 9251681626</li>
+                    </ul>
+                </div>
+                <div>
+                    <h4 class="font-semibold mb-4">Follow Us</h4>
+                    <div class="flex space-x-4">
+                        <a href="#" class="text-gray-400 hover:text-white transition-colors">Facebook</a>
+                        <a href="#" class="text-gray-400 hover:text-white transition-colors">Twitter</a>
+                        <a href="#" class="text-gray-400 hover:text-white transition-colors">Instagram</a>
+                    </div>
+                </div>
+            </div>
+            <div class="border-t border-gray-700 mt-8 pt-8 text-center text-gray-400">
+                <p>&copy; 2024 PlatePilot. All rights reserved.</p>
+            </div>
+        </div>
+    </footer>
+
+    <!-- Floating AI Assistant Button -->
+    <button id="aiAssistantBtn" onclick="openAIAssistant()" class="fixed bottom-8 right-8 bg-gradient-to-r from-green-400 to-blue-500 text-white p-4 rounded-full shadow-lg hover:scale-110 transition-transform z-50">
+        <svg xmlns="http://www.w3.org/2000/svg" class="h-8 w-8" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 20h9" />
+            <circle cx="12" cy="12" r="8" stroke="currentColor" stroke-width="2" fill="none" />
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 12h.01M12 12h.01M16 12h.01" />
+        </svg>
+    </button>
+    <!-- AI Assistant Modal (placeholder) -->
+    <div id="aiAssistantModal" class="fixed inset-0 bg-black bg-opacity-50 hidden items-center justify-center z-50">
+        <div class="bg-white dark:bg-gray-800 p-8 rounded-xl max-w-lg w-full shadow-2xl flex flex-col items-center">
+            <h3 class="text-2xl font-bold mb-4 text-gray-800 dark:text-white">AI Assistant</h3>
+            <p class="text-gray-600 dark:text-gray-300 mb-6">Hi! I'm your PlatePilot AI. How can I help you today?</p>
+            <input type="text" placeholder="Ask me anything..." class="w-full p-3 border border-gray-300 dark:border-gray-600 rounded-lg mb-4 bg-white dark:bg-gray-700 text-gray-700 dark:text-gray-300">
+            <button onclick="closeAIAssistant()" class="bg-green-500 text-white px-6 py-2 rounded-lg hover:bg-green-600">Close</button>
+        </div>
+    </div>
+
+    <script>
+        // Dark mode functionality
+        function initDarkMode() {
+            if (localStorage.getItem('darkMode') === 'true' || 
+                (!localStorage.getItem('darkMode') && window.matchMedia('(prefers-color-scheme: dark)').matches)) {
+                document.documentElement.classList.add('dark');
+            } else {
+                document.documentElement.classList.remove('dark');
+            }
+        }
+
+        function toggleDarkMode() {
+            if (document.documentElement.classList.contains('dark')) {
+                document.documentElement.classList.remove('dark');
+                localStorage.setItem('darkMode', 'false');
+            } else {
+                document.documentElement.classList.add('dark');
+                localStorage.setItem('darkMode', 'true');
+            }
+        }
+
+        // Initialize dark mode
+        initDarkMode();
+
+        // Mobile menu functionality
+        function toggleMobileMenu() {
+            const mobileMenu = document.getElementById('mobileMenu');
+            mobileMenu.classList.toggle('hidden');
+        }
+
+        // Load recipe data
+        function loadRecipe() {
+            const urlParams = new URLSearchParams(window.location.search);
+            const recipeName = urlParams.get('recipe');
+            
+            if (!recipeName) {
+                window.location.href = 'recipes.html';
+                return;
+            }
+
+            const userRecipes = JSON.parse(localStorage.getItem('userRecipes') || '[]');
+            const recipe = userRecipes.find(r => r.name === recipeName);
+
+            if (!recipe) {
+                window.location.href = 'recipes.html';
+                return;
+            }
+
+            const recipeContent = document.getElementById('recipeContent');
+            recipeContent.innerHTML = `
+                <div class="bg-white dark:bg-gray-800 rounded-xl shadow-lg overflow-hidden">
+                    <img src="${recipe.image || 'https://images.unsplash.com/photo-1517093602195-b40af9261bdb'}" 
+                         alt="${recipe.name}" 
+                         class="recipe-image">
+                    
+                    <div class="p-8">
+                        <h1 class="text-3xl font-bold text-gray-800 dark:text-white mb-4">${recipe.name}</h1>
+                        <p class="text-gray-600 dark:text-gray-300 mb-6">${recipe.description}</p>
+                        
+                        <div class="grid grid-cols-1 md:grid-cols-3 gap-4 mb-8">
+                            <div class="bg-gray-50 dark:bg-gray-700 p-4 rounded-lg">
+                                <h3 class="font-semibold text-gray-800 dark:text-white mb-2">Prep Time</h3>
+                                <p class="text-gray-600 dark:text-gray-300">${recipe.prepTime} minutes</p>
+                            </div>
+                            <div class="bg-gray-50 dark:bg-gray-700 p-4 rounded-lg">
+                                <h3 class="font-semibold text-gray-800 dark:text-white mb-2">Cook Time</h3>
+                                <p class="text-gray-600 dark:text-gray-300">${recipe.cookTime} minutes</p>
+                            </div>
+                            <div class="bg-gray-50 dark:bg-gray-700 p-4 rounded-lg">
+                                <h3 class="font-semibold text-gray-800 dark:text-white mb-2">Servings</h3>
+                                <p class="text-gray-600 dark:text-gray-300">${recipe.servings} servings</p>
+                            </div>
+                        </div>
+
+                        <div class="mb-8">
+                            <h2 class="text-2xl font-bold text-gray-800 dark:text-white mb-4">Ingredients</h2>
+                            <ul class="space-y-2">
+                                ${recipe.ingredients.map(ingredient => `
+                                    <li class="ingredient-item">
+                                        <i class="fas fa-check text-green-500"></i>
+                                        <span class="text-gray-600 dark:text-gray-300">${ingredient}</span>
+                                    </li>
+                                `).join('')}
+                            </ul>
+                        </div>
+
+                        <div class="mb-8">
+                            <h2 class="text-2xl font-bold text-gray-800 dark:text-white mb-4">Instructions</h2>
+                            <div class="space-y-4">
+                                ${recipe.instructions.map((instruction, index) => `
+                                    <div class="instruction-step">
+                                        <div class="step-number">${index + 1}</div>
+                                        <p class="text-gray-600 dark:text-gray-300">${instruction}</p>
+                                    </div>
+                                `).join('')}
+                            </div>
+                        </div>
+
+                        <div class="mb-8">
+                            <h2 class="text-2xl font-bold text-gray-800 dark:text-white mb-4">Nutrition Information (per serving)</h2>
+                            <div class="grid grid-cols-2 md:grid-cols-4 gap-4">
+                                <div class="bg-gray-50 dark:bg-gray-700 p-4 rounded-lg">
+                                    <h3 class="font-semibold text-gray-800 dark:text-white mb-2">Calories</h3>
+                                    <p class="text-gray-600 dark:text-gray-300">${recipe.nutrition.calories}</p>
+                                </div>
+                                <div class="bg-gray-50 dark:bg-gray-700 p-4 rounded-lg">
+                                    <h3 class="font-semibold text-gray-800 dark:text-white mb-2">Protein</h3>
+                                    <p class="text-gray-600 dark:text-gray-300">${recipe.nutrition.protein}g</p>
+                                </div>
+                                <div class="bg-gray-50 dark:bg-gray-700 p-4 rounded-lg">
+                                    <h3 class="font-semibold text-gray-800 dark:text-white mb-2">Carbs</h3>
+                                    <p class="text-gray-600 dark:text-gray-300">${recipe.nutrition.carbs}g</p>
+                                </div>
+                                <div class="bg-gray-50 dark:bg-gray-700 p-4 rounded-lg">
+                                    <h3 class="font-semibold text-gray-800 dark:text-white mb-2">Fiber</h3>
+                                    <p class="text-gray-600 dark:text-gray-300">${recipe.nutrition.fiber}g</p>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="flex justify-between items-center">
+                            <div class="text-gray-600 dark:text-gray-300">
+                                <i class="fas fa-user mr-2"></i> Shared by ${recipe.author}
+                            </div>
+                            <button onclick="likeRecipe('${recipe.name}')" class="bg-green-500 text-white px-6 py-2 rounded-lg hover:bg-green-600 transition-colors">
+                                <i class="fas fa-heart mr-2"></i> ${recipe.likes || 0} Likes
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            `;
+        }
+
+        function likeRecipe(recipeName) {
+            const currentUser = localStorage.getItem('currentUser');
+            if (!currentUser) {
+                alert('Please log in to like recipes');
+                window.location.href = 'login.html';
+                return;
+            }
+
+            const userRecipes = JSON.parse(localStorage.getItem('userRecipes') || '[]');
+            const recipeIndex = userRecipes.findIndex(r => r.name === recipeName);
+            
+            if (recipeIndex === -1) return;
+
+            const recipe = userRecipes[recipeIndex];
+            const userIndex = recipe.likedBy.indexOf(currentUser);
+
+            if (userIndex === -1) {
+                // Like the recipe
+                recipe.likes = (recipe.likes || 0) + 1;
+                recipe.likedBy.push(currentUser);
+            } else {
+                // Unlike the recipe
+                recipe.likes = Math.max(0, (recipe.likes || 0) - 1);
+                recipe.likedBy.splice(userIndex, 1);
+            }
+
+            localStorage.setItem('userRecipes', JSON.stringify(userRecipes));
+            loadRecipe(); // Reload to update the UI
+        }
+
+        // Load recipe when the page loads
+        document.addEventListener('DOMContentLoaded', loadRecipe);
+
+        const basePath = '/PlatePilot';
+
+        function openAIAssistant() {
+            document.getElementById('aiAssistantModal').classList.remove('hidden');
+            document.getElementById('aiAssistantModal').classList.add('flex');
+        }
+        function closeAIAssistant() {
+            document.getElementById('aiAssistantModal').classList.add('hidden');
+            document.getElementById('aiAssistantModal').classList.remove('flex');
+        }
+    </script>
+</body>
+</html> 

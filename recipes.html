@@ -1,0 +1,889 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Recipes - PlatePilot</title>
+    <meta name="description" content="PlatePilot Recipes: Explore healthy, delicious recipes for every meal and diet preference.">
+    <meta property="og:title" content="PlatePilot Recipes">
+    <meta property="og:description" content="Explore healthy, delicious recipes for every meal and diet preference.">
+    <meta property="og:image" content="https://pkispro.github.io/PlatePilot/assets/platepilot-og.jpg">
+    <meta property="og:type" content="website">
+    <meta property="og:url" content="https://pkispro.github.io/PlatePilot/recipes.html">
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:title" content="PlatePilot Recipes">
+    <meta name="twitter:description" content="Explore healthy, delicious recipes for every meal and diet preference.">
+    <meta name="twitter:image" content="https://pkispro.github.io/PlatePilot/assets/platepilot-og.jpg">
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            darkMode: 'class',
+            theme: {
+                extend: {
+                    colors: {
+                        // You can add custom colors here if needed
+                    }
+                }
+            }
+        }
+    </script>
+    <!-- Language System -->
+    <script src="translations.js"></script>
+    <script src="translations-extended.js"></script>
+    <script src="translations-more.js"></script>
+    <script src="language-selector.js"></script>
+    <style>
+        .recipe-card {
+            background: white;
+            border-radius: 1rem;
+            overflow: hidden;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            transition: all 0.3s ease-in-out;
+            margin-bottom: 2rem;
+        }
+        .recipe-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04);
+        }
+        .recipe-image {
+            width: 100%;
+            height: 200px;
+            overflow: hidden;
+        }
+        .recipe-image img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+        .recipe-content {
+            padding: 1.5rem;
+        }
+        .recipe-content h3 {
+            font-size: 1.5rem;
+            font-weight: bold;
+            margin-bottom: 0.5rem;
+            color: #1a202c;
+        }
+        .recipe-description {
+            color: #4a5568;
+            margin-bottom: 1rem;
+        }
+        .recipe-meta {
+            display: flex;
+            gap: 1rem;
+            margin-bottom: 1rem;
+            color: #4a5568;
+        }
+        .recipe-stats {
+            display: flex;
+            gap: 1rem;
+            margin-bottom: 1rem;
+            color: #4a5568;
+        }
+        .recipe-actions {
+            display: flex;
+            gap: 0.5rem;
+        }
+        .btn {
+            padding: 0.5rem 1rem;
+            border-radius: 0.5rem;
+            font-weight: 500;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+        .btn-primary {
+            background-color: #10b981;
+            color: white;
+        }
+        .btn-primary:hover {
+            background-color: #059669;
+        }
+        .btn-outline-primary {
+            border: 1px solid #10b981;
+            color: #10b981;
+        }
+        .btn-outline-primary:hover {
+            background-color: #10b981;
+            color: white;
+        }
+        .btn-danger {
+            background-color: #ef4444;
+            color: white;
+        }
+        .btn-danger:hover {
+            background-color: #dc2626;
+        }
+        .dark .recipe-card {
+            background: #1f2937;
+        }
+        .dark .recipe-content h3 {
+            color: #f3f4f6;
+        }
+        .dark .recipe-description,
+        .dark .recipe-meta,
+        .dark .recipe-stats {
+            color: #9ca3af;
+        }
+    </style>
+</head>
+<body class="bg-gray-50 dark:bg-gray-900 min-h-screen">
+    <!-- Navigation Bar -->
+    <nav class="bg-white dark:bg-gray-900 shadow-md sticky top-0 z-50">
+        <div class="container mx-auto px-4">
+            <div class="flex justify-between items-center h-16">
+                <a href="index.html" class="text-2xl font-bold text-green-600 dark:text-green-400 hover:text-green-700 dark:hover:text-green-300 transition-colors" data-translate="home">PlatePilot</a>
+                <div class="hidden md:flex items-center space-x-4">
+                    <a href="index.html" class="text-gray-700 dark:text-gray-300 hover:text-green-600 dark:hover:text-green-400 font-bold transition-colors" data-translate="home">Home</a>
+                    <a href="marketplace.html" class="bg-green-600 text-white px-4 py-2 rounded-lg font-semibold hover:bg-green-700 transition-colors" data-translate="marketplace">Marketplace</a>
+                    <a href="seller-onboarding.html" class="bg-blue-600 text-white px-4 py-2 rounded-lg font-semibold hover:bg-blue-700 transition-colors" data-translate="becomeSeller">Become a Seller</a>
+                    <!-- Recipes Dropdown -->
+                    <div class="relative group">
+                        <button class="text-gray-700 dark:text-gray-300 hover:text-green-600 dark:hover:text-green-400 transition-colors font-semibold flex items-center">Recipes <svg class="w-4 h-4 ml-1" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"/></svg></button>
+                        <div class="absolute left-0 mt-2 w-48 bg-white dark:bg-gray-800 rounded-lg shadow-lg opacity-0 group-hover:opacity-100 group-focus-within:opacity-100 pointer-events-none group-hover:pointer-events-auto group-focus-within:pointer-events-auto transition-opacity z-50">
+                            <a href="recipes.html" class="block px-4 py-2 text-gray-700 dark:text-gray-300 hover:bg-green-100 dark:hover:bg-green-900 rounded-t-lg" data-translate="recipes">All Recipes</a>
+                            <a href="upload-recipe.html" class="block px-4 py-2 text-gray-700 dark:text-gray-300 hover:bg-green-100 dark:hover:bg-green-900" data-translate="shareRecipe">Share Recipe</a>
+                            <a href="leaderboard.html" class="block px-4 py-2 text-gray-700 dark:text-gray-300 hover:bg-green-100 dark:hover:bg-green-900 rounded-b-lg" data-translate="leaderboard">Leaderboard</a>
+                        </div>
+                    </div>
+                    <!-- More Dropdown -->
+                    <div class="relative group">
+                        <button class="text-gray-700 dark:text-gray-300 hover:text-green-600 dark:hover:text-green-400 transition-colors font-semibold flex items-center">More <svg class="w-4 h-4 ml-1" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"/></svg></button>
+                        <div class="absolute left-0 mt-2 w-48 bg-white dark:bg-gray-800 rounded-lg shadow-lg opacity-0 group-hover:opacity-100 group-focus-within:opacity-100 pointer-events-none group-hover:pointer-events-auto group-focus-within:pointer-events-auto transition-opacity z-50">
+                            <a href="games.html" class="block px-4 py-2 text-gray-700 dark:text-gray-300 hover:bg-green-100 dark:hover:bg-green-900 rounded-t-lg" data-translate="games">Games</a>
+                            <a href="secret-recipes.html" class="block px-4 py-2 text-gray-700 dark:text-gray-300 hover:bg-green-100 dark:hover:bg-green-900" data-translate="secretRecipes">Secret Recipes</a>
+                            <a href="diet-planner.html" class="block px-4 py-2 text-gray-700 dark:text-gray-300 hover:bg-green-100 dark:hover:bg-green-900 rounded-b-lg" data-translate="dietPlanner">Diet Planner</a>
+                        </div>
+                    </div>
+                    <div id="languageSelectorContainer" class="ml-4"></div>
+                    <button onclick="toggleDarkMode()" class="p-2 rounded-lg bg-gray-200 dark:bg-gray-700 hover:bg-gray-300 dark:hover:bg-gray-600 transition-colors">
+                        <span class="dark:hidden">🌙</span>
+                        <span class="hidden dark:inline">☀️</span>
+                    </button>
+                </div>
+                <!-- Mobile Menu Button -->
+                <button class="md:hidden p-2 rounded-lg hover:bg-gray-200 dark:hover:bg-gray-700 transition-colors" onclick="toggleMobileMenu()">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 text-gray-700 dark:text-gray-300" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16" />
+                    </svg>
+                </button>
+            </div>
+            <!-- Mobile Menu -->
+            <div id="mobileMenu" class="md:hidden hidden pb-4">
+                <div class="flex flex-col space-y-4">
+                    <a href="index.html" class="text-gray-700 dark:text-gray-300 hover:text-green-600 dark:hover:text-green-400 font-bold transition-colors" data-translate="home">Home</a>
+                    <a href="marketplace.html" class="bg-green-600 text-white px-4 py-2 rounded-lg font-semibold hover:bg-green-700 transition-colors" data-translate="marketplace">Marketplace</a>
+                    <a href="seller-onboarding.html" class="bg-blue-600 text-white px-4 py-2 rounded-lg font-semibold hover:bg-blue-700 transition-colors" data-translate="becomeSeller">Become a Seller</a>
+                    <!-- Recipes Dropdown (Collapsible) -->
+                    <div>
+                        <button onclick="toggleMobileDropdown('recipesDropdown')" class="flex items-center justify-between w-full text-gray-700 dark:text-gray-300 font-semibold py-2 px-2 rounded hover:bg-green-100 dark:hover:bg-green-900 transition-colors">Recipes <svg class="w-4 h-4 ml-1 inline" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"/></svg></button>
+                        <div id="recipesDropdown" class="hidden flex flex-col ml-4 mt-2 space-y-2">
+                            <a href="recipes.html" class="text-gray-700 dark:text-gray-300 hover:text-green-600 dark:hover:text-green-400" data-translate="recipes">All Recipes</a>
+                            <a href="upload-recipe.html" class="text-gray-700 dark:text-gray-300 hover:text-green-600 dark:hover:text-green-400" data-translate="shareRecipe">Share Recipe</a>
+                            <a href="leaderboard.html" class="text-gray-700 dark:text-gray-300 hover:text-green-600 dark:hover:text-green-400" data-translate="leaderboard">Leaderboard</a>
+                        </div>
+                    </div>
+                    <!-- More Dropdown (Collapsible) -->
+                    <div>
+                        <button onclick="toggleMobileDropdown('moreDropdown')" class="flex items-center justify-between w-full text-gray-700 dark:text-gray-300 font-semibold py-2 px-2 rounded hover:bg-green-100 dark:hover:bg-green-900 transition-colors">More <svg class="w-4 h-4 ml-1 inline" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"/></svg></button>
+                        <div id="moreDropdown" class="hidden flex flex-col ml-4 mt-2 space-y-2">
+                            <a href="games.html" class="text-gray-700 dark:text-gray-300 hover:text-green-600 dark:hover:text-green-400" data-translate="games">Games</a>
+                            <a href="secret-recipes.html" class="text-gray-700 dark:text-gray-300 hover:text-green-600 dark:hover:text-green-400" data-translate="secretRecipes">Secret Recipes</a>
+                            <a href="diet-planner.html" class="text-gray-700 dark:text-gray-300 hover:text-green-600 dark:hover:text-green-400" data-translate="dietPlanner">Diet Planner</a>
+                        </div>
+                    </div>
+                    <div id="languageSelectorContainer" class="mt-2"></div>
+                    <button onclick="toggleDarkMode()" class="p-2 rounded-lg bg-gray-200 dark:bg-gray-700 hover:bg-gray-300 dark:hover:bg-gray-600 transition-colors w-12 self-center">
+                        <span class="dark:hidden">🌙</span>
+                        <span class="hidden dark:inline">☀️</span>
+                    </button>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Header -->
+    <header class="bg-green-500 text-white py-16">
+        <div class="container mx-auto px-4 text-center">
+            <h1 class="text-4xl font-bold mb-4" data-translate="healthyRecipesTitle">Healthy Recipes</h1>
+            <p class="text-xl mb-8" data-translate="healthyRecipesSubtitle">Pilot your plate. Powered by AI. Fueled by wellness.</p>
+            <div class="max-w-md mx-auto">
+                <select id="categoryFilter" class="w-full p-3 rounded-lg text-gray-800 focus:outline-none focus:ring-2 focus:ring-green-400" data-translate="categoryFilter">
+                    <option value="all">All Categories</option>
+                    <option value="breakfast">Breakfast</option>
+                    <option value="lunch">Lunch</option>
+                    <option value="dinner">Dinner</option>
+                    <option value="snacks">Snacks</option>
+                    <option value="desserts">Desserts</option>
+                    <option value="vegan">Vegan</option>
+                    <option value="vegetarian">Vegetarian</option>
+                    <option value="gluten-free">Gluten-Free</option>
+                </select>
+            </div>
+        </div>
+    </header>
+
+    <!-- Recipe Grid -->
+    <div class="container mx-auto px-4 py-12">
+        <div class="flex justify-between items-center mb-8">
+            <h2 class="text-3xl font-bold text-gray-800 dark:text-white" data-translate="featuredRecipes">Featured Recipes</h2>
+            <a href="upload-recipe.html" class="bg-green-500 text-white px-6 py-2 rounded-lg hover:bg-green-600 transition-colors" data-translate="shareYourRecipe">Share Your Recipe</a>
+        </div>
+        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+            <!-- Mediterranean Salad -->
+            <div class="recipe-card bg-white dark:bg-gray-800 rounded-xl overflow-hidden shadow-lg" data-category="lunch vegetarian">
+                <div class="relative">
+                    <img src="https://images.unsplash.com/photo-1540189549336-e6e99c3679fe" alt="Mediterranean Salad" class="w-full h-48 object-cover" onerror="this.onerror=null; this.src='https://images.unsplash.com/photo-1512621776951-a57141f2eefd';">
+                </div>
+                <div class="p-6">
+                    <h3 class="text-xl font-bold text-gray-800 dark:text-white mb-2" data-translate="mediterraneanSalad">Mediterranean Salad</h3>
+                    <p class="text-gray-600 dark:text-gray-300 mb-4" data-translate="mediterraneanSaladDescription">A refreshing salad with fresh vegetables and feta cheese.</p>
+                    <div class="flex justify-between items-center">
+                        <span class="text-green-500 font-medium" data-translate="vegetarian">Vegetarian</span>
+                        <a href="mediterranean-salad.html" class="bg-green-500 text-white px-4 py-2 rounded-lg hover:bg-green-600 transition-colors" data-translate="viewRecipe">View Recipe</a>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Quinoa Buddha Bowl -->
+            <div class="recipe-card bg-white dark:bg-gray-800 rounded-xl overflow-hidden shadow-lg" data-category="lunch vegan">
+                <div class="relative">
+                    <img src="https://images.unsplash.com/photo-1512621776951-a57141f2eefd" alt="Quinoa Buddha Bowl" class="w-full h-48 object-cover" onerror="this.onerror=null; this.src='https://images.unsplash.com/photo-1546069901-ba9599a7e63c';">
+                </div>
+                <div class="p-6">
+                    <h3 class="text-xl font-bold text-gray-800 dark:text-white mb-2" data-translate="quinoaBuddhaBowl">Quinoa Buddha Bowl</h3>
+                    <p class="text-gray-600 dark:text-gray-300 mb-4" data-translate="quinoaBuddhaBowlDescription">A nourishing bowl packed with protein and vegetables.</p>
+                    <div class="flex justify-between items-center">
+                        <span class="text-green-500 font-medium" data-translate="vegan">Vegan</span>
+                        <a href="quinoa-buddha-bowl.html" class="bg-green-500 text-white px-4 py-2 rounded-lg hover:bg-green-600 transition-colors" data-translate="viewRecipe">View Recipe</a>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Avocado Mousse -->
+            <div class="recipe-card bg-white dark:bg-gray-800 rounded-xl overflow-hidden shadow-lg" data-category="desserts vegan">
+                <img src="https://images.unsplash.com/photo-1563805042-7684c019e1cb" alt="Avocado Mousse" class="w-full h-48 object-cover" onerror="this.onerror=null; this.src='https://images.unsplash.com/photo-1517093602195-b40af9261bdb';">
+                <div class="p-6">
+                    <h3 class="text-xl font-bold text-gray-800 dark:text-white mb-2" data-translate="avocadoMousse">Avocado Mousse</h3>
+                    <p class="text-gray-600 dark:text-gray-300 mb-4" data-translate="avocadoMousseDescription">A creamy, healthy dessert made with avocados.</p>
+                    <div class="flex justify-between items-center">
+                        <span class="text-green-500 font-medium" data-translate="vegan">Vegan</span>
+                        <a href="avocado-mousse.html" class="bg-green-500 text-white px-4 py-2 rounded-lg hover:bg-green-600 transition-colors" data-translate="viewRecipe">View Recipe</a>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Grilled Salmon -->
+            <div class="recipe-card bg-white dark:bg-gray-800 rounded-xl overflow-hidden shadow-lg" data-category="dinner">
+                <img src="https://images.unsplash.com/photo-1467003909585-2f8a72700288" alt="Grilled Salmon" class="w-full h-48 object-cover" onerror="this.onerror=null; this.src='https://images.unsplash.com/photo-1512621776951-a57141f2eefd';">
+                <div class="p-6">
+                    <h3 class="text-xl font-bold text-gray-800 dark:text-white mb-2" data-translate="grilledSalmon">Grilled Salmon</h3>
+                    <p class="text-gray-600 dark:text-gray-300 mb-4" data-translate="grilledSalmonDescription">Perfectly grilled salmon with herbs and lemon.</p>
+                    <div class="flex justify-between items-center">
+                        <span class="text-green-500 font-medium" data-translate="highProtein">High Protein</span>
+                        <a href="grilled-salmon.html" class="bg-green-500 text-white px-4 py-2 rounded-lg hover:bg-green-600 transition-colors" data-translate="viewRecipe">View Recipe</a>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Overnight Oats -->
+            <div class="recipe-card bg-white dark:bg-gray-800 rounded-xl overflow-hidden shadow-lg" data-category="breakfast">
+                <img src="https://images.unsplash.com/photo-1517093602195-b40af9261bdb" alt="Overnight Oats" class="w-full h-48 object-cover" onerror="this.onerror=null; this.src='https://images.unsplash.com/photo-1546069901-ba9599a7e63c';">
+                <div class="p-6">
+                    <h3 class="text-xl font-bold text-gray-800 dark:text-white mb-2" data-translate="overnightOats">Overnight Oats</h3>
+                    <p class="text-gray-600 dark:text-gray-300 mb-4" data-translate="overnightOatsDescription">A convenient and nutritious breakfast option.</p>
+                    <div class="flex justify-between items-center">
+                        <span class="text-green-500 font-medium" data-translate="vegetarian">Vegetarian</span>
+                        <a href="overnight-oats.html" class="bg-green-500 text-white px-4 py-2 rounded-lg hover:bg-green-600 transition-colors" data-translate="viewRecipe">View Recipe</a>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Vegetable Stir Fry -->
+            <div class="recipe-card bg-white dark:bg-gray-800 rounded-xl overflow-hidden shadow-lg" data-category="dinner vegetarian">
+                <img src="https://images.unsplash.com/photo-1512621776951-a57141f2eefd" alt="Vegetable Stir Fry" class="w-full h-48 object-cover" onerror="this.onerror=null; this.src='https://images.unsplash.com/photo-1546069901-ba9599a7e63c';">
+                <div class="p-6">
+                    <h3 class="text-xl font-bold text-gray-800 dark:text-white mb-2" data-translate="vegetableStirFry">Vegetable Stir Fry</h3>
+                    <p class="text-gray-600 dark:text-gray-300 mb-4" data-translate="vegetableStirFryDescription">Quick and healthy stir-fried vegetables with tofu.</p>
+                    <div class="flex justify-between items-center">
+                        <span class="text-green-500 font-medium" data-translate="vegetarian">Vegetarian</span>
+                        <a href="vegetable-stir-fry.html" class="bg-green-500 text-white px-4 py-2 rounded-lg hover:bg-green-600 transition-colors" data-translate="viewRecipe">View Recipe</a>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Chia Pudding -->
+            <div class="recipe-card bg-white dark:bg-gray-800 rounded-xl overflow-hidden shadow-lg" data-category="breakfast vegan">
+                <img src="https://images.unsplash.com/photo-1517093602195-b40af9261bdb" alt="Chia Pudding" class="w-full h-48 object-cover" onerror="this.onerror=null; this.src='https://images.unsplash.com/photo-1546069901-ba9599a7e63c';">
+                <div class="p-6">
+                    <h3 class="text-xl font-bold text-gray-800 dark:text-white mb-2" data-translate="chiaPudding">Chia Pudding</h3>
+                    <p class="text-gray-600 dark:text-gray-300 mb-4" data-translate="chiaPuddingDescription">A protein-rich breakfast with chia seeds and fruits.</p>
+                    <div class="flex justify-between items-center">
+                        <span class="text-green-500 font-medium" data-translate="vegan">Vegan</span>
+                        <a href="chia-pudding.html" class="bg-green-500 text-white px-4 py-2 rounded-lg hover:bg-green-600 transition-colors" data-translate="viewRecipe">View Recipe</a>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Lentil Soup -->
+            <div class="recipe-card bg-white dark:bg-gray-800 rounded-xl overflow-hidden shadow-lg" data-category="lunch vegan">
+                <img src="https://images.unsplash.com/photo-1547592166-23ac45744acd" alt="Lentil Soup" class="w-full h-48 object-cover" onerror="this.onerror=null; this.src='https://images.unsplash.com/photo-1512621776951-a57141f2eefd';">
+                <div class="p-6">
+                    <h3 class="text-xl font-bold text-gray-800 dark:text-white mb-2" data-translate="lentilSoup">Lentil Soup</h3>
+                    <p class="text-gray-600 dark:text-gray-300 mb-4" data-translate="lentilSoupDescription">Hearty and nutritious lentil soup with vegetables.</p>
+                    <div class="flex justify-between items-center">
+                        <span class="text-green-500 font-medium" data-translate="vegan">Vegan</span>
+                        <a href="lentil-soup.html" class="bg-green-500 text-white px-4 py-2 rounded-lg hover:bg-green-600 transition-colors" data-translate="viewRecipe">View Recipe</a>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Greek Yogurt Parfait -->
+            <div class="recipe-card bg-white dark:bg-gray-800 rounded-xl overflow-hidden shadow-lg" data-category="breakfast">
+                <img src="https://images.unsplash.com/photo-1488477181946-6428a848b919" alt="Greek Yogurt Parfait" class="w-full h-48 object-cover" onerror="this.onerror=null; this.src='https://images.unsplash.com/photo-1517093602195-b40af9261bdb';">
+                <div class="p-6">
+                    <h3 class="text-xl font-bold text-gray-800 dark:text-white mb-2" data-translate="greekYogurtParfait">Greek Yogurt Parfait</h3>
+                    <p class="text-gray-600 dark:text-gray-300 mb-4" data-translate="greekYogurtParfaitDescription">Layered yogurt with fresh fruits and granola.</p>
+                    <div class="flex justify-between items-center">
+                        <span class="text-green-500 font-medium" data-translate="highProtein">High Protein</span>
+                        <a href="greek-yogurt-parfait.html" class="bg-green-500 text-white px-4 py-2 rounded-lg hover:bg-green-600 transition-colors" data-translate="viewRecipe">View Recipe</a>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Millet and Vegetable Khichdi -->
+            <div class="recipe-card bg-white dark:bg-gray-800 rounded-xl overflow-hidden shadow-lg" data-category="lunch vegetarian gluten-free">
+                <div class="relative">
+                    <img src="https://images.unsplash.com/photo-1546069901-ba9599a7e63c" alt="Millet and Vegetable Khichdi" class="w-full h-48 object-cover">
+                </div>
+                <div class="p-6">
+                    <h3 class="text-xl font-bold text-gray-800 dark:text-white mb-2" data-translate="milletKhichdi">Millet and Vegetable Khichdi</h3>
+                    <p class="text-gray-600 dark:text-gray-300 mb-4" data-translate="milletKhichdiDescription">A nutritious one-pot meal combining protein-rich millets with seasonal vegetables and aromatic spices.</p>
+                    <div class="flex justify-between items-center">
+                        <div class="flex gap-2">
+                            <span class="text-green-500 font-medium" data-translate="vegetarian">Vegetarian</span>
+                            <span class="text-green-500 font-medium" data-translate="glutenFree">Gluten-Free</span>
+                            <span class="text-green-500 font-medium" data-translate="highProtein">High Protein</span>
+                        </div>
+                        <a href="millet-khichdi.html" class="bg-green-500 text-white px-4 py-2 rounded-lg hover:bg-green-600 transition-colors" data-translate="viewRecipe">View Recipe</a>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Vegetable Pulao -->
+            <div class="recipe-card bg-white dark:bg-gray-800 rounded-xl overflow-hidden shadow-lg" data-category="lunch vegetarian">
+                <div class="relative">
+                    <img src="https://images.unsplash.com/photo-1546069901-ba9599a7e63c" alt="Vegetable Pulao" class="w-full h-48 object-cover">
+                </div>
+                <div class="p-6">
+                    <h3 class="text-xl font-bold text-gray-800 dark:text-white mb-2" data-translate="vegetablePulao">Vegetable Pulao</h3>
+                    <p class="text-gray-600 dark:text-gray-300 mb-4" data-translate="vegetablePulaoDescription">A fragrant rice dish cooked with mixed vegetables and aromatic spices.</p>
+                    <div class="flex justify-between items-center">
+                        <span class="text-green-500 font-medium" data-translate="vegetarian">Vegetarian</span>
+                        <a href="vegetable-pulao.html" class="bg-green-500 text-white px-4 py-2 rounded-lg hover:bg-green-600 transition-colors" data-translate="viewRecipe">View Recipe</a>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Vegetable Biryani -->
+            <div class="recipe-card bg-white dark:bg-gray-800 rounded-xl overflow-hidden shadow-lg" data-category="lunch vegetarian">
+                <div class="relative">
+                    <img src="https://images.unsplash.com/photo-1546069901-ba9599a7e63c" alt="Vegetable Biryani" class="w-full h-48 object-cover">
+                </div>
+                <div class="p-6">
+                    <h3 class="text-xl font-bold text-gray-800 dark:text-white mb-2" data-translate="vegetableBiryani">Vegetable Biryani</h3>
+                    <p class="text-gray-600 dark:text-gray-300 mb-4" data-translate="vegetableBiryaniDescription">A flavorful rice dish layered with spiced vegetables and aromatic herbs.</p>
+                    <div class="flex justify-between items-center">
+                        <span class="text-green-500 font-medium" data-translate="vegetarian">Vegetarian</span>
+                        <a href="vegetable-biryani.html" class="bg-green-500 text-white px-4 py-2 rounded-lg hover:bg-green-600 transition-colors" data-translate="viewRecipe">View Recipe</a>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Vegetable Poha -->
+            <div class="recipe-card bg-white dark:bg-gray-800 rounded-xl overflow-hidden shadow-lg" data-category="breakfast vegetarian gluten-free">
+                <div class="relative">
+                    <img src="https://images.unsplash.com/photo-1546069901-ba9599a7e63c" alt="Vegetable Poha" class="w-full h-48 object-cover">
+                </div>
+                <div class="p-6">
+                    <h3 class="text-xl font-bold text-gray-800 dark:text-white mb-2" data-translate="vegetablePoha">Vegetable Poha</h3>
+                    <p class="text-gray-600 dark:text-gray-300 mb-4" data-translate="vegetablePohaDescription">A light and nutritious breakfast made with flattened rice and vegetables.</p>
+                    <div class="flex justify-between items-center">
+                        <div class="flex gap-2">
+                            <span class="text-green-500 font-medium" data-translate="vegetarian">Vegetarian</span>
+                            <span class="text-green-500 font-medium" data-translate="glutenFree">Gluten-Free</span>
+                        </div>
+                        <a href="vegetable-poha.html" class="bg-green-500 text-white px-4 py-2 rounded-lg hover:bg-green-600 transition-colors" data-translate="viewRecipe">View Recipe</a>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Chickpea Curry -->
+            <div class="recipe-card bg-white dark:bg-gray-800 rounded-xl overflow-hidden shadow-lg" data-category="lunch vegan">
+                <div class="relative">
+                    <img src="https://images.unsplash.com/photo-1546069901-ba9599a7e63c" alt="Chickpea Curry" class="w-full h-48 object-cover">
+                </div>
+                <div class="p-6">
+                    <h3 class="text-xl font-bold text-gray-800 dark:text-white mb-2" data-translate="chickpeaCurry">Chickpea Curry</h3>
+                    <p class="text-gray-600 dark:text-gray-300 mb-4" data-translate="chickpeaCurryDescription">A protein-rich curry made with chickpeas and aromatic spices.</p>
+                    <div class="flex justify-between items-center">
+                        <span class="text-green-500 font-medium" data-translate="vegan">Vegan</span>
+                        <a href="chickpea-curry.html" class="bg-green-500 text-white px-4 py-2 rounded-lg hover:bg-green-600 transition-colors" data-translate="viewRecipe">View Recipe</a>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Tofu Scramble -->
+            <div class="recipe-card bg-white dark:bg-gray-800 rounded-xl overflow-hidden shadow-lg" data-category="breakfast vegan">
+                <div class="relative">
+                    <img src="https://images.unsplash.com/photo-1546069901-ba9599a7e63c" alt="Tofu Scramble" class="w-full h-48 object-cover">
+                </div>
+                <div class="p-6">
+                    <h3 class="text-xl font-bold text-gray-800 dark:text-white mb-2" data-translate="tofuScramble">Tofu Scramble</h3>
+                    <p class="text-gray-600 dark:text-gray-300 mb-4" data-translate="tofuScrambleDescription">A protein-packed vegan alternative to scrambled eggs.</p>
+                    <div class="flex justify-between items-center">
+                        <span class="text-green-500 font-medium" data-translate="vegan">Vegan</span>
+                        <a href="tofu-scramble.html" class="bg-green-500 text-white px-4 py-2 rounded-lg hover:bg-green-600 transition-colors" data-translate="viewRecipe">View Recipe</a>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Sweet Potato Buddha Bowl -->
+            <div class="recipe-card bg-white dark:bg-gray-800 rounded-xl overflow-hidden shadow-lg" data-category="lunch vegan">
+                <div class="relative">
+                    <img src="https://images.unsplash.com/photo-1504674900247-0877df9cc836" alt="Sweet Potato Buddha Bowl" class="w-full h-48 object-cover">
+                </div>
+                <div class="p-6">
+                    <h3 class="text-xl font-bold text-gray-800 dark:text-white mb-2" data-translate="sweetPotatoBuddhaBowl">Sweet Potato Buddha Bowl</h3>
+                    <p class="text-gray-600 dark:text-gray-300 mb-4" data-translate="sweetPotatoBuddhaBowlDescription">A nourishing bowl filled with roasted sweet potatoes, quinoa, and fresh vegetables.</p>
+                    <div class="flex justify-between items-center">
+                        <span class="text-green-500 font-medium" data-translate="vegan">Vegan</span>
+                        <a href="sweet-potato-buddha-bowl.html" class="bg-green-500 text-white px-4 py-2 rounded-lg hover:bg-green-600 transition-colors" data-translate="viewRecipe">View Recipe</a>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Rainbow Buddha Bowl -->
+            <div class="recipe-card bg-white dark:bg-gray-800 rounded-xl overflow-hidden shadow-lg" data-category="lunch vegan">
+                <div class="relative">
+                    <img src="https://images.unsplash.com/photo-1519864600265-abb23847ef2c" alt="Rainbow Buddha Bowl" class="w-full h-48 object-cover">
+                </div>
+                <div class="p-6">
+                    <h3 class="text-xl font-bold text-gray-800 dark:text-white mb-2" data-translate="rainbowBuddhaBowl">Rainbow Buddha Bowl</h3>
+                    <p class="text-gray-600 dark:text-gray-300 mb-4" data-translate="rainbowBuddhaBowlDescription">A colorful, nutrient-packed bowl that's as beautiful as it is delicious.</p>
+                    <div class="flex justify-between items-center">
+                        <span class="text-green-500 font-medium" data-translate="vegan">Vegan</span>
+                        <a href="rainbow-buddha-bowl.html" class="bg-green-500 text-white px-4 py-2 rounded-lg hover:bg-green-600 transition-colors" data-translate="viewRecipe">View Recipe</a>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Super Green Smoothie -->
+            <div class="recipe-card bg-white dark:bg-gray-800 rounded-xl overflow-hidden shadow-lg" data-category="breakfast vegan">
+                <div class="relative">
+                    <img src="https://images.unsplash.com/photo-1464306076886-debca5e8a6b0" alt="Super Green Smoothie" class="w-full h-48 object-cover">
+                </div>
+                <div class="p-6">
+                    <h3 class="text-xl font-bold text-gray-800 dark:text-white mb-2" data-translate="superGreenSmoothie">Super Green Smoothie</h3>
+                    <p class="text-gray-600 dark:text-gray-300 mb-4" data-translate="superGreenSmoothieDescription">A powerful blend of greens and fruits for maximum nutrition.</p>
+                    <div class="flex justify-between items-center">
+                        <span class="text-green-500 font-medium" data-translate="vegan">Vegan</span>
+                        <a href="super-green-smoothie.html" class="bg-green-500 text-white px-4 py-2 rounded-lg hover:bg-green-600 transition-colors" data-translate="viewRecipe">View Recipe</a>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Grilled Salmon -->
+            <div class="recipe-card bg-white dark:bg-gray-800 rounded-xl overflow-hidden shadow-lg" data-category="dinner">
+                <div class="relative">
+                    <img src="https://images.unsplash.com/photo-1502741338009-cac2772e18bc" alt="Grilled Salmon" class="w-full h-48 object-cover">
+                </div>
+                <div class="p-6">
+                    <h3 class="text-xl font-bold text-gray-800 dark:text-white mb-2" data-translate="grilledSalmon">Grilled Salmon</h3>
+                    <p class="text-gray-600 dark:text-gray-300 mb-4" data-translate="grilledSalmonDescription">A healthy and delicious way to enjoy omega-3 rich salmon.</p>
+                    <div class="flex justify-between items-center">
+                        <span class="text-green-500 font-medium" data-translate="highProtein">High Protein</span>
+                        <a href="grilled-salmon.html" class="bg-green-500 text-white px-4 py-2 rounded-lg hover:bg-green-600 transition-colors" data-translate="viewRecipe">View Recipe</a>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Black Bean Tacos -->
+            <div class="recipe-card bg-white dark:bg-gray-800 rounded-xl overflow-hidden shadow-lg" data-category="dinner vegan">
+                <div class="relative">
+                    <img src="https://images.unsplash.com/photo-1504674900247-ec6b0b1b798e" alt="Black Bean Tacos" class="w-full h-48 object-cover">
+                </div>
+                <div class="p-6">
+                    <h3 class="text-xl font-bold text-gray-800 dark:text-white mb-2" data-translate="blackBeanTacos">Black Bean Tacos</h3>
+                    <p class="text-gray-600 dark:text-gray-300 mb-4" data-translate="blackBeanTacosDescription">A quick and delicious Mexican-inspired meal packed with protein and flavor.</p>
+                    <div class="flex justify-between items-center">
+                        <span class="text-green-500 font-medium" data-translate="vegan">Vegan</span>
+                        <a href="black-bean-tacos.html" class="bg-green-500 text-white px-4 py-2 rounded-lg hover:bg-green-600 transition-colors" data-translate="viewRecipe">View Recipe</a>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Golden Turmeric Latte -->
+            <div class="recipe-card bg-white dark:bg-gray-800 rounded-xl overflow-hidden shadow-lg" data-category="beverage vegan">
+                <div class="relative">
+                    <img src="https://images.unsplash.com/photo-1504674900247-1a781979e2c7" alt="Golden Turmeric Latte" class="w-full h-48 object-cover">
+                </div>
+                <div class="p-6">
+                    <h3 class="text-xl font-bold text-gray-800 dark:text-white mb-2" data-translate="goldenTurmericLatte">Golden Turmeric Latte</h3>
+                    <p class="text-gray-600 dark:text-gray-300 mb-4" data-translate="goldenTurmericLatteDescription">A warming, anti-inflammatory drink perfect for any time of day.</p>
+                    <div class="flex justify-between items-center">
+                        <span class="text-green-500 font-medium" data-translate="vegan">Vegan</span>
+                        <a href="golden-turmeric-latte.html" class="bg-green-500 text-white px-4 py-2 rounded-lg hover:bg-green-600 transition-colors" data-translate="viewRecipe">View Recipe</a>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Quinoa Stuffed Bell Peppers -->
+            <div class="recipe-card bg-white dark:bg-gray-800 rounded-xl overflow-hidden shadow-lg" data-category="dinner vegetarian">
+                <div class="relative">
+                    <img src="https://images.unsplash.com/photo-1464306076886-c17ce3b3f404" alt="Quinoa Stuffed Bell Peppers" class="w-full h-48 object-cover">
+                </div>
+                <div class="p-6">
+                    <h3 class="text-xl font-bold text-gray-800 dark:text-white mb-2" data-translate="quinoaStuffedBellPeppers">Quinoa Stuffed Bell Peppers</h3>
+                    <p class="text-gray-600 dark:text-gray-300 mb-4" data-translate="quinoaStuffedBellPeppersDescription">Colorful bell peppers filled with protein-rich quinoa and vegetables.</p>
+                    <div class="flex justify-between items-center">
+                        <span class="text-green-500 font-medium" data-translate="vegetarian">Vegetarian</span>
+                        <a href="quinoa-stuffed-bell-peppers.html" class="bg-green-500 text-white px-4 py-2 rounded-lg hover:bg-green-600 transition-colors" data-translate="viewRecipe">View Recipe</a>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Mushroom Risotto -->
+            <div class="recipe-card bg-white dark:bg-gray-800 rounded-xl overflow-hidden shadow-lg" data-category="dinner vegetarian">
+                <div class="relative">
+                    <img src="https://images.unsplash.com/photo-1502741338009-cac2772e18bc" alt="Mushroom Risotto" class="w-full h-48 object-cover">
+                </div>
+                <div class="p-6">
+                    <h3 class="text-xl font-bold text-gray-800 dark:text-white mb-2" data-translate="mushroomRisotto">Mushroom Risotto</h3>
+                    <p class="text-gray-600 dark:text-gray-300 mb-4" data-translate="mushroomRisottoDescription">Creamy Italian rice dish with sautéed mushrooms.</p>
+                    <div class="flex justify-between items-center">
+                        <span class="text-green-500 font-medium" data-translate="vegetarian">Vegetarian</span>
+                        <a href="mushroom-risotto.html" class="bg-green-500 text-white px-4 py-2 rounded-lg hover:bg-green-600 transition-colors" data-translate="viewRecipe">View Recipe</a>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Avocado Toast -->
+            <div class="recipe-card bg-white dark:bg-gray-800 rounded-xl overflow-hidden shadow-lg" data-category="breakfast vegetarian">
+                <div class="relative">
+                    <img src="https://images.unsplash.com/photo-1465101046530-73398c7f28ca" alt="Avocado Toast" class="w-full h-48 object-cover">
+                </div>
+                <div class="p-6">
+                    <h3 class="text-xl font-bold text-gray-800 dark:text-white mb-2" data-translate="avocadoToast">Avocado Toast</h3>
+                    <p class="text-gray-600 dark:text-gray-300 mb-4" data-translate="avocadoToastDescription">Crispy toast topped with creamy avocado and seasonings.</p>
+                    <div class="flex justify-between items-center">
+                        <span class="text-green-500 font-medium" data-translate="vegetarian">Vegetarian</span>
+                        <a href="avocado-toast.html" class="bg-green-500 text-white px-4 py-2 rounded-lg hover:bg-green-600 transition-colors" data-translate="viewRecipe">View Recipe</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- User Submitted Recipes -->
+        <div class="mt-16">
+            <h2 class="text-3xl font-bold text-gray-800 dark:text-white" data-translate="communityRecipes">Community Recipes</h2>
+            <div id="userRecipes" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+                <!-- User recipes will be loaded here -->
+            </div>
+        </div>
+    </div>
+
+    <!-- Footer -->
+    <footer class="bg-gray-800 text-white py-8 mt-12">
+        <div class="container mx-auto px-4">
+            <div class="grid grid-cols-1 md:grid-cols-4 gap-8">
+                <div>
+                    <h3 class="text-xl font-bold mb-4" data-translate="footerPlatePilot">PlatePilot</h3>
+                    <p class="text-gray-400" data-translate="footerDescription">Your partner in healthy living.</p>
+                </div>
+                <div>
+                    <h4 class="font-semibold mb-4" data-translate="footerQuickLinks">Quick Links</h4>
+                    <ul class="space-y-2">
+                        <li><a href="index.html" class="text-gray-400 hover:text-white transition-colors" data-translate="home">Home</a></li>
+                        <li><a href="recipes.html" class="text-gray-400 hover:text-white transition-colors" data-translate="recipes">Recipes</a></li>
+                        <li><a href="games.html" class="text-gray-400 hover:text-white transition-colors" data-translate="games">Games</a></li>
+                        <li><a href="secret-recipes.html" class="text-gray-400 hover:text-white transition-colors" data-translate="secretRecipes">Secret Recipes</a></li>
+                        <li><a href="diet-planner.html" class="text-gray-400 hover:text-white transition-colors" data-translate="dietPlanner">Diet Planner</a></li>
+                    </ul>
+                </div>
+                <div>
+                    <h4 class="font-semibold mb-4" data-translate="footerContact">Contact</h4>
+                    <ul class="space-y-2 text-gray-400">
+                        <li data-translate="footerEmail">Email: platepilot.11@gmail.com</li>
+                        <li data-translate="footerPhone">Phone: +91 9251681626</li>
+                    </ul>
+                </div>
+                <div>
+                    <h4 class="font-semibold mb-4" data-translate="footerFollowUs">Follow Us</h4>
+                    <div class="flex space-x-4">
+                        <a href="#" class="text-gray-400 hover:text-white transition-colors" data-translate="facebook">Facebook</a>
+                        <a href="#" class="text-gray-400 hover:text-white transition-colors" data-translate="twitter">Twitter</a>
+                        <a href="#" class="text-gray-400 hover:text-white transition-colors" data-translate="instagram">Instagram</a>
+                    </div>
+                </div>
+            </div>
+            <div class="border-t border-gray-700 mt-8 pt-8 text-center text-gray-400">
+                <p data-translate="footerCopyright">&copy; 2024 PlatePilot. All rights reserved.</p>
+            </div>
+        </div>
+    </footer>
+
+    <!-- Floating AI Assistant Button -->
+    <button id="aiAssistantBtn" onclick="openAIAssistant()" class="fixed bottom-8 right-8 bg-gradient-to-r from-green-400 to-blue-500 text-white p-4 rounded-full shadow-lg hover:scale-110 transition-transform z-50">
+        <svg xmlns="http://www.w3.org/2000/svg" class="h-8 w-8" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 20h9" />
+            <circle cx="12" cy="12" r="8" stroke="currentColor" stroke-width="2" fill="none" />
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 12h.01M12 12h.01M16 12h.01" />
+        </svg>
+    </button>
+    <!-- AI Assistant Modal (placeholder) -->
+    <div id="aiAssistantModal" class="fixed inset-0 bg-black bg-opacity-50 hidden items-center justify-center z-50">
+        <div class="bg-white dark:bg-gray-800 p-8 rounded-xl max-w-lg w-full shadow-2xl flex flex-col items-center">
+            <h3 class="text-2xl font-bold mb-4 text-gray-800 dark:text-white" data-translate="aiAssistantTitle">AI Assistant</h3>
+            <p class="text-gray-600 dark:text-gray-300 mb-6" data-translate="aiAssistantDescription">Hi! I'm your PlatePilot AI. How can I help you today?</p>
+            <input type="text" placeholder="Ask me anything..." class="w-full p-3 border border-gray-300 dark:border-gray-600 rounded-lg mb-4 bg-white dark:bg-gray-700 text-gray-700 dark:text-gray-300">
+            <button onclick="closeAIAssistant()" class="bg-green-500 text-white px-6 py-2 rounded-lg hover:bg-green-600" data-translate="close">Close</button>
+        </div>
+    </div>
+
+    <!-- Back to Top Button -->
+    <button id="backToTop" aria-label="Back to Top" class="hidden fixed bottom-24 right-8 bg-green-500 text-white p-3 rounded-full shadow-lg hover:bg-green-600 transition-colors z-50">
+        <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 15l7-7 7 7" />
+        </svg>
+    </button>
+
+    <script>
+        // Set base path for GitHub Pages
+        const basePath = '/PlatePilot';
+        
+        // Update all navigation links
+        document.addEventListener('DOMContentLoaded', function() {
+            // Update navigation links
+            document.querySelectorAll('a[href]').forEach(link => {
+                const href = link.getAttribute('href');
+                if (href.startsWith('index.html') || 
+                    href.startsWith('recipes.html') || 
+                    href.startsWith('upload-recipe.html') || 
+                    href.startsWith('games.html') || 
+                    href.startsWith('secret-recipes.html') || 
+                    href.startsWith('diet-planner.html') || 
+                    href.startsWith('login.html') || 
+                    href.startsWith('signup.html')) {
+                    if (!href.includes(basePath)) {
+                        link.href = basePath + '/' + href;
+                    }
+                }
+            });
+            
+            // Initialize dark mode
+            if (localStorage.getItem('darkMode') === 'true') {
+                document.documentElement.classList.add('dark');
+            }
+            
+            // Toggle dark mode
+            window.toggleDarkMode = function() {
+                if (document.documentElement.classList.contains('dark')) {
+                    document.documentElement.classList.remove('dark');
+                    localStorage.setItem('darkMode', 'false');
+                } else {
+                    document.documentElement.classList.add('dark');
+                    localStorage.setItem('darkMode', 'true');
+                }
+            };
+            
+            // Mobile menu toggle
+            window.toggleMobileMenu = function() {
+                const mobileMenu = document.getElementById('mobileMenu');
+                mobileMenu.classList.toggle('hidden');
+            };
+            
+            // Check login status
+            const user = JSON.parse(localStorage.getItem('currentUser'));
+            const welcomeMessage = document.getElementById('welcomeMessage');
+            
+            if (user) {
+                if (welcomeMessage) {
+                    welcomeMessage.textContent = `Welcome, ${user.name}!`;
+                }
+            } else {
+                if (welcomeMessage) {
+                    welcomeMessage.textContent = '';
+                }
+            }
+            
+            // Logout functionality
+            window.logout = function() {
+                localStorage.removeItem('currentUser');
+                window.location.href = basePath + '/login.html';
+            };
+            
+            // Load user recipes
+            loadUserRecipes();
+            
+            // Recipe filtering
+            const categoryFilter = document.getElementById('categoryFilter');
+            if (categoryFilter) {
+                categoryFilter.addEventListener('change', function() {
+                    const category = this.value;
+                    filterRecipes(category);
+                });
+            }
+        });
+        
+        function loadUserRecipes() {
+            const recipes = JSON.parse(localStorage.getItem('recipes')) || [];
+            const recipesContainer = document.getElementById('userRecipes');
+            
+            if (!recipesContainer) return;
+            
+            if (recipes.length === 0) {
+                recipesContainer.innerHTML = '<p class="text-gray-600 dark:text-gray-400 text-center" data-translate="noRecipesAvailable">No recipes available yet. Be the first to share your recipe!</p>';
+                return;
+            }
+            
+            recipes.forEach(recipe => {
+                const recipeCard = document.createElement('div');
+                recipeCard.className = 'recipe-card bg-white dark:bg-gray-800 rounded-xl overflow-hidden shadow-lg';
+                
+                const likes = recipe.likes || 0;
+                const likedBy = recipe.likedBy || [];
+                const currentUser = JSON.parse(localStorage.getItem('currentUser'));
+                const isLiked = currentUser && likedBy.includes(currentUser.email);
+                
+                recipeCard.innerHTML = `
+                    <div class="relative">
+                        <img src="${recipe.image}" alt="${recipe.name}" class="w-full h-48 object-cover" onerror="this.src='${basePath}/images/placeholder.jpg'">
+                    </div>
+                    <div class="p-6">
+                        <h3 class="text-xl font-bold text-gray-800 dark:text-white mb-2">${recipe.name}</h3>
+                        <p class="text-gray-600 dark:text-gray-300 mb-4">${recipe.description}</p>
+                        <div class="flex justify-between items-center">
+                            <span class="text-green-500 font-medium">${recipe.category || 'Uncategorized'}</span>
+                            <div class="flex items-center space-x-4">
+                                <button onclick="likeRecipe('${recipe.name}')" class="text-gray-600 dark:text-gray-300 hover:text-red-500 dark:hover:text-red-400 transition-colors ${isLiked ? 'text-red-500 dark:text-red-400' : ''}">
+                                    <i class="fas fa-heart"></i> ${likes}
+                                </button>
+                                <a href="${basePath}/recipe-detail.html?name=${encodeURIComponent(recipe.name)}" class="bg-green-500 text-white px-4 py-2 rounded-lg hover:bg-green-600 transition-colors">
+                                    View Recipe
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+                `;
+                
+                recipesContainer.appendChild(recipeCard);
+            });
+        }
+        
+        function likeRecipe(recipeName) {
+            const currentUser = JSON.parse(localStorage.getItem('currentUser'));
+            if (!currentUser) {
+                window.location.href = basePath + '/login.html?redirect=recipes.html';
+                return;
+            }
+            
+            const recipes = JSON.parse(localStorage.getItem('recipes')) || [];
+            const recipe = recipes.find(r => r.name === recipeName);
+            
+            if (recipe) {
+                if (!recipe.likedBy) {
+                    recipe.likedBy = [];
+                }
+                
+                const userIndex = recipe.likedBy.indexOf(currentUser.email);
+                if (userIndex === -1) {
+                    recipe.likedBy.push(currentUser.email);
+                    recipe.likes = (recipe.likes || 0) + 1;
+                } else {
+                    recipe.likedBy.splice(userIndex, 1);
+                    recipe.likes = (recipe.likes || 0) - 1;
+                }
+                
+                localStorage.setItem('recipes', JSON.stringify(recipes));
+                loadUserRecipes();
+            }
+        }
+        
+        function filterRecipes(category) {
+            const recipes = JSON.parse(localStorage.getItem('recipes')) || [];
+            const recipesContainer = document.getElementById('userRecipes');
+            
+            if (!recipesContainer) return;
+            
+            if (category === 'all') {
+                loadUserRecipes();
+                return;
+            }
+            
+            const filteredRecipes = recipes.filter(recipe => recipe.category === category);
+            
+            if (filteredRecipes.length === 0) {
+                recipesContainer.innerHTML = `<p class="text-gray-600 dark:text-gray-400 text-center" data-translate="noRecipesAvailable">No ${category} recipes available yet.</p>`;
+                return;
+            }
+            
+            recipesContainer.innerHTML = '';
+            
+            filteredRecipes.forEach(recipe => {
+                const recipeCard = document.createElement('div');
+                recipeCard.className = 'recipe-card bg-white dark:bg-gray-800 rounded-xl overflow-hidden shadow-lg';
+                
+                const likes = recipe.likes || 0;
+                const likedBy = recipe.likedBy || [];
+                const currentUser = JSON.parse(localStorage.getItem('currentUser'));
+                const isLiked = currentUser && likedBy.includes(currentUser.email);
+                
+                recipeCard.innerHTML = `
+                    <div class="relative">
+                        <img src="${recipe.image}" alt="${recipe.name}" class="w-full h-48 object-cover" onerror="this.src='${basePath}/images/placeholder.jpg'">
+                    </div>
+                    <div class="p-6">
+                        <h3 class="text-xl font-bold text-gray-800 dark:text-white mb-2">${recipe.name}</h3>
+                        <p class="text-gray-600 dark:text-gray-300 mb-4">${recipe.description}</p>
+                        <div class="flex justify-between items-center">
+                            <span class="text-green-500 font-medium">${recipe.category || 'Uncategorized'}</span>
+                            <div class="flex items-center space-x-4">
+                                <button onclick="likeRecipe('${recipe.name}')" class="text-gray-600 dark:text-gray-300 hover:text-red-500 dark:hover:text-red-400 transition-colors ${isLiked ? 'text-red-500 dark:text-red-400' : ''}">
+                                    <i class="fas fa-heart"></i> ${likes}
+                                </button>
+                                <a href="${basePath}/recipe-detail.html?name=${encodeURIComponent(recipe.name)}" class="bg-green-500 text-white px-4 py-2 rounded-lg hover:bg-green-600 transition-colors">
+                                    View Recipe
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+                `;
+                
+                recipesContainer.appendChild(recipeCard);
+            });
+        }
+
+        function openAIAssistant() {
+            document.getElementById('aiAssistantModal').classList.remove('hidden');
+            document.getElementById('aiAssistantModal').classList.add('flex');
+        }
+        function closeAIAssistant() {
+            document.getElementById('aiAssistantModal').classList.add('hidden');
+            document.getElementById('aiAssistantModal').classList.remove('flex');
+        }
+
+        // Back to Top functionality
+        const backToTop = document.getElementById('backToTop');
+        window.addEventListener('scroll', () => {
+            if (window.scrollY > 300) {
+                backToTop.classList.remove('hidden');
+            } else {
+                backToTop.classList.add('hidden');
+            }
+        });
+        backToTop.addEventListener('click', () => {
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+        });
+    </script>
+</body>
+</html> 

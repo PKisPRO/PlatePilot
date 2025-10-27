@@ -1,0 +1,327 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Quinoa Bowl - PlatePilot</title>
+    <meta name="description" content="PlatePilot: Quinoa Bowl - A nutritious and colorful bowl recipe with nutrition info, comments, and AI-powered wellness assistant.">
+    <meta property="og:title" content="Quinoa Bowl - PlatePilot">
+    <meta property="og:description" content="A nutritious and colorful bowl recipe with nutrition info, comments, and AI-powered wellness assistant.">
+    <meta property="og:image" content="https://images.unsplash.com/photo-1512621776951-a57141f2eefd">
+    <meta property="og:type" content="article">
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:title" content="Quinoa Bowl - PlatePilot">
+    <meta name="twitter:description" content="A nutritious and colorful bowl recipe with nutrition info, comments, and AI-powered wellness assistant.">
+    <meta name="twitter:image" content="https://images.unsplash.com/photo-1512621776951-a57141f2eefd">
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            darkMode: 'class',
+            theme: {
+                extend: {
+                    colors: {
+                        // You can add custom colors here if needed
+                    }
+                }
+            }
+        }
+    </script>
+    <!-- Language System -->
+    <script src="translations.js"></script>
+    <script src="translations-extended.js"></script>
+    <script src="translations-more.js"></script>
+    <script src="language-selector.js"></script>
+    <style>
+        .recipe-image { transition: transform 0.3s; }
+        .recipe-image:hover { transform: scale(1.02); }
+        .floating-ai-btn { position: fixed; bottom: 2rem; right: 2rem; z-index: 50; }
+        .tooltip { position: relative; cursor: pointer; }
+        .tooltip .tooltip-text { visibility: hidden; width: 120px; background: #222; color: #fff; text-align: center; border-radius: 6px; padding: 5px 0; position: absolute; z-index: 100; bottom: 125%; left: 50%; margin-left: -60px; opacity: 0; transition: opacity 0.3s; }
+        .tooltip:hover .tooltip-text { visibility: visible; opacity: 1; }
+        .back-to-top { position: fixed; bottom: 5rem; right: 2rem; z-index: 40; display: none; }
+        .back-to-top.show { display: block; }
+    </style>
+</head>
+<body class="bg-gray-50 dark:bg-gray-900 min-h-screen">
+    <!-- Navigation Bar -->
+    <nav class="bg-white dark:bg-gray-900 shadow-md sticky top-0 z-50">
+        <div class="container mx-auto px-4">
+            <div class="flex justify-between items-center h-16">
+                <a href="index.html" class="text-2xl font-bold text-green-600 dark:text-green-400 hover:text-green-700 dark:hover:text-green-300 transition-colors">
+                    PlatePilot
+                </a>
+                <div class="hidden md:flex items-center space-x-8">
+                    <a href="index.html" class="text-gray-700 dark:text-gray-300 hover:text-green-600 dark:hover:text-green-400 transition-colors" data-translate="nav.home">Home</a>
+                    <a href="recipes.html" class="text-green-600 dark:text-green-400 font-medium" data-translate="nav.recipes">Recipes</a>
+                    <a href="upload-recipe.html" class="text-gray-700 dark:text-gray-300 hover:text-green-600 dark:hover:text-green-400 transition-colors" data-translate="nav.share_recipe">Share Recipe</a>
+                    <a href="games.html" class="text-gray-700 dark:text-gray-300 hover:text-green-600 dark:hover:text-green-400 transition-colors" data-translate="nav.games">Games</a>
+                    <a href="secret-recipes.html" class="text-gray-700 dark:text-gray-300 hover:text-green-600 dark:hover:text-green-400 transition-colors" data-translate="nav.secret_recipes">Secret Recipes</a>
+                    <a href="diet-planner.html" class="text-gray-700 dark:text-gray-300 hover:text-green-600 dark:hover:text-green-400 transition-colors" data-translate="nav.diet_planner">Diet Planner</a>
+                    <!-- Language Selector will be inserted here by JavaScript -->
+                    <button onclick="toggleDarkMode()" class="p-2 rounded-lg bg-gray-200 dark:bg-gray-700 hover:bg-gray-300 dark:hover:bg-gray-600 transition-colors">
+                        <span class="dark:hidden">🌙</span>
+                        <span class="hidden dark:inline">☀️</span>
+                    </button>
+                </div>
+                <!-- Mobile Menu Button -->
+                <button class="md:hidden p-2 rounded-lg hover:bg-gray-200 dark:hover:bg-gray-700 transition-colors" onclick="toggleMobileMenu()">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 text-gray-700 dark:text-gray-300" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16" />
+                    </svg>
+                </button>
+            </div>
+            <!-- Mobile Menu -->
+            <div id="mobileMenu" class="md:hidden hidden pb-4">
+                <div class="flex flex-col space-y-4">
+                    <a href="index.html" class="text-gray-700 dark:text-gray-300 hover:text-green-600 dark:hover:text-green-400 transition-colors">Home</a>
+                    <a href="recipes.html" class="text-green-600 dark:text-green-400 font-medium">Recipes</a>
+                    <a href="upload-recipe.html" class="text-gray-700 dark:text-gray-300 hover:text-green-600 dark:hover:text-green-400 transition-colors">Share Recipe</a>
+                    <a href="games.html" class="text-gray-700 dark:text-gray-300 hover:text-green-600 dark:hover:text-green-400 transition-colors">Games</a>
+                    <a href="secret-recipes.html" class="text-gray-700 dark:text-gray-300 hover:text-green-600 dark:hover:text-green-400 transition-colors">Secret Recipes</a>
+                    <a href="diet-planner.html" class="text-gray-700 dark:text-gray-300 hover:text-green-600 dark:hover:text-green-400 transition-colors">Diet Planner</a>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Recipe Content -->
+    <main class="container mx-auto px-4 py-8">
+        <div class="max-w-4xl mx-auto">
+            <h1 class="text-4xl font-bold text-gray-800 dark:text-white mb-4" data-translate="recipe.quinoa_bowl.title">Quinoa Bowl</h1>
+            <p class="text-xl text-gray-600 dark:text-gray-300 mb-8" data-translate="recipe.quinoa_bowl.description">A nutritious and colorful bowl packed with protein-rich quinoa, fresh vegetables, and a zesty dressing.</p>
+
+            <!-- Recipe Image -->
+            <div class="mb-8">
+                <img src="https://images.unsplash.com/photo-1512621776951-a57141f2eefd" alt="Quinoa Bowl" class="w-full h-96 object-cover rounded-lg shadow-lg recipe-image">
+            </div>
+
+            <!-- Recipe Info -->
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-4 mb-8">
+                <div class="bg-white dark:bg-gray-800 p-4 rounded-lg shadow">
+                    <h3 class="font-semibold text-gray-800 dark:text-white">Prep Time</h3>
+                    <p class="text-xl text-gray-600 dark:text-gray-300 mb-8" data-translate="recipe.quinoa_bowl.description">A nutritious and colorful bowl packed with protein-rich quinoa, fresh vegetables, and a zesty dressing.</p>
+                </div>
+                <div class="bg-white dark:bg-gray-800 p-4 rounded-lg shadow">
+                    <h3 class="font-semibold text-gray-800 dark:text-white">Cook Time</h3>
+                    <p class="text-xl text-gray-600 dark:text-gray-300 mb-8" data-translate="recipe.quinoa_bowl.description">A nutritious and colorful bowl packed with protein-rich quinoa, fresh vegetables, and a zesty dressing.</p>
+                </div>
+                <div class="bg-white dark:bg-gray-800 p-4 rounded-lg shadow">
+                    <h3 class="font-semibold text-gray-800 dark:text-white">Servings</h3>
+                    <p class="text-xl text-gray-600 dark:text-gray-300 mb-8" data-translate="recipe.quinoa_bowl.description">A nutritious and colorful bowl packed with protein-rich quinoa, fresh vegetables, and a zesty dressing.</p>
+                </div>
+            </div>
+
+            <!-- Description -->
+            <div class="bg-white dark:bg-gray-800 p-6 rounded-lg shadow-lg mb-8">
+                <h2 class="text-2xl font-bold text-gray-800 dark:text-white mb-4">Description</h2>
+                <p class="text-gray-600 dark:text-gray-300">
+                    This Quinoa Bowl is a perfect balance of protein, fiber, and essential nutrients. It combines fluffy quinoa with crisp vegetables, creamy avocado, and a tangy lemon-tahini dressing for a satisfying and healthy meal.
+                </p>
+                <div class="mt-4 flex flex-wrap gap-2">
+                    <span class="px-3 py-1 bg-green-100 text-green-800 rounded-full text-sm">Vegetarian</span>
+                    <span class="px-3 py-1 bg-green-100 text-green-800 rounded-full text-sm">Vegan</span>
+                    <span class="px-3 py-1 bg-green-100 text-green-800 rounded-full text-sm">Gluten-Free</span>
+                    <span class="px-3 py-1 bg-green-100 text-green-800 rounded-full text-sm">High Protein</span>
+                </div>
+            </div>
+
+            <!-- Ingredients -->
+            <div class="bg-white dark:bg-gray-800 p-6 rounded-lg shadow-lg mb-8">
+                <h2 class="text-2xl font-bold text-gray-800 dark:text-white mb-4">Ingredients</h2>
+                <ul class="list-disc list-inside text-gray-600 dark:text-gray-300 space-y-2">
+                    <li>1 cup quinoa, rinsed</li>
+                    <li>2 cups water or vegetable broth</li>
+                    <li>1 cucumber, diced</li>
+                    <li>1 bell pepper, diced</li>
+                    <li>1 cup cherry tomatoes, halved</li>
+                    <li>1 avocado, sliced</li>
+                    <li>1/4 cup red onion, finely chopped</li>
+                    <li>1/4 cup fresh parsley, chopped</li>
+                    <li>2 tbsp olive oil</li>
+                    <li>1 tbsp tahini</li>
+                    <li>1 lemon, juiced</li>
+                    <li>1 clove garlic, minced</li>
+                    <li>Salt and pepper to taste</li>
+                </ul>
+            </div>
+
+            <!-- Instructions -->
+            <div class="bg-white dark:bg-gray-800 p-6 rounded-lg shadow-lg mb-8">
+                <h2 class="text-2xl font-bold text-gray-800 dark:text-white mb-4">Instructions</h2>
+                <ol class="list-decimal list-inside text-gray-600 dark:text-gray-300 space-y-2">
+                    <li>Rinse quinoa thoroughly under cold water.</li>
+                    <li>In a medium saucepan, combine quinoa and water/broth. Bring to a boil.</li>
+                    <li>Reduce heat, cover, and simmer for 15-20 minutes until water is absorbed.</li>
+                    <li>Remove from heat and let stand for 5 minutes. Fluff with a fork.</li>
+                    <li>While quinoa cooks, prepare the vegetables.</li>
+                    <li>Make the dressing by whisking together olive oil, tahini, lemon juice, garlic, salt, and pepper.</li>
+                    <li>In a large bowl, combine cooked quinoa, vegetables, and parsley.</li>
+                    <li>Drizzle with dressing and toss gently to combine.</li>
+                    <li>Top with avocado slices and serve immediately.</li>
+                </ol>
+            </div>
+
+            <!-- Nutritional Information -->
+            <div class="bg-white dark:bg-gray-800 p-6 rounded-lg shadow-lg mb-8">
+                <h2 class="text-2xl font-bold text-gray-800 dark:text-white mb-4">Nutritional Information</h2>
+                <div class="grid grid-cols-2 md:grid-cols-4 gap-4">
+                    <div class="text-center">
+                        <p class="text-xl text-gray-600 dark:text-gray-300 mb-8" data-translate="recipe.quinoa_bowl.description">A nutritious and colorful bowl packed with protein-rich quinoa, fresh vegetables, and a zesty dressing.</p>
+                        <p class="text-xl text-gray-600 dark:text-gray-300 mb-8" data-translate="recipe.quinoa_bowl.description">A nutritious and colorful bowl packed with protein-rich quinoa, fresh vegetables, and a zesty dressing.</p>
+                    </div>
+                    <div class="text-center">
+                        <p class="text-xl text-gray-600 dark:text-gray-300 mb-8" data-translate="recipe.quinoa_bowl.description">A nutritious and colorful bowl packed with protein-rich quinoa, fresh vegetables, and a zesty dressing.</p>
+                        <p class="text-xl text-gray-600 dark:text-gray-300 mb-8" data-translate="recipe.quinoa_bowl.description">A nutritious and colorful bowl packed with protein-rich quinoa, fresh vegetables, and a zesty dressing.</p>
+                    </div>
+                    <div class="text-center">
+                        <p class="text-xl text-gray-600 dark:text-gray-300 mb-8" data-translate="recipe.quinoa_bowl.description">A nutritious and colorful bowl packed with protein-rich quinoa, fresh vegetables, and a zesty dressing.</p>
+                        <p class="text-xl text-gray-600 dark:text-gray-300 mb-8" data-translate="recipe.quinoa_bowl.description">A nutritious and colorful bowl packed with protein-rich quinoa, fresh vegetables, and a zesty dressing.</p>
+                    </div>
+                    <div class="text-center">
+                        <p class="text-xl text-gray-600 dark:text-gray-300 mb-8" data-translate="recipe.quinoa_bowl.description">A nutritious and colorful bowl packed with protein-rich quinoa, fresh vegetables, and a zesty dressing.</p>
+                        <p class="text-xl text-gray-600 dark:text-gray-300 mb-8" data-translate="recipe.quinoa_bowl.description">A nutritious and colorful bowl packed with protein-rich quinoa, fresh vegetables, and a zesty dressing.</p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Tips -->
+            <div class="bg-white dark:bg-gray-800 p-6 rounded-lg shadow-lg mb-8">
+                <h2 class="text-2xl font-bold text-gray-800 dark:text-white mb-4">Tips for Perfect Quinoa Bowl</h2>
+                <ul class="list-disc list-inside text-gray-600 dark:text-gray-300 space-y-2">
+                    <li>Rinse quinoa well to remove any bitter coating.</li>
+                    <li>Use vegetable broth instead of water for more flavor.</li>
+                    <li>Let quinoa cool slightly before adding vegetables to prevent wilting.</li>
+                    <li>Add avocado just before serving to prevent browning.</li>
+                    <li>Adjust the dressing ingredients to your taste preference.</li>
+                </ul>
+            </div>
+
+            <!-- Comments Section -->
+            <div class="bg-white dark:bg-gray-800 p-6 rounded-lg shadow-lg">
+                <h2 class="text-2xl font-bold text-gray-800 dark:text-white mb-4">Comments</h2>
+                <div id="comments" class="space-y-4 mb-6">
+                    <!-- Comments will be loaded here -->
+                </div>
+                <form id="commentForm" class="space-y-4">
+                    <textarea id="commentText" class="w-full p-3 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-700 text-gray-700 dark:text-gray-300" rows="3" placeholder="Share your thoughts..."></textarea>
+                    <button type="submit" class="bg-green-500 text-white px-6 py-2 rounded-lg hover:bg-green-600 transition-colors">Post Comment</button>
+                </form>
+            </div>
+        </div>
+    </main>
+
+    <!-- Footer -->
+    <footer class="bg-gray-800 text-white py-8 mt-12">
+        <div class="container mx-auto px-4">
+            <div class="grid grid-cols-1 md:grid-cols-4 gap-8">
+                <div>
+                    <h3 class="text-xl font-bold mb-4">PlatePilot</h3>
+                    <p class="text-xl text-gray-600 dark:text-gray-300 mb-8" data-translate="recipe.quinoa_bowl.description">A nutritious and colorful bowl packed with protein-rich quinoa, fresh vegetables, and a zesty dressing.</p>
+                </div>
+                <div>
+                    <h4 class="font-semibold mb-4">Quick Links</h4>
+                    <ul class="space-y-2">
+                        <li><a href="index.html" class="text-gray-400 hover:text-white transition-colors">Home</a></li>
+                        <li><a href="recipes.html" class="text-gray-400 hover:text-white transition-colors">Recipes</a></li>
+                        <li><a href="games.html" class="text-gray-400 hover:text-white transition-colors">Games</a></li>
+                        <li><a href="secret-recipes.html" class="text-gray-400 hover:text-white transition-colors">Secret Recipes</a></li>
+                        <li><a href="diet-planner.html" class="text-gray-400 hover:text-white transition-colors">Diet Planner</a></li>
+                    </ul>
+                </div>
+                <div>
+                    <h4 class="font-semibold mb-4">Contact</h4>
+                    <ul class="space-y-2 text-gray-400">
+                        <li>Email: platepilot.11@gmail.com</li>
+                        <li>Phone: +91 9251681626</li>
+                    </ul>
+                </div>
+                <div>
+                    <h4 class="font-semibold mb-4">Follow Us</h4>
+                    <div class="flex space-x-4">
+                        <a href="#" class="text-gray-400 hover:text-white transition-colors">Facebook</a>
+                        <a href="#" class="text-gray-400 hover:text-white transition-colors">Twitter</a>
+                        <a href="#" class="text-gray-400 hover:text-white transition-colors">Instagram</a>
+                    </div>
+                </div>
+            </div>
+            <div class="border-t border-gray-700 mt-8 pt-8 text-center text-gray-400">
+                <p>&copy; 2024 PlatePilot. All rights reserved.</p>
+            </div>
+        </div>
+    </footer>
+
+    <script>
+        // Set base path for GitHub Pages
+        const basePath = '/PlatePilot';
+        
+        // Update navigation links
+        document.addEventListener('DOMContentLoaded', function() {
+            document.querySelectorAll('a[href]').forEach(link => {
+                const href = link.getAttribute('href');
+                if (href.startsWith('index.html') || 
+                    href.startsWith('recipes.html') || 
+                    href.startsWith('upload-recipe.html') || 
+                    href.startsWith('games.html') || 
+                    href.startsWith('secret-recipes.html') || 
+                    href.startsWith('diet-planner.html')) {
+                    if (!href.includes(basePath)) {
+                        link.href = basePath + '/' + href;
+                    }
+                }
+            });
+            
+            // Initialize dark mode
+            if (localStorage.getItem('darkMode') === 'true') {
+                document.documentElement.classList.add('dark');
+            }
+            
+            // Toggle dark mode
+            window.toggleDarkMode = function() {
+                if (document.documentElement.classList.contains('dark')) {
+                    document.documentElement.classList.remove('dark');
+                    localStorage.setItem('darkMode', 'false');
+                } else {
+                    document.documentElement.classList.add('dark');
+                    localStorage.setItem('darkMode', 'true');
+                }
+            };
+            
+            // Mobile menu toggle
+            window.toggleMobileMenu = function() {
+                const mobileMenu = document.getElementById('mobileMenu');
+                mobileMenu.classList.toggle('hidden');
+            };
+
+            // Comments functionality
+            const commentForm = document.getElementById('commentForm');
+            const commentsContainer = document.getElementById('comments');
+            
+            // Load comments
+            function loadComments() {
+                const comments = JSON.parse(localStorage.getItem('quinoa-bowl-comments')) || [];
+                commentsContainer.innerHTML = comments.map(comment => `
+                    <div class="bg-gray-50 dark:bg-gray-700 p-4 rounded-lg">
+                        <p class="text-xl text-gray-600 dark:text-gray-300 mb-8" data-translate="recipe.quinoa_bowl.description">A nutritious and colorful bowl packed with protein-rich quinoa, fresh vegetables, and a zesty dressing.</p>
+                    </div>
+                `).join('');
+            }
+            
+            // Save comment
+            commentForm.addEventListener('submit', function(e) {
+                e.preventDefault();
+                const commentText = document.getElementById('commentText').value.trim();
+                if (commentText) {
+                    const comments = JSON.parse(localStorage.getItem('quinoa-bowl-comments')) || [];
+                    comments.push(commentText);
+                    localStorage.setItem('quinoa-bowl-comments', JSON.stringify(comments));
+                    document.getElementById('commentText').value = '';
+                    loadComments();
+                }
+            });
+            
+            // Initial load of comments
+            loadComments();
+        });
+    </script>
+</body>
+</html> 

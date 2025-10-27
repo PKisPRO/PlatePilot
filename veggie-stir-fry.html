@@ -1,0 +1,203 @@
+            <!-- Comments Section -->
+            <div id="commentsSection" class="hidden mt-8">
+                <div class="mb-4">
+                    <textarea id="commentInput" placeholder="Write a comment..." class="w-full p-2 border rounded-lg dark:bg-gray-700 dark:border-gray-600 mb-2" rows="3"></textarea>
+                    <button onclick="addComment()" class="bg-green-500 text-white px-4 py-2 rounded-lg hover:bg-green-600">Post Comment</button>
+                </div>
+                <div id="commentsList" class="space-y-4"></div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Footer -->
+    <footer class="bg-gray-800 text-white py-8 mt-12">
+        <div class="container mx-auto px-4">
+            <div class="grid grid-cols-1 md:grid-cols-4 gap-8">
+                <div>
+                    <h3 class="text-xl font-bold mb-4">PlatePilot</h3>
+                    <p class="text-xl text-gray-600 dark:text-gray-300 mb-8" data-translate="recipe.veggie_stir_fry.description">Your partner in healthy living.</p>
+                </div>
+                <div>
+                    <h4 class="font-semibold mb-4">Quick Links</h4>
+                    <ul class="space-y-2">
+                        <li><a href="index.html" class="text-gray-400 hover:text-white transition-colors">Home</a></li>
+                        <li><a href="recipes.html" class="text-gray-400 hover:text-white transition-colors">Recipes</a></li>
+                        <li><a href="games.html" class="text-gray-400 hover:text-white transition-colors">Games</a></li>
+                        <li><a href="secret-recipes.html" class="text-gray-400 hover:text-white transition-colors">Secret Recipes</a></li>
+                        <li><a href="diet-planner.html" class="text-gray-400 hover:text-white transition-colors">Diet Planner</a></li>
+                    </ul>
+                </div>
+                <div>
+                    <h4 class="font-semibold mb-4">Contact</h4>
+                    <ul class="space-y-2 text-gray-400">
+                        <li>Email: platepilot.11@gmail.com</li>
+                        <li>Phone: +91 9251681626</li>
+                    </ul>
+                </div>
+                <div>
+                    <h4 class="font-semibold mb-4">Follow Us</h4>
+                    <div class="flex space-x-4">
+                        <a href="#" class="text-gray-400 hover:text-white transition-colors">Facebook</a>
+                        <a href="#" class="text-gray-400 hover:text-white transition-colors">Twitter</a>
+                        <a href="#" class="text-gray-400 hover:text-white transition-colors">Instagram</a>
+                    </div>
+                </div>
+            </div>
+            <div class="border-t border-gray-700 mt-8 pt-8 text-center text-gray-400">
+                <p>&copy; 2024 PlatePilot. All rights reserved.</p>
+            </div>
+        </div>
+    </footer>
+
+    <!-- Video Modal -->
+    <div id="videoModal" class="fixed inset-0 bg-black bg-opacity-50 hidden items-center justify-center z-50">
+        <div class="bg-white dark:bg-gray-800 p-4 rounded-lg w-11/12 max-w-4xl">
+            <div class="flex justify-between items-center mb-4">
+                <h3 class="text-xl font-bold text-gray-800 dark:text-white">Recipe Video</h3>
+                <button onclick="closeVideoModal()" class="text-gray-500 hover:text-gray-700 dark:text-gray-400 dark:hover:text-gray-200">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
+                    </svg>
+                </button>
+            </div>
+            <div class="aspect-w-16 aspect-h-9">
+                <iframe id="recipeVideo" class="w-full h-96" src="" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Dark mode toggle
+        function toggleDarkMode() {
+            document.documentElement.classList.toggle('dark');
+            localStorage.setItem('darkMode', document.documentElement.classList.contains('dark'));
+        }
+
+        // Check for saved dark mode preference
+        if (localStorage.getItem('darkMode') === 'true') {
+            document.documentElement.classList.add('dark');
+        }
+
+        // Mobile menu toggle
+        function toggleMobileMenu() {
+            const mobileMenu = document.getElementById('mobileMenu');
+            mobileMenu.classList.toggle('hidden');
+        }
+
+        // Check access on page load
+        window.onload = function() {
+            const currentUser = localStorage.getItem('currentUser');
+            if (!currentUser) {
+                window.location.href = 'login.html';
+                return;
+            }
+
+            // Load saved likes and comments
+            const savedLikes = localStorage.getItem('veggie-stir-fry-likes');
+            if (savedLikes) {
+                document.getElementById('likeCount').textContent = savedLikes;
+            }
+
+            const savedComments = JSON.parse(localStorage.getItem('veggie-stir-fry-comments') || '[]');
+            document.getElementById('commentCount').textContent = savedComments.length;
+        }
+
+        // Like functionality
+        function toggleLike() {
+            const currentUser = localStorage.getItem('currentUser');
+            if (!currentUser) {
+                alert('Please log in to like recipes');
+                return;
+            }
+
+            const likeCount = document.getElementById('likeCount');
+            const currentLikes = parseInt(likeCount.textContent);
+            const newLikes = currentLikes + 1;
+            likeCount.textContent = newLikes;
+            localStorage.setItem('veggie-stir-fry-likes', newLikes);
+        }
+
+        // Comments functionality
+        function toggleComments() {
+            const currentUser = localStorage.getItem('currentUser');
+            if (!currentUser) {
+                alert('Please log in to view comments');
+                return;
+            }
+
+            const commentsSection = document.getElementById('commentsSection');
+            commentsSection.classList.toggle('hidden');
+            loadComments();
+        }
+
+        function addComment() {
+            const currentUser = localStorage.getItem('currentUser');
+            if (!currentUser) {
+                alert('Please log in to add comments');
+                return;
+            }
+
+            const commentInput = document.getElementById('commentInput');
+            const comment = commentInput.value.trim();
+            
+            if (comment) {
+                const comments = JSON.parse(localStorage.getItem('veggie-stir-fry-comments') || '[]');
+                comments.push({
+                    user: currentUser,
+                    text: comment,
+                    timestamp: new Date().toISOString()
+                });
+                
+                localStorage.setItem('veggie-stir-fry-comments', JSON.stringify(comments));
+                commentInput.value = '';
+                loadComments();
+            }
+        }
+
+        function loadComments() {
+            const comments = JSON.parse(localStorage.getItem('veggie-stir-fry-comments') || '[]');
+            const commentsList = document.getElementById('commentsList');
+            commentsList.innerHTML = '';
+            
+            comments.forEach(comment => {
+                const commentElement = document.createElement('div');
+                commentElement.className = 'bg-gray-100 dark:bg-gray-700 p-4 rounded-lg mb-4';
+                commentElement.innerHTML = `
+                    <div class="flex justify-between items-start mb-2">
+                        <span class="font-semibold text-gray-800 dark:text-white">${comment.user}</span>
+                        <span class="text-sm text-gray-500 dark:text-gray-400">${new Date(comment.timestamp).toLocaleDateString()}</span>
+                    </div>
+                    <p class="text-xl text-gray-600 dark:text-gray-300 mb-8" data-translate="recipe.veggie_stir_fry.description">Your partner in healthy living.</p>
+                `;
+                commentsList.appendChild(commentElement);
+            });
+            
+            document.getElementById('commentCount').textContent = comments.length;
+        }
+
+        // Video modal functionality
+        function openVideoModal() {
+            const modal = document.getElementById('videoModal');
+            const video = document.getElementById('recipeVideo');
+            video.src = 'https://www.youtube.com/embed/your-video-id'; // Replace with actual video ID
+            modal.classList.remove('hidden');
+            modal.classList.add('flex');
+        }
+
+        function closeVideoModal() {
+            const modal = document.getElementById('videoModal');
+            const video = document.getElementById('recipeVideo');
+            video.src = '';
+            modal.classList.add('hidden');
+            modal.classList.remove('flex');
+        }
+
+        // Close modal when clicking outside
+        document.getElementById('videoModal').addEventListener('click', function(e) {
+            if (e.target === this) {
+                closeVideoModal();
+            }
+        });
+    </script>
+</body>
+</html> 

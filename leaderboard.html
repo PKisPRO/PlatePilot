@@ -1,0 +1,427 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Recipe Leaderboard - PlatePilot</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            darkMode: 'class',
+            theme: {
+                extend: {
+                    colors: {
+                        // You can add custom colors here if needed
+                    }
+                }
+            }
+        }
+    </script>
+    <style>
+        .recipe-card {
+            background: white;
+            border-radius: 1rem;
+            overflow: hidden;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            transition: all 0.3s ease-in-out;
+            margin-bottom: 2rem;
+        }
+        .recipe-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04);
+        }
+        .rank-badge {
+            position: absolute;
+            top: 1rem;
+            left: 1rem;
+            width: 2.5rem;
+            height: 2.5rem;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: bold;
+            z-index: 10;
+        }
+        .rank-1 {
+            background: linear-gradient(135deg, #FFD700, #FFA500);
+            color: #000;
+        }
+        .rank-2 {
+            background: linear-gradient(135deg, #C0C0C0, #A9A9A9);
+            color: #000;
+        }
+        .rank-3 {
+            background: linear-gradient(135deg, #CD7F32, #8B4513);
+            color: #fff;
+        }
+        .dark .recipe-card {
+            background: #1f2937;
+        }
+    </style>
+</head>
+<body class="bg-gray-50 dark:bg-gray-900 min-h-screen">
+    <!-- Navigation Bar -->
+    <nav class="bg-white dark:bg-gray-900 shadow-md sticky top-0 z-50">
+        <div class="container mx-auto px-4">
+            <div class="flex justify-between items-center h-16">
+                <a href="index.html" class="text-2xl font-bold text-green-600 dark:text-green-400 hover:text-green-700 dark:hover:text-green-300 transition-colors" data-translate="home">PlatePilot</a>
+                <div class="hidden md:flex items-center space-x-4">
+                    <a href="index.html" class="text-gray-700 dark:text-gray-300 hover:text-green-600 dark:hover:text-green-400 font-bold transition-colors" data-translate="home">Home</a>
+                    <a href="marketplace.html" class="bg-green-600 text-white px-4 py-2 rounded-lg font-semibold hover:bg-green-700 transition-colors" data-translate="marketplace">Marketplace</a>
+                    <a href="seller-onboarding.html" class="bg-blue-600 text-white px-4 py-2 rounded-lg font-semibold hover:bg-blue-700 transition-colors" data-translate="becomeSeller">Become a Seller</a>
+                    <!-- Recipes Dropdown -->
+                    <div class="relative group">
+                        <button class="text-gray-700 dark:text-gray-300 hover:text-green-600 dark:hover:text-green-400 transition-colors font-semibold flex items-center">Recipes <svg class="w-4 h-4 ml-1" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"/></svg></button>
+                        <div class="absolute left-0 mt-2 w-48 bg-white dark:bg-gray-800 rounded-lg shadow-lg opacity-0 group-hover:opacity-100 group-focus-within:opacity-100 pointer-events-none group-hover:pointer-events-auto group-focus-within:pointer-events-auto transition-opacity z-50">
+                            <a href="recipes.html" class="block px-4 py-2 text-gray-700 dark:text-gray-300 hover:bg-green-100 dark:hover:bg-green-900 rounded-t-lg" data-translate="recipes">All Recipes</a>
+                            <a href="upload-recipe.html" class="block px-4 py-2 text-gray-700 dark:text-gray-300 hover:bg-green-100 dark:hover:bg-green-900" data-translate="shareRecipe">Share Recipe</a>
+                            <a href="leaderboard.html" class="block px-4 py-2 text-gray-700 dark:text-gray-300 hover:bg-green-100 dark:hover:bg-green-900 rounded-b-lg" data-translate="leaderboard">Leaderboard</a>
+                        </div>
+                    </div>
+                    <!-- More Dropdown -->
+                    <div class="relative group">
+                        <button class="text-gray-700 dark:text-gray-300 hover:text-green-600 dark:hover:text-green-400 transition-colors font-semibold flex items-center">More <svg class="w-4 h-4 ml-1" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"/></svg></button>
+                        <div class="absolute left-0 mt-2 w-48 bg-white dark:bg-gray-800 rounded-lg shadow-lg opacity-0 group-hover:opacity-100 group-focus-within:opacity-100 pointer-events-none group-hover:pointer-events-auto group-focus-within:pointer-events-auto transition-opacity z-50">
+                            <a href="games.html" class="block px-4 py-2 text-gray-700 dark:text-gray-300 hover:bg-green-100 dark:hover:bg-green-900 rounded-t-lg" data-translate="games">Games</a>
+                            <a href="secret-recipes.html" class="block px-4 py-2 text-gray-700 dark:text-gray-300 hover:bg-green-100 dark:hover:bg-green-900" data-translate="secretRecipes">Secret Recipes</a>
+                            <a href="diet-planner.html" class="block px-4 py-2 text-gray-700 dark:text-gray-300 hover:bg-green-100 dark:hover:bg-green-900 rounded-b-lg" data-translate="dietPlanner">Diet Planner</a>
+                        </div>
+                    </div>
+                    <div id="languageSelectorContainer" class="ml-4"></div>
+                    <button onclick="toggleDarkMode()" class="p-2 rounded-lg bg-gray-200 dark:bg-gray-700 hover:bg-gray-300 dark:hover:bg-gray-600 transition-colors">
+                        <span class="dark:hidden">🌙</span>
+                        <span class="hidden dark:inline">☀️</span>
+                    </button>
+                </div>
+                <!-- Mobile Menu Button -->
+                <button class="md:hidden p-2 rounded-lg hover:bg-gray-200 dark:hover:bg-gray-700 transition-colors" onclick="toggleMobileMenu()">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 text-gray-700 dark:text-gray-300" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16" />
+                    </svg>
+                </button>
+            </div>
+            <!-- Mobile Menu -->
+            <div id="mobileMenu" class="md:hidden hidden pb-4">
+                <div class="flex flex-col space-y-4">
+                    <a href="index.html" class="text-gray-700 dark:text-gray-300 hover:text-green-600 dark:hover:text-green-400 font-bold transition-colors" data-translate="home">Home</a>
+                    <a href="marketplace.html" class="bg-green-600 text-white px-4 py-2 rounded-lg font-semibold hover:bg-green-700 transition-colors" data-translate="marketplace">Marketplace</a>
+                    <a href="seller-onboarding.html" class="bg-blue-600 text-white px-4 py-2 rounded-lg font-semibold hover:bg-blue-700 transition-colors" data-translate="becomeSeller">Become a Seller</a>
+                    <!-- Recipes Dropdown (Collapsible) -->
+                    <div>
+                        <button onclick="toggleMobileDropdown('recipesDropdown')" class="flex items-center justify-between w-full text-gray-700 dark:text-gray-300 font-semibold py-2 px-2 rounded hover:bg-green-100 dark:hover:bg-green-900 transition-colors">Recipes <svg class="w-4 h-4 ml-1 inline" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"/></svg></button>
+                        <div id="recipesDropdown" class="hidden flex flex-col ml-4 mt-2 space-y-2">
+                            <a href="recipes.html" class="text-gray-700 dark:text-gray-300 hover:text-green-600 dark:hover:text-green-400" data-translate="recipes">All Recipes</a>
+                            <a href="upload-recipe.html" class="text-gray-700 dark:text-gray-300 hover:text-green-600 dark:hover:text-green-400" data-translate="shareRecipe">Share Recipe</a>
+                            <a href="leaderboard.html" class="text-gray-700 dark:text-gray-300 hover:text-green-600 dark:hover:text-green-400" data-translate="leaderboard">Leaderboard</a>
+                        </div>
+                    </div>
+                    <!-- More Dropdown (Collapsible) -->
+                    <div>
+                        <button onclick="toggleMobileDropdown('moreDropdown')" class="flex items-center justify-between w-full text-gray-700 dark:text-gray-300 font-semibold py-2 px-2 rounded hover:bg-green-100 dark:hover:bg-green-900 transition-colors">More <svg class="w-4 h-4 ml-1 inline" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"/></svg></button>
+                        <div id="moreDropdown" class="hidden flex flex-col ml-4 mt-2 space-y-2">
+                            <a href="games.html" class="text-gray-700 dark:text-gray-300 hover:text-green-600 dark:hover:text-green-400" data-translate="games">Games</a>
+                            <a href="secret-recipes.html" class="text-gray-700 dark:text-gray-300 hover:text-green-600 dark:hover:text-green-400" data-translate="secretRecipes">Secret Recipes</a>
+                            <a href="diet-planner.html" class="text-gray-700 dark:text-gray-300 hover:text-green-600 dark:hover:text-green-400" data-translate="dietPlanner">Diet Planner</a>
+                        </div>
+                    </div>
+                    <div id="languageSelectorContainer" class="mt-2"></div>
+                    <button onclick="toggleDarkMode()" class="p-2 rounded-lg bg-gray-200 dark:bg-gray-700 hover:bg-gray-300 dark:hover:bg-gray-600 transition-colors w-12 self-center">
+                        <span class="dark:hidden">🌙</span>
+                        <span class="hidden dark:inline">☀️</span>
+                    </button>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Header -->
+    <header class="bg-gradient-to-r from-green-500 to-green-600 text-white py-16">
+        <div class="container mx-auto px-4 text-center">
+            <h1 class="text-4xl font-bold mb-4" data-translate="leaderboardTitle">Recipe Leaderboard</h1>
+            <p class="text-xl mb-8" data-translate="leaderboardSubtitle">Discover the most popular recipes in our community</p>
+            <div class="max-w-md mx-auto">
+                <select id="timeFilter" class="w-full p-3 rounded-lg text-gray-800 focus:outline-none focus:ring-2 focus:ring-green-400">
+                    <option value="all">All Time</option>
+                    <option value="month">This Month</option>
+                    <option value="week">This Week</option>
+                </select>
+            </div>
+        </div>
+    </header>
+
+    <!-- Leaderboard Content -->
+    <div class="container mx-auto px-4 py-12">
+        <!-- Top 3 Recipes -->
+        <div class="mb-16">
+            <h2 class="text-3xl font-bold text-gray-800 dark:text-white mb-8" data-translate="topRecipesTitle">Top Recipes</h2>
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-8" id="topRecipes">
+                <!-- Top recipes will be loaded here -->
+            </div>
+        </div>
+
+        <!-- All Ranked Recipes -->
+        <div>
+            <h2 class="text-3xl font-bold text-gray-800 dark:text-white mb-8" data-translate="allRecipesTitle">All Recipes</h2>
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8" id="allRecipes">
+                <!-- All recipes will be loaded here -->
+            </div>
+        </div>
+    </div>
+
+    <!-- Footer -->
+    <footer class="bg-gray-800 text-white py-8 mt-12">
+        <div class="container mx-auto px-4">
+            <div class="grid grid-cols-1 md:grid-cols-4 gap-8">
+                <div>
+                    <h3 class="text-xl font-bold mb-4" data-translate="footerPlatePilot">PlatePilot</h3>
+                    <p class="text-gray-400" data-translate="footerDescription">Pilot your plate. Powered by AI. Fueled by wellness.</p>
+                </div>
+                <div>
+                    <h4 class="font-semibold mb-4" data-translate="footerQuickLinks">Quick Links</h4>
+                    <ul class="space-y-2">
+                        <li><a href="index.html" class="text-gray-400 hover:text-white transition-colors" data-translate="footerHome">Home</a></li>
+                        <li><a href="recipes.html" class="text-gray-400 hover:text-white transition-colors" data-translate="footerRecipes">Recipes</a></li>
+                        <li><a href="games.html" class="text-gray-400 hover:text-white transition-colors" data-translate="footerGames">Games</a></li>
+                        <li><a href="secret-recipes.html" class="text-gray-400 hover:text-white transition-colors" data-translate="footerSecretRecipes">Secret Recipes</a></li>
+                        <li><a href="diet-planner.html" class="text-gray-400 hover:text-white transition-colors" data-translate="footerDietPlanner">Diet Planner</a></li>
+                    </ul>
+                </div>
+                <div>
+                    <h4 class="font-semibold mb-4" data-translate="footerContact">Contact</h4>
+                    <ul class="space-y-2 text-gray-400">
+                        <li data-translate="footerEmail">Email: platepilot.11@gmail.com</li>
+                        <li data-translate="footerPhone">Phone: +91 9251681626</li>
+                    </ul>
+                </div>
+                <div>
+                    <h4 class="font-semibold mb-4" data-translate="footerFollowUs">Follow Us</h4>
+                    <div class="flex space-x-4">
+                        <a href="#" class="text-gray-400 hover:text-white transition-colors" data-translate="footerFacebook">Facebook</a>
+                        <a href="#" class="text-gray-400 hover:text-white transition-colors" data-translate="footerTwitter">Twitter</a>
+                        <a href="#" class="text-gray-400 hover:text-white transition-colors" data-translate="footerInstagram">Instagram</a>
+                    </div>
+                </div>
+            </div>
+            <div class="border-t border-gray-700 mt-8 pt-8 text-center text-gray-400">
+                <p data-translate="footerCopyright">&copy; 2024 PlatePilot. All rights reserved.</p>
+            </div>
+        </div>
+    </footer>
+
+    <!-- Floating AI Assistant Button -->
+    <button id="aiAssistantBtn" onclick="openAIAssistant()" class="fixed bottom-8 right-8 bg-gradient-to-r from-green-400 to-blue-500 text-white p-4 rounded-full shadow-lg hover:scale-110 transition-transform z-50">
+        <svg xmlns="http://www.w3.org/2000/svg" class="h-8 w-8" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 20h9" />
+            <circle cx="12" cy="12" r="8" stroke="currentColor" stroke-width="2" fill="none" />
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 12h.01M12 12h.01M16 12h.01" />
+        </svg>
+    </button>
+    <!-- AI Assistant Modal (placeholder) -->
+    <div id="aiAssistantModal" class="fixed inset-0 bg-black bg-opacity-50 hidden items-center justify-center z-50">
+        <div class="bg-white dark:bg-gray-800 p-8 rounded-xl max-w-lg w-full shadow-2xl flex flex-col items-center">
+            <h3 class="text-2xl font-bold mb-4 text-gray-800 dark:text-white" data-translate="aiAssistantTitle">AI Assistant</h3>
+            <p class="text-gray-600 dark:text-gray-300 mb-6" data-translate="aiAssistantDescription">Hi! I'm your PlatePilot AI. How can I help you today?</p>
+            <input type="text" placeholder="Ask me anything..." class="w-full p-3 border border-gray-300 dark:border-gray-600 rounded-lg mb-4 bg-white dark:bg-gray-700 text-gray-700 dark:text-gray-300">
+            <button onclick="closeAIAssistant()" class="bg-green-500 text-white px-6 py-2 rounded-lg hover:bg-green-600">Close</button>
+        </div>
+    </div>
+
+    <script>
+        // Set base path for GitHub Pages
+        const basePath = '/PlatePilot';
+        
+        document.addEventListener('DOMContentLoaded', function() {
+            // Initialize dark mode
+            if (localStorage.getItem('darkMode') === 'true') {
+                document.documentElement.classList.add('dark');
+            }
+            
+            // Toggle dark mode
+            window.toggleDarkMode = function() {
+                if (document.documentElement.classList.contains('dark')) {
+                    document.documentElement.classList.remove('dark');
+                    localStorage.setItem('darkMode', 'false');
+                } else {
+                    document.documentElement.classList.add('dark');
+                    localStorage.setItem('darkMode', 'true');
+                }
+            };
+            
+            // Mobile menu toggle
+            window.toggleMobileMenu = function() {
+                const mobileMenu = document.getElementById('mobileMenu');
+                mobileMenu.classList.toggle('hidden');
+            };
+
+            // Mobile dropdown toggle
+            window.toggleMobileDropdown = function(dropdownId) {
+                const dropdown = document.getElementById(dropdownId);
+                dropdown.classList.toggle('hidden');
+            };
+            
+            // Load recipes
+            loadRecipes();
+            
+            // Time filter change
+            const timeFilter = document.getElementById('timeFilter');
+            if (timeFilter) {
+                timeFilter.addEventListener('change', function() {
+                    loadRecipes(this.value);
+                });
+            }
+        });
+        
+        function loadRecipes(timeFilter = 'all') {
+            const recipes = JSON.parse(localStorage.getItem('recipes')) || [];
+            const topRecipesContainer = document.getElementById('topRecipes');
+            const allRecipesContainer = document.getElementById('allRecipes');
+            
+            if (!topRecipesContainer || !allRecipesContainer) return;
+            
+            if (recipes.length === 0) {
+                topRecipesContainer.innerHTML = '<p class="text-gray-600 dark:text-gray-400 text-center col-span-3" data-translate="noRecipes">No recipes available yet.</p>';
+                allRecipesContainer.innerHTML = '<p class="text-gray-600 dark:text-gray-400 text-center col-span-3" data-translate="noRecipes">No recipes available yet.</p>';
+                return;
+            }
+            
+            // Filter recipes by time if needed
+            let filteredRecipes = recipes;
+            if (timeFilter !== 'all') {
+                const now = new Date();
+                const filterDate = new Date();
+                
+                if (timeFilter === 'month') {
+                    filterDate.setMonth(now.getMonth() - 1);
+                } else if (timeFilter === 'week') {
+                    filterDate.setDate(now.getDate() - 7);
+                }
+                
+                filteredRecipes = recipes.filter(recipe => new Date(recipe.date) >= filterDate);
+            }
+            
+            // Sort recipes by likes
+            filteredRecipes.sort((a, b) => (b.likes || 0) - (a.likes || 0));
+            
+            // Update top recipes
+            topRecipesContainer.innerHTML = '';
+            const topThree = filteredRecipes.slice(0, 3);
+            
+            topThree.forEach((recipe, index) => {
+                const likes = recipe.likes || 0;
+                const likedBy = recipe.likedBy || [];
+                const currentUser = JSON.parse(localStorage.getItem('currentUser'));
+                const isLiked = currentUser && likedBy.includes(currentUser.email);
+                
+                const recipeCard = document.createElement('div');
+                recipeCard.className = 'recipe-card relative';
+                
+                recipeCard.innerHTML = `
+                    <div class="rank-badge rank-${index + 1}">${index + 1}</div>
+                    <div class="relative">
+                        <img src="${recipe.image}" alt="${recipe.name}" class="w-full h-48 object-cover" onerror="this.src='${basePath}/images/placeholder.jpg'">
+                    </div>
+                    <div class="p-6">
+                        <h3 class="text-xl font-bold text-gray-800 dark:text-white mb-2">${recipe.name}</h3>
+                        <p class="text-gray-600 dark:text-gray-300 mb-4">${recipe.description}</p>
+                        <div class="flex justify-between items-center">
+                            <div class="flex items-center space-x-2">
+                                <span class="text-green-500 font-medium">${recipe.category || 'Uncategorized'}</span>
+                                <span class="text-yellow-500 font-medium">${likes} likes</span>
+                            </div>
+                            <div class="flex items-center space-x-4">
+                                <button onclick="likeRecipe('${recipe.name}')" class="text-gray-600 dark:text-gray-300 hover:text-red-500 dark:hover:text-red-400 transition-colors ${isLiked ? 'text-red-500 dark:text-red-400' : ''}">
+                                    <i class="fas fa-heart"></i>
+                                </button>
+                                <a href="${basePath}/recipe-detail.html?name=${encodeURIComponent(recipe.name)}" class="bg-green-500 text-white px-4 py-2 rounded-lg hover:bg-green-600 transition-colors">
+                                    View Recipe
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+                `;
+                
+                topRecipesContainer.appendChild(recipeCard);
+            });
+            
+            // Update all recipes
+            allRecipesContainer.innerHTML = '';
+            
+            filteredRecipes.forEach((recipe, index) => {
+                const likes = recipe.likes || 0;
+                const likedBy = recipe.likedBy || [];
+                const currentUser = JSON.parse(localStorage.getItem('currentUser'));
+                const isLiked = currentUser && likedBy.includes(currentUser.email);
+                
+                const recipeCard = document.createElement('div');
+                recipeCard.className = 'recipe-card relative';
+                
+                recipeCard.innerHTML = `
+                    <div class="rank-badge bg-gray-700 text-white">${index + 1}</div>
+                    <div class="relative">
+                        <img src="${recipe.image}" alt="${recipe.name}" class="w-full h-48 object-cover" onerror="this.src='${basePath}/images/placeholder.jpg'">
+                    </div>
+                    <div class="p-6">
+                        <h3 class="text-xl font-bold text-gray-800 dark:text-white mb-2">${recipe.name}</h3>
+                        <p class="text-gray-600 dark:text-gray-300 mb-4">${recipe.description}</p>
+                        <div class="flex justify-between items-center">
+                            <div class="flex items-center space-x-2">
+                                <span class="text-green-500 font-medium">${recipe.category || 'Uncategorized'}</span>
+                                <span class="text-yellow-500 font-medium">${likes} likes</span>
+                            </div>
+                            <div class="flex items-center space-x-4">
+                                <button onclick="likeRecipe('${recipe.name}')" class="text-gray-600 dark:text-gray-300 hover:text-red-500 dark:hover:text-red-400 transition-colors ${isLiked ? 'text-red-500 dark:text-red-400' : ''}">
+                                    <i class="fas fa-heart"></i>
+                                </button>
+                                <a href="${basePath}/recipe-detail.html?name=${encodeURIComponent(recipe.name)}" class="bg-green-500 text-white px-4 py-2 rounded-lg hover:bg-green-600 transition-colors">
+                                    View Recipe
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+                `;
+                
+                allRecipesContainer.appendChild(recipeCard);
+            });
+        }
+        
+        function likeRecipe(recipeName) {
+            const currentUser = JSON.parse(localStorage.getItem('currentUser'));
+            if (!currentUser) {
+                window.location.href = basePath + '/login.html?redirect=leaderboard.html';
+                return;
+            }
+            
+            const recipes = JSON.parse(localStorage.getItem('recipes')) || [];
+            const recipe = recipes.find(r => r.name === recipeName);
+            
+            if (recipe) {
+                if (!recipe.likedBy) {
+                    recipe.likedBy = [];
+                }
+                
+                const userIndex = recipe.likedBy.indexOf(currentUser.email);
+                if (userIndex === -1) {
+                    recipe.likedBy.push(currentUser.email);
+                    recipe.likes = (recipe.likes || 0) + 1;
+                } else {
+                    recipe.likedBy.splice(userIndex, 1);
+                    recipe.likes = (recipe.likes || 0) - 1;
+                }
+                
+                localStorage.setItem('recipes', JSON.stringify(recipes));
+                loadRecipes(document.getElementById('timeFilter').value);
+            }
+        }
+
+        function openAIAssistant() {
+            document.getElementById('aiAssistantModal').classList.remove('hidden');
+            document.getElementById('aiAssistantModal').classList.add('flex');
+        }
+        function closeAIAssistant() {
+            document.getElementById('aiAssistantModal').classList.add('hidden');
+            document.getElementById('aiAssistantModal').classList.remove('flex');
+        }
+    </script>
+</body>
+</html> 

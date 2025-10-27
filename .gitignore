@@ -1,0 +1,11 @@
+# Local configuration files with sensitive data
+ai-config-local.js
+
+# Environment files
+.env
+.env.local
+.env.production
+
+# API keys and secrets
+*.key
+secrets.json

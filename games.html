@@ -1,0 +1,313 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Games - PlatePilot</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            darkMode: 'class',
+            theme: {
+                extend: {
+                    colors: {
+                        // You can add custom colors here if needed
+                    }
+                }
+            }
+        }
+    </script>
+    <!-- Language System -->
+    <script src="translations.js"></script>
+    <script src="translations-extended.js"></script>
+    <script src="translations-more.js"></script>
+    <script src="language-selector.js"></script>
+    <style>
+        .game-card {
+            transition: all 0.3s ease-in-out;
+        }
+        .game-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04);
+        }
+        .memory-card {
+            perspective: 1000px;
+            cursor: pointer;
+        }
+        .memory-card-inner {
+            position: relative;
+            width: 100%;
+            height: 100%;
+            text-align: center;
+            transition: transform 0.6s;
+            transform-style: preserve-3d;
+        }
+        .memory-card.flipped .memory-card-inner {
+            transform: rotateY(180deg);
+        }
+        .memory-card-front, .memory-card-back {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            backface-visibility: hidden;
+            border-radius: 0.5rem;
+        }
+        .memory-card-back {
+            transform: rotateY(180deg);
+        }
+    </style>
+</head>
+<body class="bg-gray-50 dark:bg-gray-900 min-h-screen">
+    <!-- Navigation Bar -->
+    <nav class="bg-white dark:bg-gray-900 shadow-md sticky top-0 z-50">
+        <div class="container mx-auto px-4">
+            <div class="flex justify-between items-center h-16">
+                <a href="index.html" class="text-2xl font-bold text-green-600 dark:text-green-400 hover:text-green-700 dark:hover:text-green-300 transition-colors" data-translate="home">PlatePilot</a>
+                <div class="hidden md:flex items-center space-x-4">
+                    <a href="index.html" class="text-gray-700 dark:text-gray-300 hover:text-green-600 dark:hover:text-green-400 font-bold transition-colors" data-translate="home">Home</a>
+                    <a href="marketplace.html" class="bg-green-600 text-white px-4 py-2 rounded-lg font-semibold hover:bg-green-700 transition-colors" data-translate="marketplace">Marketplace</a>
+                    <a href="seller-onboarding.html" class="bg-blue-600 text-white px-4 py-2 rounded-lg font-semibold hover:bg-blue-700 transition-colors" data-translate="becomeSeller">Become a Seller</a>
+                    <!-- Recipes Dropdown -->
+                    <div class="relative group">
+                        <button class="text-gray-700 dark:text-gray-300 hover:text-green-600 dark:hover:text-green-400 transition-colors font-semibold flex items-center">Recipes <svg class="w-4 h-4 ml-1" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"/></svg></button>
+                        <div class="absolute left-0 mt-2 w-48 bg-white dark:bg-gray-800 rounded-lg shadow-lg opacity-0 group-hover:opacity-100 group-focus-within:opacity-100 pointer-events-none group-hover:pointer-events-auto group-focus-within:pointer-events-auto transition-opacity z-50">
+                            <a href="recipes.html" class="block px-4 py-2 text-gray-700 dark:text-gray-300 hover:bg-green-100 dark:hover:bg-green-900 rounded-t-lg" data-translate="recipes">All Recipes</a>
+                            <a href="upload-recipe.html" class="block px-4 py-2 text-gray-700 dark:text-gray-300 hover:bg-green-100 dark:hover:bg-green-900" data-translate="shareRecipe">Share Recipe</a>
+                            <a href="leaderboard.html" class="block px-4 py-2 text-gray-700 dark:text-gray-300 hover:bg-green-100 dark:hover:bg-green-900 rounded-b-lg" data-translate="leaderboard">Leaderboard</a>
+                        </div>
+                    </div>
+                    <!-- More Dropdown -->
+                    <div class="relative group">
+                        <button class="text-gray-700 dark:text-gray-300 hover:text-green-600 dark:hover:text-green-400 transition-colors font-semibold flex items-center">More <svg class="w-4 h-4 ml-1" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"/></svg></button>
+                        <div class="absolute left-0 mt-2 w-48 bg-white dark:bg-gray-800 rounded-lg shadow-lg opacity-0 group-hover:opacity-100 group-focus-within:opacity-100 pointer-events-none group-hover:pointer-events-auto group-focus-within:pointer-events-auto transition-opacity z-50">
+                            <a href="games.html" class="block px-4 py-2 text-gray-700 dark:text-gray-300 hover:bg-green-100 dark:hover:bg-green-900 rounded-t-lg" data-translate="games">Games</a>
+                            <a href="secret-recipes.html" class="block px-4 py-2 text-gray-700 dark:text-gray-300 hover:bg-green-100 dark:hover:bg-green-900" data-translate="secretRecipes">Secret Recipes</a>
+                            <a href="diet-planner.html" class="block px-4 py-2 text-gray-700 dark:text-gray-300 hover:bg-green-100 dark:hover:bg-green-900 rounded-b-lg" data-translate="dietPlanner">Diet Planner</a>
+                        </div>
+                    </div>
+                    <div id="languageSelectorContainer" class="ml-4"></div>
+                    <button onclick="toggleDarkMode()" class="p-2 rounded-lg bg-gray-200 dark:bg-gray-700 hover:bg-gray-300 dark:hover:bg-gray-600 transition-colors">
+                        <span class="dark:hidden">🌙</span>
+                        <span class="hidden dark:inline">☀️</span>
+                    </button>
+                </div>
+                <!-- Mobile Menu Button -->
+                <button class="md:hidden p-2 rounded-lg hover:bg-gray-200 dark:hover:bg-gray-700 transition-colors" onclick="toggleMobileMenu()">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 text-gray-700 dark:text-gray-300" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16" />
+                    </svg>
+                </button>
+            </div>
+            <!-- Mobile Menu -->
+            <div id="mobileMenu" class="md:hidden hidden pb-4">
+                <div class="flex flex-col space-y-4">
+                    <a href="index.html" class="text-gray-700 dark:text-gray-300 hover:text-green-600 dark:hover:text-green-400 font-bold transition-colors" data-translate="home">Home</a>
+                    <a href="marketplace.html" class="bg-green-600 text-white px-4 py-2 rounded-lg font-semibold hover:bg-green-700 transition-colors" data-translate="marketplace">Marketplace</a>
+                    <a href="seller-onboarding.html" class="bg-blue-600 text-white px-4 py-2 rounded-lg font-semibold hover:bg-blue-700 transition-colors" data-translate="becomeSeller">Become a Seller</a>
+                    <!-- Recipes Dropdown (Collapsible) -->
+                    <div>
+                        <button onclick="toggleMobileDropdown('recipesDropdown')" class="flex items-center justify-between w-full text-gray-700 dark:text-gray-300 font-semibold py-2 px-2 rounded hover:bg-green-100 dark:hover:bg-green-900 transition-colors">Recipes <svg class="w-4 h-4 ml-1 inline" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"/></svg></button>
+                        <div id="recipesDropdown" class="hidden flex flex-col ml-4 mt-2 space-y-2">
+                            <a href="recipes.html" class="text-gray-700 dark:text-gray-300 hover:text-green-600 dark:hover:text-green-400" data-translate="recipes">All Recipes</a>
+                            <a href="upload-recipe.html" class="text-gray-700 dark:text-gray-300 hover:text-green-600 dark:hover:text-green-400" data-translate="shareRecipe">Share Recipe</a>
+                            <a href="leaderboard.html" class="text-gray-700 dark:text-gray-300 hover:text-green-600 dark:hover:text-green-400" data-translate="leaderboard">Leaderboard</a>
+                        </div>
+                    </div>
+                    <!-- More Dropdown (Collapsible) -->
+                    <div>
+                        <button onclick="toggleMobileDropdown('moreDropdown')" class="flex items-center justify-between w-full text-gray-700 dark:text-gray-300 font-semibold py-2 px-2 rounded hover:bg-green-100 dark:hover:bg-green-900 transition-colors">More <svg class="w-4 h-4 ml-1 inline" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"/></svg></button>
+                        <div id="moreDropdown" class="hidden flex flex-col ml-4 mt-2 space-y-2">
+                            <a href="games.html" class="text-gray-700 dark:text-gray-300 hover:text-green-600 dark:hover:text-green-400" data-translate="games">Games</a>
+                            <a href="secret-recipes.html" class="text-gray-700 dark:text-gray-300 hover:text-green-600 dark:hover:text-green-400" data-translate="secretRecipes">Secret Recipes</a>
+                            <a href="diet-planner.html" class="text-gray-700 dark:text-gray-300 hover:text-green-600 dark:hover:text-green-400" data-translate="dietPlanner">Diet Planner</a>
+                        </div>
+                    </div>
+                    <div id="languageSelectorContainer" class="mt-2"></div>
+                    <button onclick="toggleDarkMode()" class="p-2 rounded-lg bg-gray-200 dark:bg-gray-700 hover:bg-gray-300 dark:hover:bg-gray-600 transition-colors w-12 self-center">
+                        <span class="dark:hidden">🌙</span>
+                        <span class="hidden dark:inline">☀️</span>
+                    </button>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Header -->
+    <header class="bg-green-500 text-white py-16">
+        <div class="container mx-auto px-4 text-center">
+            <h1 class="text-4xl font-bold mb-4" data-translate="gamesTitle">Nutrition Games</h1>
+            <p class="text-xl mb-8" data-translate="gamesSubtitle">Learn about healthy eating through fun and interactive games</p>
+        </div>
+    </header>
+
+    <!-- Games Section -->
+    <div class="container mx-auto px-4 py-12">
+        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+            <!-- Food Pyramid Game -->
+            <div class="bg-white dark:bg-gray-800 rounded-xl overflow-hidden shadow-lg">
+                <img src="https://images.unsplash.com/photo-1490818387583-1baba5e638af" alt="Food Pyramid Game" class="w-full h-48 object-cover">
+                <div class="p-6">
+                    <h3 class="text-xl font-bold text-gray-800 dark:text-white mb-2" data-translate="foodPyramidChallenge">Food Pyramid Challenge</h3>
+                    <p class="text-gray-600 dark:text-gray-300 mb-4" data-translate="foodPyramidDescription">Learn about the food pyramid and build a balanced meal.</p>
+                    <button class="bg-green-500 text-white px-6 py-2 rounded-lg hover:bg-green-600 transition-colors" data-translate="playNow">Play Now</button>
+                </div>
+            </div>
+
+            <!-- Nutrition Quiz -->
+            <div class="bg-white dark:bg-gray-800 rounded-xl overflow-hidden shadow-lg">
+                <img src="https://images.unsplash.com/photo-1505576399279-565b52d4ac71" alt="Nutrition Quiz" class="w-full h-48 object-cover">
+                <div class="p-6">
+                    <h3 class="text-xl font-bold text-gray-800 dark:text-white mb-2" data-translate="nutritionQuiz">Nutrition Quiz</h3>
+                    <p class="text-gray-600 dark:text-gray-300 mb-4" data-translate="nutritionQuizDescription">Test your knowledge about healthy eating and nutrition.</p>
+                    <button class="bg-green-500 text-white px-6 py-2 rounded-lg hover:bg-green-600 transition-colors" data-translate="startQuiz">Start Quiz</button>
+                </div>
+            </div>
+
+            <!-- Recipe Memory Game -->
+            <div class="bg-white dark:bg-gray-800 rounded-xl overflow-hidden shadow-lg">
+                <img src="https://images.unsplash.com/photo-1495521821757-a1efb6729352" alt="Recipe Memory Game" class="w-full h-48 object-cover">
+                <div class="p-6">
+                    <h3 class="text-xl font-bold text-gray-800 dark:text-white mb-2" data-translate="recipeMemoryGame">Recipe Memory Game</h3>
+                    <p class="text-gray-600 dark:text-gray-300 mb-4" data-translate="recipeMemoryGameDescription">Match ingredients and create healthy recipes.</p>
+                    <button class="bg-green-500 text-white px-6 py-2 rounded-lg hover:bg-green-600 transition-colors" data-translate="playNow">Play Now</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Footer -->
+    <footer class="bg-gray-800 text-white py-8 mt-12">
+        <div class="container mx-auto px-4">
+            <div class="grid grid-cols-1 md:grid-cols-4 gap-8">
+                <div>
+                    <h3 class="text-xl font-bold mb-4" data-translate="footerPlatePilot">PlatePilot</h3>
+                    <p class="text-gray-400" data-translate="footerDescription">Pilot your plate. Powered by AI. Fueled by wellness.</p>
+                </div>
+                <div>
+                    <h4 class="font-semibold mb-4" data-translate="footerQuickLinks">Quick Links</h4>
+                    <ul class="space-y-2">
+                        <li><a href="index.html" class="text-gray-400 hover:text-white transition-colors" data-translate="home">Home</a></li>
+                        <li><a href="recipes.html" class="text-gray-400 hover:text-white transition-colors" data-translate="recipes">Recipes</a></li>
+                        <li><a href="games.html" class="text-gray-400 hover:text-white transition-colors" data-translate="games">Games</a></li>
+                        <li><a href="secret-recipes.html" class="text-gray-400 hover:text-white transition-colors" data-translate="secretRecipes">Secret Recipes</a></li>
+                        <li><a href="diet-planner.html" class="text-gray-400 hover:text-white transition-colors" data-translate="dietPlanner">Diet Planner</a></li>
+                    </ul>
+                </div>
+                <div>
+                    <h4 class="font-semibold mb-4" data-translate="footerContact">Contact</h4>
+                    <ul class="space-y-2 text-gray-400">
+                        <li data-translate="footerEmail">Email: platepilot.11@gmail.com</li>
+                        <li data-translate="footerPhone">Phone: +91 9251681626</li>
+                    </ul>
+                </div>
+                <div>
+                    <h4 class="font-semibold mb-4" data-translate="footerFollowUs">Follow Us</h4>
+                    <div class="flex space-x-4">
+                        <a href="#" class="text-gray-400 hover:text-white transition-colors" data-translate="footerFacebook">Facebook</a>
+                        <a href="#" class="text-gray-400 hover:text-white transition-colors" data-translate="footerTwitter">Twitter</a>
+                        <a href="#" class="text-gray-400 hover:text-white transition-colors" data-translate="footerInstagram">Instagram</a>
+                    </div>
+                </div>
+            </div>
+            <div class="border-t border-gray-700 mt-8 pt-8 text-center text-gray-400">
+                <p data-translate="footerCopyright">&copy; 2024 PlatePilot. All rights reserved.</p>
+            </div>
+        </div>
+    </footer>
+
+    <!-- Floating AI Assistant Button -->
+    <button id="aiAssistantBtn" onclick="openAIAssistant()" class="fixed bottom-8 right-8 bg-gradient-to-r from-green-400 to-blue-500 text-white p-4 rounded-full shadow-lg hover:scale-110 transition-transform z-50">
+        <svg xmlns="http://www.w3.org/2000/svg" class="h-8 w-8" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 20h9" />
+            <circle cx="12" cy="12" r="8" stroke="currentColor" stroke-width="2" fill="none" />
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 12h.01M12 12h.01M16 12h.01" />
+        </svg>
+    </button>
+    <!-- AI Assistant Modal (placeholder) -->
+    <div id="aiAssistantModal" class="fixed inset-0 bg-black bg-opacity-50 hidden items-center justify-center z-50">
+        <div class="bg-white dark:bg-gray-800 p-8 rounded-xl max-w-lg w-full shadow-2xl flex flex-col items-center">
+            <h3 class="text-2xl font-bold mb-4 text-gray-800 dark:text-white" data-translate="aiAssistantTitle">AI Assistant</h3>
+            <p class="text-gray-600 dark:text-gray-300 mb-6" data-translate="aiAssistantDescription">Hi! I'm your PlatePilot AI. How can I help you today?</p>
+            <input type="text" placeholder="Ask me anything..." class="w-full p-3 border border-gray-300 dark:border-gray-600 rounded-lg mb-4 bg-white dark:bg-gray-700 text-gray-700 dark:text-gray-300">
+            <button onclick="closeAIAssistant()" class="bg-green-500 text-white px-6 py-2 rounded-lg hover:bg-green-600" data-translate="aiAssistantClose">Close</button>
+        </div>
+    </div>
+
+    <script>
+        // Set base path for GitHub Pages
+        const basePath = '/PlatePilot';
+        
+        // Update all navigation links
+        document.addEventListener('DOMContentLoaded', function() {
+            // Update navigation links
+            document.querySelectorAll('a[href]').forEach(link => {
+                const href = link.getAttribute('href');
+                if (href.startsWith('index.html') || 
+                    href.startsWith('recipes.html') || 
+                    href.startsWith('leaderboard.html') || 
+                    href.startsWith('upload-recipe.html') || 
+                    href.startsWith('games.html') || 
+                    href.startsWith('secret-recipes.html') || 
+                    href.startsWith('diet-planner.html') || 
+                    href.startsWith('login.html') || 
+                    href.startsWith('signup.html')) {
+                    if (!href.includes(basePath)) {
+                        link.href = basePath + '/' + href;
+                    }
+                }
+            });
+            
+            // Initialize dark mode
+            if (localStorage.getItem('darkMode') === 'true') {
+                document.documentElement.classList.add('dark');
+            }
+            
+            // Toggle dark mode
+            window.toggleDarkMode = function() {
+                if (document.documentElement.classList.contains('dark')) {
+                    document.documentElement.classList.remove('dark');
+                    localStorage.setItem('darkMode', 'false');
+                } else {
+                    document.documentElement.classList.add('dark');
+                    localStorage.setItem('darkMode', 'true');
+                }
+            };
+            
+            // Mobile menu toggle
+            window.toggleMobileMenu = function() {
+                const mobileMenu = document.getElementById('mobileMenu');
+                mobileMenu.classList.toggle('hidden');
+            };
+            
+            // Check login status
+            const user = JSON.parse(localStorage.getItem('currentUser'));
+            const welcomeMessage = document.getElementById('welcomeMessage');
+            
+            if (user) {
+                if (welcomeMessage) {
+                    welcomeMessage.textContent = `Welcome, ${user.name}!`;
+                }
+            } else {
+                if (welcomeMessage) {
+                    welcomeMessage.textContent = '';
+                }
+            }
+            
+            // Logout functionality
+            window.logout = function() {
+                localStorage.removeItem('currentUser');
+                window.location.href = basePath + '/login.html';
+            };
+        });
+
+        function openAIAssistant() {
+            document.getElementById('aiAssistantModal').classList.remove('hidden');
+            document.getElementById('aiAssistantModal').classList.add('flex');
+        }
+        function closeAIAssistant() {
+            document.getElementById('aiAssistantModal').classList.add('hidden');
+            document.getElementById('aiAssistantModal').classList.remove('flex');
+        }
+    </script>
+</body>
+</html> 

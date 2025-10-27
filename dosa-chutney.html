@@ -1,0 +1,353 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dosa with Chutney - PlatePilot</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            darkMode: 'class',
+            theme: {
+                extend: {
+                    colors: {
+                        // You can add custom colors here if needed
+                    }
+                }
+            }
+        }
+    </script>
+</head>
+<body class="bg-gray-50 dark:bg-gray-900 min-h-screen">
+    <!-- Navigation Bar -->
+    <nav class="bg-white dark:bg-gray-900 shadow-md sticky top-0 z-50">
+        <div class="container mx-auto px-4">
+            <div class="flex justify-between items-center h-16">
+                <a href="index.html" class="text-2xl font-bold text-green-600 dark:text-green-400 hover:text-green-700 dark:hover:text-green-300 transition-colors">
+                    PlatePilot
+                </a>
+                <div class="hidden md:flex items-center space-x-8">
+                    <a href="index.html" class="text-gray-700 dark:text-gray-300 hover:text-green-600 dark:hover:text-green-400 transition-colors">Home</a>
+                    <a href="recipes.html" class="text-green-600 dark:text-green-400 font-medium">Recipes</a>
+                    <a href="upload-recipe.html" class="text-gray-700 dark:text-gray-300 hover:text-green-600 dark:hover:text-green-400 transition-colors">Share Recipe</a>
+                    <a href="games.html" class="text-gray-700 dark:text-gray-300 hover:text-green-600 dark:hover:text-green-400 transition-colors">Games</a>
+                    <a href="secret-recipes.html" class="text-gray-700 dark:text-gray-300 hover:text-green-600 dark:hover:text-green-400 transition-colors">Secret Recipes</a>
+                    <a href="diet-planner.html" class="text-gray-700 dark:text-gray-300 hover:text-green-600 dark:hover:text-green-400 transition-colors">Diet Planner</a>
+                    <button onclick="toggleDarkMode()" class="p-2 rounded-lg bg-gray-200 dark:bg-gray-700 hover:bg-gray-300 dark:hover:bg-gray-600 transition-colors">
+                        <span class="dark:hidden">🌙</span>
+                        <span class="hidden dark:inline">☀️</span>
+                    </button>
+                </div>
+                <!-- Mobile Menu Button -->
+                <button class="md:hidden p-2 rounded-lg hover:bg-gray-200 dark:hover:bg-gray-700 transition-colors" onclick="toggleMobileMenu()">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 text-gray-700 dark:text-gray-300" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16" />
+                    </svg>
+                </button>
+            </div>
+            <!-- Mobile Menu -->
+            <div id="mobileMenu" class="md:hidden hidden pb-4">
+                <div class="flex flex-col space-y-4">
+                    <a href="index.html" class="text-gray-700 dark:text-gray-300 hover:text-green-600 dark:hover:text-green-400 transition-colors">Home</a>
+                    <a href="recipes.html" class="text-green-600 dark:text-green-400 font-medium">Recipes</a>
+                    <a href="upload-recipe.html" class="text-gray-700 dark:text-gray-300 hover:text-green-600 dark:hover:text-green-400 transition-colors">Share Recipe</a>
+                    <a href="games.html" class="text-gray-700 dark:text-gray-300 hover:text-green-600 dark:hover:text-green-400 transition-colors">Games</a>
+                    <a href="secret-recipes.html" class="text-gray-700 dark:text-gray-300 hover:text-green-600 dark:hover:text-green-400 transition-colors">Secret Recipes</a>
+                    <a href="diet-planner.html" class="text-gray-700 dark:text-gray-300 hover:text-green-600 dark:hover:text-green-400 transition-colors">Diet Planner</a>
+                    <button onclick="toggleDarkMode()" class="flex items-center space-x-2 text-gray-700 dark:text-gray-300 hover:text-green-600 dark:hover:text-green-400 transition-colors">
+                        <span class="dark:hidden">🌙</span>
+                        <span class="hidden dark:inline">☀️</span>
+                        <span>Toggle Theme</span>
+                    </button>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Recipe Content -->
+    <div class="container mx-auto px-4 py-12">
+        <div class="max-w-4xl mx-auto">
+            <!-- Recipe Header -->
+            <div class="text-center mb-12">
+                <h1 class="text-4xl font-bold text-gray-800 dark:text-white mb-4" data-translate="recipe.dosa_chutney.title">Dosa with Chutney</h1>
+                <p class="text-xl text-gray-600 dark:text-gray-300 mb-8" data-translate="recipe.dosa_chutney.description">A crispy South Indian crepe served with flavorful coconut chutney</p>
+            </div>
+
+            <!-- Recipe Image -->
+            <div class="mb-8">
+                <img src="https://images.unsplash.com/photo-1603133872878-684f208fb84b" alt="Dosa with Chutney" class="w-full h-96 object-cover rounded-lg shadow-lg">
+            </div>
+
+            <!-- Recipe Info -->
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
+                <div class="bg-white dark:bg-gray-800 p-6 rounded-lg shadow-md">
+                    <h3 class="text-lg font-semibold text-gray-800 dark:text-white mb-2">Prep Time</h3>
+                    <p class="text-xl text-gray-600 dark:text-gray-300 mb-8" data-translate="recipe.dosa_chutney.description">A crispy South Indian crepe served with flavorful coconut chutney</p>
+                </div>
+                <div class="bg-white dark:bg-gray-800 p-6 rounded-lg shadow-md">
+                    <h3 class="text-lg font-semibold text-gray-800 dark:text-white mb-2">Cook Time</h3>
+                    <p class="text-xl text-gray-600 dark:text-gray-300 mb-8" data-translate="recipe.dosa_chutney.description">A crispy South Indian crepe served with flavorful coconut chutney</p>
+                </div>
+                <div class="bg-white dark:bg-gray-800 p-6 rounded-lg shadow-md">
+                    <h3 class="text-lg font-semibold text-gray-800 dark:text-white mb-2">Servings</h3>
+                    <p class="text-xl text-gray-600 dark:text-gray-300 mb-8" data-translate="recipe.dosa_chutney.description">A crispy South Indian crepe served with flavorful coconut chutney</p>
+                </div>
+            </div>
+
+            <!-- Recipe Description -->
+            <div class="bg-white dark:bg-gray-800 p-8 rounded-lg shadow-md mb-8">
+                <h2 class="text-2xl font-bold text-gray-800 dark:text-white mb-4">About This Recipe</h2>
+                <p class="text-gray-600 dark:text-gray-300 mb-4">
+                    Dosa is a thin, crispy crepe made from fermented rice and urad dal batter, while the coconut chutney 
+                    adds a perfect balance of flavors. This combination is not only delicious but also highly nutritious, 
+                    providing a good source of carbohydrates, proteins, and healthy fats. The fermentation process makes 
+                    it easier to digest and increases the bioavailability of nutrients.
+                </p>
+                <div class="flex flex-wrap gap-2 mt-4">
+                    <span class="px-3 py-1 bg-green-100 text-green-800 rounded-full text-sm">Vegetarian</span>
+                    <span class="px-3 py-1 bg-green-100 text-green-800 rounded-full text-sm">Gluten-Free</span>
+                    <span class="px-3 py-1 bg-green-100 text-green-800 rounded-full text-sm">Fermented</span>
+                </div>
+            </div>
+
+            <!-- Ingredients -->
+            <div class="bg-white dark:bg-gray-800 p-8 rounded-lg shadow-md mb-8">
+                <h2 class="text-2xl font-bold text-gray-800 dark:text-white mb-4">Ingredients</h2>
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
+                    <div>
+                        <h3 class="text-xl font-semibold text-gray-800 dark:text-white mb-4">For Dosa</h3>
+                        <ul class="list-disc list-inside text-gray-600 dark:text-gray-300 space-y-2">
+                            <li>2 cups idli rice</li>
+                            <li>1 cup urad dal (black gram)</li>
+                            <li>1/2 teaspoon fenugreek seeds</li>
+                            <li>Salt to taste</li>
+                            <li>Water for grinding</li>
+                            <li>Oil for cooking</li>
+                        </ul>
+                    </div>
+                    <div>
+                        <h3 class="text-xl font-semibold text-gray-800 dark:text-white mb-4">For Coconut Chutney</h3>
+                        <ul class="list-disc list-inside text-gray-600 dark:text-gray-300 space-y-2">
+                            <li>1 cup fresh coconut, grated</li>
+                            <li>2 green chilies</li>
+                            <li>1 inch ginger</li>
+                            <li>1/4 cup roasted chana dal</li>
+                            <li>1/2 teaspoon mustard seeds</li>
+                            <li>1/2 teaspoon urad dal</li>
+                            <li>Few curry leaves</li>
+                            <li>2 tablespoons oil</li>
+                            <li>Salt to taste</li>
+                            <li>Water for grinding</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Instructions -->
+            <div class="bg-white dark:bg-gray-800 p-8 rounded-lg shadow-md mb-8">
+                <h2 class="text-2xl font-bold text-gray-800 dark:text-white mb-4">Instructions</h2>
+                <div class="space-y-8">
+                    <div>
+                        <h3 class="text-xl font-semibold text-gray-800 dark:text-white mb-4">Making Dosa Batter</h3>
+                        <ol class="list-decimal list-inside text-gray-600 dark:text-gray-300 space-y-4">
+                            <li>Wash and soak idli rice and urad dal separately for 6-8 hours.</li>
+                            <li>Grind urad dal with fenugreek seeds to a smooth, fluffy batter.</li>
+                            <li>Grind rice to a slightly coarse batter.</li>
+                            <li>Mix both batters, add salt, and let it ferment overnight.</li>
+                            <li>Heat a non-stick pan and pour a ladle of batter in a circular motion.</li>
+                            <li>Drizzle oil around the edges and cook until crispy and golden brown.</li>
+                        </ol>
+                    </div>
+                    <div>
+                        <h3 class="text-xl font-semibold text-gray-800 dark:text-white mb-4">Making Coconut Chutney</h3>
+                        <ol class="list-decimal list-inside text-gray-600 dark:text-gray-300 space-y-4">
+                            <li>Grind coconut, green chilies, ginger, and roasted chana dal to a smooth paste.</li>
+                            <li>Add water as needed to achieve the desired consistency.</li>
+                            <li>Prepare tempering with oil, mustard seeds, urad dal, and curry leaves.</li>
+                            <li>Add the tempering to the chutney and mix well.</li>
+                            <li>Serve with hot dosas.</li>
+                        </ol>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Nutritional Information -->
+            <div class="bg-white dark:bg-gray-800 p-8 rounded-lg shadow-md mb-8">
+                <h2 class="text-2xl font-bold text-gray-800 dark:text-white mb-4">Nutritional Information</h2>
+                <div class="grid grid-cols-2 md:grid-cols-4 gap-4">
+                    <div class="text-center">
+                        <p class="text-xl text-gray-600 dark:text-gray-300 mb-8" data-translate="recipe.dosa_chutney.description">A crispy South Indian crepe served with flavorful coconut chutney</p>
+                        <p class="text-xl text-gray-600 dark:text-gray-300 mb-8" data-translate="recipe.dosa_chutney.description">A crispy South Indian crepe served with flavorful coconut chutney</p>
+                    </div>
+                    <div class="text-center">
+                        <p class="text-xl text-gray-600 dark:text-gray-300 mb-8" data-translate="recipe.dosa_chutney.description">A crispy South Indian crepe served with flavorful coconut chutney</p>
+                        <p class="text-xl text-gray-600 dark:text-gray-300 mb-8" data-translate="recipe.dosa_chutney.description">A crispy South Indian crepe served with flavorful coconut chutney</p>
+                    </div>
+                    <div class="text-center">
+                        <p class="text-xl text-gray-600 dark:text-gray-300 mb-8" data-translate="recipe.dosa_chutney.description">A crispy South Indian crepe served with flavorful coconut chutney</p>
+                        <p class="text-xl text-gray-600 dark:text-gray-300 mb-8" data-translate="recipe.dosa_chutney.description">A crispy South Indian crepe served with flavorful coconut chutney</p>
+                    </div>
+                    <div class="text-center">
+                        <p class="text-xl text-gray-600 dark:text-gray-300 mb-8" data-translate="recipe.dosa_chutney.description">A crispy South Indian crepe served with flavorful coconut chutney</p>
+                        <p class="text-xl text-gray-600 dark:text-gray-300 mb-8" data-translate="recipe.dosa_chutney.description">A crispy South Indian crepe served with flavorful coconut chutney</p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Tips -->
+            <div class="bg-white dark:bg-gray-800 p-8 rounded-lg shadow-md mb-8">
+                <h2 class="text-2xl font-bold text-gray-800 dark:text-white mb-4">Tips</h2>
+                <ul class="list-disc list-inside text-gray-600 dark:text-gray-300 space-y-2">
+                    <li>Ensure proper fermentation of the batter for crispy dosas.</li>
+                    <li>Use warm water while grinding the batter for better fermentation.</li>
+                    <li>Don't overmix the batter after fermentation to maintain the airiness.</li>
+                    <li>Keep the pan at medium heat for even cooking.</li>
+                    <li>You can add various fillings like spiced potatoes for masala dosa.</li>
+                </ul>
+            </div>
+
+            <!-- Comments Section -->
+            <div class="bg-white dark:bg-gray-800 p-8 rounded-lg shadow-md">
+                <h2 class="text-2xl font-bold text-gray-800 dark:text-white mb-4">Comments</h2>
+                <div id="comments" class="space-y-4">
+                    <!-- Comments will be dynamically added here -->
+                </div>
+                <form id="commentForm" class="mt-6">
+                    <textarea class="w-full p-3 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-700 text-gray-700 dark:text-gray-300" rows="3" placeholder="Add a comment..."></textarea>
+                    <button type="submit" class="mt-2 bg-green-500 text-white px-4 py-2 rounded-lg hover:bg-green-600 transition-colors">Post Comment</button>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <!-- Footer -->
+    <footer class="bg-gray-800 text-white py-8 mt-12">
+        <div class="container mx-auto px-4">
+            <div class="grid grid-cols-1 md:grid-cols-4 gap-8">
+                <div>
+                    <h3 class="text-xl font-bold mb-4">PlatePilot</h3>
+                    <p class="text-xl text-gray-600 dark:text-gray-300 mb-8" data-translate="recipe.dosa_chutney.description">A crispy South Indian crepe served with flavorful coconut chutney</p>
+                </div>
+                <div>
+                    <h4 class="font-semibold mb-4">Quick Links</h4>
+                    <ul class="space-y-2">
+                        <li><a href="index.html" class="text-gray-400 hover:text-white transition-colors">Home</a></li>
+                        <li><a href="recipes.html" class="text-gray-400 hover:text-white transition-colors">Recipes</a></li>
+                        <li><a href="games.html" class="text-gray-400 hover:text-white transition-colors">Games</a></li>
+                        <li><a href="secret-recipes.html" class="text-gray-400 hover:text-white transition-colors">Secret Recipes</a></li>
+                        <li><a href="diet-planner.html" class="text-gray-400 hover:text-white transition-colors">Diet Planner</a></li>
+                    </ul>
+                </div>
+                <div>
+                    <h4 class="font-semibold mb-4">Contact</h4>
+                    <ul class="space-y-2 text-gray-400">
+                        <li>Email: platepilot.11@gmail.com</li>
+                        <li>Phone: +91 9251681626</li>
+                    </ul>
+                </div>
+                <div>
+                    <h4 class="font-semibold mb-4">Follow Us</h4>
+                    <div class="flex space-x-4">
+                        <a href="#" class="text-gray-400 hover:text-white transition-colors">Facebook</a>
+                        <a href="#" class="text-gray-400 hover:text-white transition-colors">Twitter</a>
+                        <a href="#" class="text-gray-400 hover:text-white transition-colors">Instagram</a>
+                    </div>
+                </div>
+            </div>
+            <div class="border-t border-gray-700 mt-8 pt-8 text-center text-gray-400">
+                <p>&copy; 2024 PlatePilot. All rights reserved.</p>
+            </div>
+        </div>
+    </footer>
+
+    <script>
+        // Set base path for GitHub Pages
+        const basePath = '/PlatePilot';
+        
+        // Update all navigation links
+        document.addEventListener('DOMContentLoaded', function() {
+            // Update navigation links
+            document.querySelectorAll('a[href]').forEach(link => {
+                const href = link.getAttribute('href');
+                if (href.startsWith('index.html') || 
+                    href.startsWith('recipes.html') || 
+                    href.startsWith('upload-recipe.html') || 
+                    href.startsWith('games.html') || 
+                    href.startsWith('secret-recipes.html') || 
+                    href.startsWith('diet-planner.html') || 
+                    href.startsWith('login.html') || 
+                    href.startsWith('signup.html')) {
+                    if (!href.includes(basePath)) {
+                        link.href = basePath + '/' + href;
+                    }
+                }
+            });
+            
+            // Initialize dark mode
+            if (localStorage.getItem('darkMode') === 'true') {
+                document.documentElement.classList.add('dark');
+            }
+            
+            // Toggle dark mode
+            window.toggleDarkMode = function() {
+                if (document.documentElement.classList.contains('dark')) {
+                    document.documentElement.classList.remove('dark');
+                    localStorage.setItem('darkMode', 'false');
+                } else {
+                    document.documentElement.classList.add('dark');
+                    localStorage.setItem('darkMode', 'true');
+                }
+            };
+            
+            // Mobile menu toggle
+            window.toggleMobileMenu = function() {
+                const mobileMenu = document.getElementById('mobileMenu');
+                mobileMenu.classList.toggle('hidden');
+            };
+
+            // Handle comments
+            const commentForm = document.getElementById('commentForm');
+            const commentsContainer = document.getElementById('comments');
+
+            // Load existing comments
+            let comments = JSON.parse(localStorage.getItem('dosaChutneyComments')) || [];
+            displayComments();
+
+            commentForm.addEventListener('submit', function(e) {
+                e.preventDefault();
+                const commentText = this.querySelector('textarea').value.trim();
+                if (commentText) {
+                    const user = JSON.parse(localStorage.getItem('currentUser'));
+                    if (!user) {
+                        alert('Please log in to post a comment');
+                        return;
+                    }
+                    const newComment = {
+                        text: commentText,
+                        user: user.name,
+                        date: new Date().toISOString()
+                    };
+                    comments.unshift(newComment);
+                    localStorage.setItem('dosaChutneyComments', JSON.stringify(comments));
+                    displayComments();
+                    this.reset();
+                }
+            });
+
+            function displayComments() {
+                commentsContainer.innerHTML = comments.map(comment => `
+                    <div class="bg-gray-50 dark:bg-gray-700 p-4 rounded-lg">
+                        <div class="flex justify-between items-start">
+                            <div>
+                                <p class="text-xl text-gray-600 dark:text-gray-300 mb-8" data-translate="recipe.dosa_chutney.description">A crispy South Indian crepe served with flavorful coconut chutney</p>
+                                <p class="text-xl text-gray-600 dark:text-gray-300 mb-8" data-translate="recipe.dosa_chutney.description">A crispy South Indian crepe served with flavorful coconut chutney</p>
+                            </div>
+                            <span class="text-sm text-gray-500 dark:text-gray-400">${new Date(comment.date).toLocaleDateString()}</span>
+                        </div>
+                    </div>
+                `).join('');
+            }
+        });
+    </script>
+</body>
+</html> 

@@ -1,0 +1,503 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Diet Planner - PlatePilot</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            darkMode: 'class',
+            theme: {
+                extend: {
+                    colors: {
+                        // You can add custom colors here if needed
+                    }
+                }
+            }
+        }
+    </script>
+    <!-- Language System -->
+    <script src="translations.js"></script>
+    <script src="translations-extended.js"></script>
+    <script src="translations-more.js"></script>
+    <script src="language-selector.js"></script>
+    <style>
+        .meal-card {
+            transition: all 0.3s ease-in-out;
+        }
+        .meal-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04);
+        }
+    </style>
+</head>
+<body class="bg-gray-50 dark:bg-gray-900 min-h-screen">
+    <!-- Navigation Bar -->
+    <nav class="bg-white dark:bg-gray-900 shadow-md sticky top-0 z-50">
+        <div class="container mx-auto px-4">
+            <div class="flex justify-between items-center h-16">
+                <a href="index.html" class="text-2xl font-bold text-green-600 dark:text-green-400 hover:text-green-700 dark:hover:text-green-300 transition-colors" data-translate="home">PlatePilot</a>
+                <div class="hidden md:flex items-center space-x-4">
+                    <a href="index.html" class="text-gray-700 dark:text-gray-300 hover:text-green-600 dark:hover:text-green-400 font-bold transition-colors" data-translate="home">Home</a>
+                    <a href="marketplace.html" class="bg-green-600 text-white px-4 py-2 rounded-lg font-semibold hover:bg-green-700 transition-colors" data-translate="marketplace">Marketplace</a>
+                    <a href="seller-onboarding.html" class="bg-blue-600 text-white px-4 py-2 rounded-lg font-semibold hover:bg-blue-700 transition-colors" data-translate="becomeSeller">Become a Seller</a>
+                    <!-- Recipes Dropdown -->
+                    <div class="relative group">
+                        <button class="text-gray-700 dark:text-gray-300 hover:text-green-600 dark:hover:text-green-400 transition-colors font-semibold flex items-center">Recipes <svg class="w-4 h-4 ml-1" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"/></svg></button>
+                        <div class="absolute left-0 mt-2 w-48 bg-white dark:bg-gray-800 rounded-lg shadow-lg opacity-0 group-hover:opacity-100 group-focus-within:opacity-100 pointer-events-none group-hover:pointer-events-auto group-focus-within:pointer-events-auto transition-opacity z-50">
+                            <a href="recipes.html" class="block px-4 py-2 text-gray-700 dark:text-gray-300 hover:bg-green-100 dark:hover:bg-green-900 rounded-t-lg" data-translate="recipes">All Recipes</a>
+                            <a href="upload-recipe.html" class="block px-4 py-2 text-gray-700 dark:text-gray-300 hover:bg-green-100 dark:hover:bg-green-900" data-translate="shareRecipe">Share Recipe</a>
+                            <a href="leaderboard.html" class="block px-4 py-2 text-gray-700 dark:text-gray-300 hover:bg-green-100 dark:hover:bg-green-900 rounded-b-lg" data-translate="leaderboard">Leaderboard</a>
+                        </div>
+                    </div>
+                    <!-- More Dropdown -->
+                    <div class="relative group">
+                        <button class="text-gray-700 dark:text-gray-300 hover:text-green-600 dark:hover:text-green-400 transition-colors font-semibold flex items-center">More <svg class="w-4 h-4 ml-1" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"/></svg></button>
+                        <div class="absolute left-0 mt-2 w-48 bg-white dark:bg-gray-800 rounded-lg shadow-lg opacity-0 group-hover:opacity-100 group-focus-within:opacity-100 pointer-events-none group-hover:pointer-events-auto group-focus-within:pointer-events-auto transition-opacity z-50">
+                            <a href="games.html" class="block px-4 py-2 text-gray-700 dark:text-gray-300 hover:bg-green-100 dark:hover:bg-green-900 rounded-t-lg" data-translate="games">Games</a>
+                            <a href="secret-recipes.html" class="block px-4 py-2 text-gray-700 dark:text-gray-300 hover:bg-green-100 dark:hover:bg-green-900" data-translate="secretRecipes">Secret Recipes</a>
+                            <a href="diet-planner.html" class="block px-4 py-2 text-gray-700 dark:text-gray-300 hover:bg-green-100 dark:hover:bg-green-900 rounded-b-lg" data-translate="dietPlanner">Diet Planner</a>
+                        </div>
+                    </div>
+                    <div id="languageSelectorContainer" class="ml-4"></div>
+                    <button onclick="toggleDarkMode()" class="p-2 rounded-lg bg-gray-200 dark:bg-gray-700 hover:bg-gray-300 dark:hover:bg-gray-600 transition-colors">
+                        <span class="dark:hidden">🌙</span>
+                        <span class="hidden dark:inline">☀️</span>
+                    </button>
+                </div>
+                <!-- Mobile Menu Button -->
+                <button class="md:hidden p-2 rounded-lg hover:bg-gray-200 dark:hover:bg-gray-700 transition-colors" onclick="toggleMobileMenu()">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 text-gray-700 dark:text-gray-300" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16" />
+                    </svg>
+                </button>
+            </div>
+            <!-- Mobile Menu -->
+            <div id="mobileMenu" class="md:hidden hidden pb-4">
+                <div class="flex flex-col space-y-4">
+                    <a href="index.html" class="text-gray-700 dark:text-gray-300 hover:text-green-600 dark:hover:text-green-400 font-bold transition-colors" data-translate="home">Home</a>
+                    <a href="marketplace.html" class="bg-green-600 text-white px-4 py-2 rounded-lg font-semibold hover:bg-green-700 transition-colors" data-translate="marketplace">Marketplace</a>
+                    <a href="seller-onboarding.html" class="bg-blue-600 text-white px-4 py-2 rounded-lg font-semibold hover:bg-blue-700 transition-colors" data-translate="becomeSeller">Become a Seller</a>
+                    <!-- Recipes Dropdown (Collapsible) -->
+                    <div>
+                        <button onclick="toggleMobileDropdown('recipesDropdown')" class="flex items-center justify-between w-full text-gray-700 dark:text-gray-300 font-semibold py-2 px-2 rounded hover:bg-green-100 dark:hover:bg-green-900 transition-colors">Recipes <svg class="w-4 h-4 ml-1 inline" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"/></svg></button>
+                        <div id="recipesDropdown" class="hidden flex flex-col ml-4 mt-2 space-y-2">
+                            <a href="recipes.html" class="text-gray-700 dark:text-gray-300 hover:text-green-600 dark:hover:text-green-400" data-translate="recipes">All Recipes</a>
+                            <a href="upload-recipe.html" class="text-gray-700 dark:text-gray-300 hover:text-green-600 dark:hover:text-green-400" data-translate="shareRecipe">Share Recipe</a>
+                            <a href="leaderboard.html" class="text-gray-700 dark:text-gray-300 hover:text-green-600 dark:hover:text-green-400" data-translate="leaderboard">Leaderboard</a>
+                        </div>
+                    </div>
+                    <!-- More Dropdown (Collapsible) -->
+                    <div>
+                        <button onclick="toggleMobileDropdown('moreDropdown')" class="flex items-center justify-between w-full text-gray-700 dark:text-gray-300 font-semibold py-2 px-2 rounded hover:bg-green-100 dark:hover:bg-green-900 transition-colors">More <svg class="w-4 h-4 ml-1 inline" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"/></svg></button>
+                        <div id="moreDropdown" class="hidden flex flex-col ml-4 mt-2 space-y-2">
+                            <a href="games.html" class="text-gray-700 dark:text-gray-300 hover:text-green-600 dark:hover:text-green-400" data-translate="games">Games</a>
+                            <a href="secret-recipes.html" class="text-gray-700 dark:text-gray-300 hover:text-green-600 dark:hover:text-green-400" data-translate="secretRecipes">Secret Recipes</a>
+                            <a href="diet-planner.html" class="text-gray-700 dark:text-gray-300 hover:text-green-600 dark:hover:text-green-400" data-translate="dietPlanner">Diet Planner</a>
+                        </div>
+                    </div>
+                    <div id="languageSelectorContainer" class="mt-2"></div>
+                    <button onclick="toggleDarkMode()" class="p-2 rounded-lg bg-gray-200 dark:bg-gray-700 hover:bg-gray-300 dark:hover:bg-gray-600 transition-colors w-12 self-center">
+                        <span class="dark:hidden">🌙</span>
+                        <span class="hidden dark:inline">☀️</span>
+                    </button>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Header -->
+    <header class="bg-green-500 text-white py-16">
+        <div class="container mx-auto px-4 text-center">
+            <h1 class="text-4xl font-bold mb-4" data-translate="dietPlannerTitle">Diet Planner</h1>
+            <p class="text-xl mb-8" data-translate="dietPlannerSubtitle">Create your personalized meal plan</p>
+        </div>
+    </header>
+
+    <!-- Diet Planner Section -->
+    <div class="container mx-auto px-4 py-12">
+        <!-- Meal Plan Form -->
+        <div class="bg-white dark:bg-gray-800 rounded-xl shadow-lg p-6 mb-8">
+            <h2 class="text-2xl font-bold text-gray-800 dark:text-white mb-6" data-translate="createMealPlan">Create Your Meal Plan</h2>
+            <form id="mealPlanForm" class="space-y-6">
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                <div>
+                        <label class="block text-gray-700 dark:text-gray-300 mb-2" data-translate="goal">Goal</label>
+                        <select id="goal" class="w-full p-2 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-700 text-gray-700 dark:text-gray-300">
+                            <option value="weight-loss" data-translate="weightLoss">Weight Loss</option>
+                            <option value="muscle-gain" data-translate="muscleGain">Muscle Gain</option>
+                            <option value="maintenance" data-translate="maintenance">Maintenance</option>
+                            <option value="healthy-eating" data-translate="healthyEating">Healthy Eating</option>
+                        </select>
+                </div>
+                <div>
+                    <label class="block text-gray-700 dark:text-gray-300 mb-2" data-translate="activityLevel">Activity Level</label>
+                        <select id="activityLevel" class="w-full p-2 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-700 text-gray-700 dark:text-gray-300">
+                            <option value="sedentary" data-translate="sedentary">Sedentary</option>
+                            <option value="light" data-translate="lightlyActive">Lightly Active</option>
+                            <option value="moderate" data-translate="moderatelyActive">Moderately Active</option>
+                            <option value="very" data-translate="veryActive">Very Active</option>
+                    </select>
+                </div>
+                <div>
+                        <label class="block text-gray-700 dark:text-gray-300 mb-2" data-translate="dietaryPreferences">Dietary Preferences</label>
+                        <div class="space-y-2">
+                            <label class="flex items-center">
+                                <input type="checkbox" id="vegetarian" class="mr-2">
+                                <span class="text-gray-700 dark:text-gray-300" data-translate="vegetarian">Vegetarian</span>
+                            </label>
+                            <label class="flex items-center">
+                                <input type="checkbox" id="vegan" class="mr-2">
+                                <span class="text-gray-700 dark:text-gray-300" data-translate="vegan">Vegan</span>
+                            </label>
+                            <label class="flex items-center">
+                                <input type="checkbox" id="glutenFree" class="mr-2">
+                                <span class="text-gray-700 dark:text-gray-300" data-translate="glutenFree">Gluten-Free</span>
+                            </label>
+            </div>
+                    </div>
+                    <div>
+                        <label class="block text-gray-700 dark:text-gray-300 mb-2" data-translate="mealsPerDay">Meals per Day</label>
+                        <select id="mealsPerDay" class="w-full p-2 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-700 text-gray-700 dark:text-gray-300">
+                            <option value="3" data-translate="threeMeals">3 Meals</option>
+                            <option value="4" data-translate="fourMeals">4 Meals</option>
+                            <option value="5" data-translate="fiveMeals">5 Meals</option>
+                            <option value="6" data-translate="sixMeals">6 Meals</option>
+                        </select>
+                    </div>
+                    <div>
+                        <label class="block text-gray-700 dark:text-gray-300 mb-2" data-translate="calorieTarget">Calorie Target</label>
+                        <input type="number" id="calorieTarget" class="w-full p-2 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-700 text-gray-700 dark:text-gray-300" placeholder="Enter daily calorie target" data-translate="calorieTargetPlaceholder">
+                    </div>
+                    <div>
+                        <label class="block text-gray-700 dark:text-gray-300 mb-2" data-translate="allergiesRestrictions">Allergies/Restrictions</label>
+                        <input type="text" id="allergies" class="w-full p-2 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-700 text-gray-700 dark:text-gray-300" placeholder="Enter any allergies or restrictions" data-translate="allergiesPlaceholder">
+                    </div>
+                </div>
+                <button type="submit" class="w-full bg-green-500 text-white py-3 rounded-lg hover:bg-green-600 transition-colors" data-translate="generateMealPlan">Generate Meal Plan</button>
+            </form>
+        </div>
+
+        <!-- Meal Plan Display -->
+        <div id="mealPlanDisplay" class="bg-white dark:bg-gray-800 rounded-xl shadow-lg p-6 hidden">
+            <div class="flex justify-between items-center mb-6">
+                <h2 class="text-2xl font-bold text-gray-800 dark:text-white" data-translate="aiGeneratedMealPlan">Your AI-Generated Meal Plan</h2>
+                <button onclick="saveMealPlan()" class="bg-green-500 text-white px-4 py-2 rounded-lg hover:bg-green-600 transition-colors" data-translate="savePlan">Save Plan</button>
+            </div>
+            <div id="mealPlanContent" class="space-y-8">
+                <!-- Meal plan will be dynamically inserted here -->
+            </div>
+        </div>
+    </div>
+
+    <!-- Footer -->
+    <footer class="bg-gray-800 text-white py-8 mt-12">
+        <div class="container mx-auto px-4">
+            <div class="grid grid-cols-1 md:grid-cols-4 gap-8">
+                <div>
+                    <h3 class="text-xl font-bold mb-4" data-translate="platePilot">PlatePilot</h3>
+                    <p class="text-gray-400" data-translate="platePilotDescription">Pilot your plate. Powered by AI. Fueled by wellness.</p>
+                </div>
+                <div>
+                    <h4 class="font-semibold mb-4" data-translate="quickLinks">Quick Links</h4>
+                    <ul class="space-y-2">
+                        <li><a href="index.html" class="text-gray-400 hover:text-white transition-colors" data-translate="home">Home</a></li>
+                        <li><a href="recipes.html" class="text-gray-400 hover:text-white transition-colors" data-translate="recipes">Recipes</a></li>
+                        <li><a href="games.html" class="text-gray-400 hover:text-white transition-colors" data-translate="games">Games</a></li>
+                        <li><a href="secret-recipes.html" class="text-gray-400 hover:text-white transition-colors" data-translate="secretRecipes">Secret Recipes</a></li>
+                        <li><a href="diet-planner.html" class="text-gray-400 hover:text-white transition-colors" data-translate="dietPlanner">Diet Planner</a></li>
+                    </ul>
+                </div>
+                <div>
+                    <h4 class="font-semibold mb-4" data-translate="contact">Contact</h4>
+                    <ul class="space-y-2 text-gray-400">
+                        <li data-translate="email">Email: platepilot.11@gmail.com</li>
+                        <li data-translate="phone">Phone: +91 9251681626</li>
+                    </ul>
+                </div>
+                <div>
+                    <h4 class="font-semibold mb-4" data-translate="followUs">Follow Us</h4>
+                    <div class="flex space-x-4">
+                        <a href="#" class="text-gray-400 hover:text-white transition-colors">Facebook</a>
+                        <a href="#" class="text-gray-400 hover:text-white transition-colors">Twitter</a>
+                        <a href="#" class="text-gray-400 hover:text-white transition-colors">Instagram</a>
+                    </div>
+                </div>
+            </div>
+            <div class="border-t border-gray-700 mt-8 pt-8 text-center text-gray-400">
+                <p data-translate="copyright">&copy; 2024 PlatePilot. All rights reserved.</p>
+            </div>
+        </div>
+    </footer>
+
+    <!-- Floating AI Assistant Button -->
+    <button id="aiAssistantBtn" onclick="openAIAssistant()" class="fixed bottom-8 right-8 bg-gradient-to-r from-green-400 to-blue-500 text-white p-4 rounded-full shadow-lg hover:scale-110 transition-transform z-50">
+        <svg xmlns="http://www.w3.org/2000/svg" class="h-8 w-8" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 20h9" />
+            <circle cx="12" cy="12" r="8" stroke="currentColor" stroke-width="2" fill="none" />
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 12h.01M12 12h.01M16 12h.01" />
+        </svg>
+    </button>
+    <!-- AI Assistant Modal (placeholder) -->
+    <div id="aiAssistantModal" class="fixed inset-0 bg-black bg-opacity-50 hidden items-center justify-center z-50">
+        <div class="bg-white dark:bg-gray-800 p-8 rounded-xl max-w-lg w-full shadow-2xl flex flex-col items-center">
+            <h3 class="text-2xl font-bold mb-4 text-gray-800 dark:text-white" data-translate="aiAssistant">AI Assistant</h3>
+            <p class="text-gray-600 dark:text-gray-300 mb-6" data-translate="aiAssistantIntro">Hi! I'm your PlatePilot AI. How can I help you today?</p>
+            <input type="text" placeholder="Ask me anything..." class="w-full p-3 border border-gray-300 dark:border-gray-600 rounded-lg mb-4 bg-white dark:bg-gray-700 text-gray-700 dark:text-gray-300">
+            <button onclick="closeAIAssistant()" class="bg-green-500 text-white px-6 py-2 rounded-lg hover:bg-green-600" data-translate="close">Close</button>
+        </div>
+    </div>
+
+    <script>
+        // Set base path for GitHub Pages
+        const basePath = '/PlatePilot';
+        
+        // Meal plan generation logic
+        const mealDatabase = {
+            breakfast: [
+                { name: "Vegetable Poha", calories: 320, protein: 8, carbs: 45, fat: 12, vegetarian: true, vegan: true, glutenFree: true },
+                { name: "Idli with Sambar", calories: 280, protein: 10, carbs: 40, fat: 5, vegetarian: true, vegan: true, glutenFree: true },
+                { name: "Upma", calories: 300, protein: 8, carbs: 42, fat: 10, vegetarian: true, vegan: true, glutenFree: true },
+                { name: "Dosa with Chutney", calories: 350, protein: 12, carbs: 48, fat: 15, vegetarian: true, vegan: true, glutenFree: true },
+                { name: "Masala Dosa", calories: 350, protein: 12, carbs: 45, fat: 15, vegetarian: true, vegan: true, glutenFree: true },
+                { name: "Greek Yogurt Parfait", calories: 300, protein: 20, carbs: 35, fat: 10, vegetarian: true, vegan: false, glutenFree: true },
+                { name: "Avocado Toast", calories: 320, protein: 8, carbs: 30, fat: 18, vegetarian: true, vegan: true, glutenFree: false },
+                { name: "Overnight Oats", calories: 280, protein: 10, carbs: 45, fat: 8, vegetarian: true, vegan: true, glutenFree: true }
+            ],
+            lunch: [
+                { name: "Millet and Vegetable Khichdi", calories: 380, protein: 15, carbs: 65, fat: 12, vegetarian: true, vegan: true, glutenFree: true },
+                { name: "Mediterranean Salad", calories: 350, protein: 10, carbs: 35, fat: 20, vegetarian: true, vegan: true, glutenFree: true },
+                { name: "Quinoa Bowl", calories: 400, protein: 15, carbs: 45, fat: 18, vegetarian: true, vegan: true, glutenFree: true },
+                { name: "Lentil Soup", calories: 320, protein: 18, carbs: 45, fat: 8, vegetarian: true, vegan: true, glutenFree: true },
+                { name: "Sweet Potato Buddha Bowl", calories: 380, protein: 12, carbs: 55, fat: 15, vegetarian: true, vegan: true, glutenFree: true },
+                { name: "Quinoa Stuffed Bell Peppers", calories: 350, protein: 14, carbs: 48, fat: 12, vegetarian: true, vegan: true, glutenFree: true },
+                { name: "Rainbow Buddha Bowl", calories: 360, protein: 15, carbs: 50, fat: 14, vegetarian: true, vegan: true, glutenFree: true },
+                { name: "Chickpea Curry", calories: 380, protein: 16, carbs: 45, fat: 15, vegetarian: true, vegan: true, glutenFree: true },
+                { name: "Black Bean Tacos", calories: 350, protein: 14, carbs: 42, fat: 12, vegetarian: true, vegan: true, glutenFree: true }
+            ],
+            dinner: [
+                { name: "Vegetable Stir-Fry", calories: 380, protein: 12, carbs: 40, fat: 15, vegetarian: true, vegan: true, glutenFree: true },
+                { name: "Tofu Stir-Fry", calories: 420, protein: 20, carbs: 40, fat: 18, vegetarian: true, vegan: true, glutenFree: true },
+                { name: "Mushroom Risotto", calories: 450, protein: 12, carbs: 50, fat: 22, vegetarian: true, vegan: false, glutenFree: false },
+                { name: "Vegetable Pasta", calories: 400, protein: 15, carbs: 55, fat: 15, vegetarian: true, vegan: true, glutenFree: false },
+                { name: "Quinoa Buddha Bowl", calories: 380, protein: 14, carbs: 48, fat: 16, vegetarian: true, vegan: true, glutenFree: true },
+                { name: "Grilled Salmon", calories: 420, protein: 35, carbs: 0, fat: 28, vegetarian: false, vegan: false, glutenFree: true }
+            ],
+            snacks: [
+                { name: "Chia Pudding", calories: 180, protein: 6, carbs: 20, fat: 10, vegetarian: true, vegan: true, glutenFree: true },
+                { name: "Golden Turmeric Latte", calories: 120, protein: 4, carbs: 15, fat: 6, vegetarian: true, vegan: true, glutenFree: true },
+                { name: "Super Green Smoothie", calories: 160, protein: 8, carbs: 25, fat: 5, vegetarian: true, vegan: true, glutenFree: true },
+                { name: "Avocado Mousse", calories: 200, protein: 4, carbs: 12, fat: 16, vegetarian: true, vegan: true, glutenFree: true }
+            ]
+        };
+
+        function generateMealPlan() {
+            const goal = document.getElementById('goal').value;
+            const activityLevel = document.getElementById('activityLevel').value;
+            const isVegetarian = document.getElementById('vegetarian').checked;
+            const isVegan = document.getElementById('vegan').checked;
+            const isGlutenFree = document.getElementById('glutenFree').checked;
+            const mealsPerDay = parseInt(document.getElementById('mealsPerDay').value);
+            const calorieTarget = parseInt(document.getElementById('calorieTarget').value) || 2000;
+            const allergies = document.getElementById('allergies').value.toLowerCase();
+
+            // Calculate daily macro targets based on goal
+            let macroTargets = { protein: 0, carbs: 0, fat: 0 };
+            switch(goal) {
+                case 'weight-loss': macroTargets = { protein: 0.4, carbs: 0.3, fat: 0.3 }; break;
+                case 'muscle-gain': macroTargets = { protein: 0.4, carbs: 0.4, fat: 0.2 }; break;
+                case 'maintenance': macroTargets = { protein: 0.3, carbs: 0.4, fat: 0.3 }; break;
+                case 'healthy-eating': macroTargets = { protein: 0.3, carbs: 0.45, fat: 0.25 }; break;
+            }
+
+            // Distribute calories/macros per meal
+            const mealTypes = ['breakfast', 'lunch', 'dinner'];
+            if (mealsPerDay > 3) mealTypes.push('snacks');
+            const caloriesPerMeal = Math.round(calorieTarget / mealsPerDay);
+            const proteinPerMeal = Math.round((calorieTarget * macroTargets.protein / 4) / mealsPerDay);
+            const carbsPerMeal = Math.round((calorieTarget * macroTargets.carbs / 4) / mealsPerDay);
+            const fatPerMeal = Math.round((calorieTarget * macroTargets.fat / 9) / mealsPerDay);
+
+            // Track used meals to avoid repeats
+            const usedMeals = { breakfast: [], lunch: [], dinner: [], snacks: [] };
+
+            // Generate meal plan for each day
+            const days = ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday', 'Sunday'];
+            let mealPlanHTML = '';
+
+            days.forEach(day => {
+                let dailyTotals = { calories: 0, protein: 0, carbs: 0, fat: 0 };
+                mealPlanHTML += `
+                    <div class="mb-8">
+                        <h3 class="text-xl font-semibold text-gray-800 dark:text-white mb-4">${day}</h3>
+                        <div class="grid grid-cols-1 md:grid-cols-${mealsPerDay} gap-4">
+                `;
+                mealTypes.forEach(mealType => {
+                    const meal = selectBestMeal(mealType, isVegetarian, isVegan, isGlutenFree, allergies, caloriesPerMeal, proteinPerMeal, carbsPerMeal, fatPerMeal, usedMeals[mealType]);
+                    usedMeals[mealType].push(meal.name); // Avoid repeat
+                    dailyTotals.calories += meal.calories;
+                    dailyTotals.protein += meal.protein;
+                    dailyTotals.carbs += meal.carbs;
+                    dailyTotals.fat += meal.fat;
+                    mealPlanHTML += `
+                        <div class="bg-gray-50 dark:bg-gray-700 p-4 rounded-lg">
+                            <h4 class="font-medium text-gray-800 dark:text-white mb-2">${mealType.charAt(0).toUpperCase() + mealType.slice(1)}</h4>
+                            <p class="text-gray-600 dark:text-gray-300">${meal.name}</p>
+                            <p class="text-sm text-gray-500 dark:text-gray-400 mt-2">
+                                ${meal.calories} cal | P: ${meal.protein}g | C: ${meal.carbs}g | F: ${meal.fat}g
+                            </p>
+                        </div>
+                    `;
+                });
+                mealPlanHTML += `
+                        </div>
+                        <div class="mt-4 text-right text-sm text-gray-700 dark:text-gray-300 font-semibold">
+                            Daily Total: ${dailyTotals.calories} cal | P: ${dailyTotals.protein}g | C: ${dailyTotals.carbs}g | F: ${dailyTotals.fat}g
+                        </div>
+                    </div>
+                `;
+            });
+
+            document.getElementById('mealPlanContent').innerHTML = mealPlanHTML;
+            document.getElementById('mealPlanDisplay').classList.remove('hidden');
+        }
+
+        // Improved meal selection: pick closest to target macros/calories, avoid repeats
+        function selectBestMeal(mealType, isVegetarian, isVegan, isGlutenFree, allergies, calTarget, pTarget, cTarget, fTarget, used) {
+            let availableMeals = mealDatabase[mealType].filter(meal => {
+                if (isVegan && !meal.vegan) return false;
+                if (isVegetarian && !meal.vegetarian) return false;
+                if (isGlutenFree && !meal.glutenFree) return false;
+                if (allergies && meal.name.toLowerCase().includes(allergies)) return false;
+                if (used && used.includes(meal.name)) return false;
+                return true;
+            });
+            if (availableMeals.length === 0) {
+                return {
+                    name: "Custom meal (consult nutritionist)",
+                    calories: 0,
+                    protein: 0,
+                    carbs: 0,
+                    fat: 0
+                };
+            }
+            // Pick meal closest to target macros/calories
+            availableMeals.sort((a, b) => {
+                const aDiff = Math.abs(a.calories - calTarget) + Math.abs(a.protein - pTarget) + Math.abs(a.carbs - cTarget) + Math.abs(a.fat - fTarget);
+                const bDiff = Math.abs(b.calories - calTarget) + Math.abs(b.protein - pTarget) + Math.abs(b.carbs - cTarget) + Math.abs(b.fat - fTarget);
+                return aDiff - bDiff;
+            });
+            return availableMeals[0];
+        }
+
+        function saveMealPlan() {
+            const user = JSON.parse(localStorage.getItem('currentUser'));
+            if (!user) {
+                alert('Please log in to save your meal plan');
+                return;
+            }
+
+            const mealPlan = {
+                date: new Date().toISOString(),
+                content: document.getElementById('mealPlanContent').innerHTML
+            };
+
+            let savedPlans = JSON.parse(localStorage.getItem('savedMealPlans')) || {};
+            if (!savedPlans[user.email]) {
+                savedPlans[user.email] = [];
+            }
+            savedPlans[user.email].push(mealPlan);
+            localStorage.setItem('savedMealPlans', JSON.stringify(savedPlans));
+            alert('Meal plan saved successfully!');
+        }
+        
+        // Update all navigation links
+        document.addEventListener('DOMContentLoaded', function() {
+            // Update navigation links
+            document.querySelectorAll('a[href]').forEach(link => {
+                const href = link.getAttribute('href');
+                if (href.startsWith('index.html') || 
+                    href.startsWith('recipes.html') || 
+                    href.startsWith('leaderboard.html') || 
+                    href.startsWith('upload-recipe.html') || 
+                    href.startsWith('games.html') || 
+                    href.startsWith('secret-recipes.html') || 
+                    href.startsWith('diet-planner.html') || 
+                    href.startsWith('login.html') || 
+                    href.startsWith('signup.html')) {
+                    if (!href.includes(basePath)) {
+                        link.href = basePath + '/' + href;
+                    }
+                }
+            });
+            
+            // Initialize dark mode
+            if (localStorage.getItem('darkMode') === 'true') {
+                document.documentElement.classList.add('dark');
+            }
+            
+            // Toggle dark mode
+            window.toggleDarkMode = function() {
+                if (document.documentElement.classList.contains('dark')) {
+                    document.documentElement.classList.remove('dark');
+                    localStorage.setItem('darkMode', 'false');
+                } else {
+                    document.documentElement.classList.add('dark');
+                    localStorage.setItem('darkMode', 'true');
+                }
+            };
+            
+            // Mobile menu toggle
+            window.toggleMobileMenu = function() {
+                const mobileMenu = document.getElementById('mobileMenu');
+                mobileMenu.classList.toggle('hidden');
+            };
+
+            // Mobile dropdown toggles
+            window.toggleMobileDropdown = function(dropdownId) {
+                const dropdown = document.getElementById(dropdownId);
+                dropdown.classList.toggle('hidden');
+            };
+            
+            // Check login status
+            const user = JSON.parse(localStorage.getItem('currentUser'));
+            const welcomeMessage = document.getElementById('welcomeMessage');
+            
+            if (user) {
+                if (welcomeMessage) {
+                    welcomeMessage.textContent = `Welcome, ${user.name}!`;
+                }
+            } else {
+                if (welcomeMessage) {
+                    welcomeMessage.textContent = '';
+                }
+            }
+            
+            // Logout functionality
+            window.logout = function() {
+                localStorage.removeItem('currentUser');
+                window.location.href = basePath + '/login.html';
+            };
+
+            // Handle meal plan form submission
+            const mealPlanForm = document.getElementById('mealPlanForm');
+            if (mealPlanForm) {
+                mealPlanForm.addEventListener('submit', function(e) {
+                    e.preventDefault();
+                    generateMealPlan();
+                });
+            }
+        });
+
+        function openAIAssistant() {
+            document.getElementById('aiAssistantModal').classList.remove('hidden');
+            document.getElementById('aiAssistantModal').classList.add('flex');
+        }
+        function closeAIAssistant() {
+            document.getElementById('aiAssistantModal').classList.add('hidden');
+            document.getElementById('aiAssistantModal').classList.remove('flex');
+        }
+    </script>
+</body>
+</html>

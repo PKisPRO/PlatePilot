@@ -1,0 +1,301 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Vegetable Stir-Fry - PlatePilot</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            darkMode: 'class',
+            theme: {
+                extend: {
+                    colors: {
+                        // You can add custom colors here if needed
+                    }
+                }
+            }
+        }
+    </script>
+</head>
+<body class="bg-gray-50 dark:bg-gray-900 min-h-screen">
+    <!-- Navigation Bar -->
+    <nav class="bg-white dark:bg-gray-900 shadow-md sticky top-0 z-50">
+        <div class="container mx-auto px-4">
+            <div class="flex justify-between items-center h-16">
+                <a href="index.html" class="text-2xl font-bold text-green-600 dark:text-green-400 hover:text-green-700 dark:hover:text-green-300 transition-colors">
+                    PlatePilot
+                </a>
+                <div class="hidden md:flex items-center space-x-8">
+                    <a href="index.html" class="text-gray-700 dark:text-gray-300 hover:text-green-600 dark:hover:text-green-400 transition-colors">Home</a>
+                    <a href="recipes.html" class="text-green-600 dark:text-green-400 font-medium">Recipes</a>
+                    <a href="upload-recipe.html" class="text-gray-700 dark:text-gray-300 hover:text-green-600 dark:hover:text-green-400 transition-colors">Share Recipe</a>
+                    <a href="games.html" class="text-gray-700 dark:text-gray-300 hover:text-green-600 dark:hover:text-green-400 transition-colors">Games</a>
+                    <a href="secret-recipes.html" class="text-gray-700 dark:text-gray-300 hover:text-green-600 dark:hover:text-green-400 transition-colors">Secret Recipes</a>
+                    <a href="diet-planner.html" class="text-gray-700 dark:text-gray-300 hover:text-green-600 dark:hover:text-green-400 transition-colors">Diet Planner</a>
+                    <button onclick="toggleDarkMode()" class="p-2 rounded-lg bg-gray-200 dark:bg-gray-700 hover:bg-gray-300 dark:hover:bg-gray-600 transition-colors">
+                        <span class="dark:hidden">🌙</span>
+                        <span class="hidden dark:inline">☀️</span>
+                    </button>
+                </div>
+                <!-- Mobile Menu Button -->
+                <button class="md:hidden p-2 rounded-lg hover:bg-gray-200 dark:hover:bg-gray-700 transition-colors" onclick="toggleMobileMenu()">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 text-gray-700 dark:text-gray-300" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16" />
+                    </svg>
+                </button>
+            </div>
+            <!-- Mobile Menu -->
+            <div id="mobileMenu" class="md:hidden hidden pb-4">
+                <div class="flex flex-col space-y-4">
+                    <a href="index.html" class="text-gray-700 dark:text-gray-300 hover:text-green-600 dark:hover:text-green-400 transition-colors">Home</a>
+                    <a href="recipes.html" class="text-green-600 dark:text-green-400 font-medium">Recipes</a>
+                    <a href="upload-recipe.html" class="text-gray-700 dark:text-gray-300 hover:text-green-600 dark:hover:text-green-400 transition-colors">Share Recipe</a>
+                    <a href="games.html" class="text-gray-700 dark:text-gray-300 hover:text-green-600 dark:hover:text-green-400 transition-colors">Games</a>
+                    <a href="secret-recipes.html" class="text-gray-700 dark:text-gray-300 hover:text-green-600 dark:hover:text-green-400 transition-colors">Secret Recipes</a>
+                    <a href="diet-planner.html" class="text-gray-700 dark:text-gray-300 hover:text-green-600 dark:hover:text-green-400 transition-colors">Diet Planner</a>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Recipe Content -->
+    <main class="container mx-auto px-4 py-8">
+        <div class="max-w-4xl mx-auto">
+            <h1 class="text-4xl font-bold text-gray-800 dark:text-white mb-4" data-translate="recipe.vegetable_stir_fry.title">Vegetable Stir-Fry</h1>
+            <p class="text-xl text-gray-600 dark:text-gray-300 mb-8" data-translate="recipe.vegetable_stir_fry.description">A quick and healthy stir-fry loaded with colorful vegetables and aromatic Asian flavors.</p>
+
+            <!-- Recipe Image -->
+            <div class="mb-8">
+                <img src="https://images.unsplash.com/photo-1512621776951-a57141f2eefd" alt="Vegetable Stir-Fry" class="w-full h-96 object-cover rounded-lg shadow-lg">
+            </div>
+
+            <!-- Recipe Info -->
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-4 mb-8">
+                <div class="bg-white dark:bg-gray-800 p-4 rounded-lg shadow">
+                    <h3 class="font-semibold text-gray-800 dark:text-white">Prep Time</h3>
+                    <p class="text-xl text-gray-600 dark:text-gray-300 mb-8" data-translate="recipe.vegetable_stir_fry.description">A quick and healthy stir-fry loaded with colorful vegetables and aromatic Asian flavors.</p>
+                </div>
+                <div class="bg-white dark:bg-gray-800 p-4 rounded-lg shadow">
+                    <h3 class="font-semibold text-gray-800 dark:text-white">Cook Time</h3>
+                    <p class="text-xl text-gray-600 dark:text-gray-300 mb-8" data-translate="recipe.vegetable_stir_fry.description">A quick and healthy stir-fry loaded with colorful vegetables and aromatic Asian flavors.</p>
+                </div>
+                <div class="bg-white dark:bg-gray-800 p-4 rounded-lg shadow">
+                    <h3 class="font-semibold text-gray-800 dark:text-white">Servings</h3>
+                    <p class="text-xl text-gray-600 dark:text-gray-300 mb-8" data-translate="recipe.vegetable_stir_fry.description">A quick and healthy stir-fry loaded with colorful vegetables and aromatic Asian flavors.</p>
+                </div>
+            </div>
+
+            <!-- Description -->
+            <div class="bg-white dark:bg-gray-800 p-6 rounded-lg shadow-lg mb-8">
+                <h2 class="text-2xl font-bold text-gray-800 dark:text-white mb-4">Description</h2>
+                <p class="text-gray-600 dark:text-gray-300">
+                    This Vegetable Stir-Fry is a vibrant and nutritious dish that combines fresh vegetables with a savory sauce. It's quick to prepare, making it perfect for busy weeknights, and can be customized with your favorite vegetables and protein sources.
+                </p>
+                <div class="mt-4 flex flex-wrap gap-2">
+                    <span class="px-3 py-1 bg-green-100 text-green-800 rounded-full text-sm">Vegetarian</span>
+                    <span class="px-3 py-1 bg-green-100 text-green-800 rounded-full text-sm">Vegan</span>
+                    <span class="px-3 py-1 bg-green-100 text-green-800 rounded-full text-sm">Gluten-Free</span>
+                </div>
+            </div>
+
+            <!-- Ingredients -->
+            <div class="bg-white dark:bg-gray-800 p-6 rounded-lg shadow-lg mb-8">
+                <h2 class="text-2xl font-bold text-gray-800 dark:text-white mb-4">Ingredients</h2>
+                <ul class="list-disc list-inside text-gray-600 dark:text-gray-300 space-y-2">
+                    <li>2 cups broccoli florets</li>
+                    <li>1 bell pepper, sliced</li>
+                    <li>1 carrot, julienned</li>
+                    <li>1 cup snap peas</li>
+                    <li>1 cup mushrooms, sliced</li>
+                    <li>2 cloves garlic, minced</li>
+                    <li>1 inch ginger, grated</li>
+                    <li>2 tbsp soy sauce</li>
+                    <li>1 tbsp sesame oil</li>
+                    <li>1 tbsp cornstarch</li>
+                    <li>1/4 cup vegetable broth</li>
+                    <li>2 tbsp cooking oil</li>
+                    <li>Salt and pepper to taste</li>
+                </ul>
+            </div>
+
+            <!-- Instructions -->
+            <div class="bg-white dark:bg-gray-800 p-6 rounded-lg shadow-lg mb-8">
+                <h2 class="text-2xl font-bold text-gray-800 dark:text-white mb-4">Instructions</h2>
+                <ol class="list-decimal list-inside text-gray-600 dark:text-gray-300 space-y-2">
+                    <li>Prepare the sauce by mixing soy sauce, cornstarch, and vegetable broth in a small bowl.</li>
+                    <li>Heat cooking oil in a large wok or skillet over high heat.</li>
+                    <li>Add garlic and ginger, stir for 30 seconds until fragrant.</li>
+                    <li>Add carrots and broccoli, stir-fry for 2-3 minutes.</li>
+                    <li>Add bell pepper, snap peas, and mushrooms. Continue stir-frying for 2-3 minutes.</li>
+                    <li>Pour the sauce over the vegetables and stir well.</li>
+                    <li>Cook for 1-2 minutes until the sauce thickens.</li>
+                    <li>Drizzle with sesame oil and season with salt and pepper.</li>
+                    <li>Serve hot over rice or noodles.</li>
+                </ol>
+            </div>
+
+            <!-- Nutritional Information -->
+            <div class="bg-white dark:bg-gray-800 p-6 rounded-lg shadow-lg mb-8">
+                <h2 class="text-2xl font-bold text-gray-800 dark:text-white mb-4">Nutritional Information</h2>
+                <div class="grid grid-cols-2 md:grid-cols-4 gap-4">
+                    <div class="text-center">
+                        <p class="text-xl text-gray-600 dark:text-gray-300 mb-8" data-translate="recipe.vegetable_stir_fry.description">A quick and healthy stir-fry loaded with colorful vegetables and aromatic Asian flavors.</p>
+                        <p class="text-xl text-gray-600 dark:text-gray-300 mb-8" data-translate="recipe.vegetable_stir_fry.description">A quick and healthy stir-fry loaded with colorful vegetables and aromatic Asian flavors.</p>
+                    </div>
+                    <div class="text-center">
+                        <p class="text-xl text-gray-600 dark:text-gray-300 mb-8" data-translate="recipe.vegetable_stir_fry.description">A quick and healthy stir-fry loaded with colorful vegetables and aromatic Asian flavors.</p>
+                        <p class="text-xl text-gray-600 dark:text-gray-300 mb-8" data-translate="recipe.vegetable_stir_fry.description">A quick and healthy stir-fry loaded with colorful vegetables and aromatic Asian flavors.</p>
+                    </div>
+                    <div class="text-center">
+                        <p class="text-xl text-gray-600 dark:text-gray-300 mb-8" data-translate="recipe.vegetable_stir_fry.description">A quick and healthy stir-fry loaded with colorful vegetables and aromatic Asian flavors.</p>
+                        <p class="text-xl text-gray-600 dark:text-gray-300 mb-8" data-translate="recipe.vegetable_stir_fry.description">A quick and healthy stir-fry loaded with colorful vegetables and aromatic Asian flavors.</p>
+                    </div>
+                    <div class="text-center">
+                        <p class="text-xl text-gray-600 dark:text-gray-300 mb-8" data-translate="recipe.vegetable_stir_fry.description">A quick and healthy stir-fry loaded with colorful vegetables and aromatic Asian flavors.</p>
+                        <p class="text-xl text-gray-600 dark:text-gray-300 mb-8" data-translate="recipe.vegetable_stir_fry.description">A quick and healthy stir-fry loaded with colorful vegetables and aromatic Asian flavors.</p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Tips -->
+            <div class="bg-white dark:bg-gray-800 p-6 rounded-lg shadow-lg mb-8">
+                <h2 class="text-2xl font-bold text-gray-800 dark:text-white mb-4">Tips for Perfect Vegetable Stir-Fry</h2>
+                <ul class="list-disc list-inside text-gray-600 dark:text-gray-300 space-y-2">
+                    <li>Cut all vegetables into similar sizes for even cooking.</li>
+                    <li>Have all ingredients prepared before starting to cook.</li>
+                    <li>Keep the heat high and stir constantly for the best results.</li>
+                    <li>Add vegetables in order of cooking time (hardest to softest).</li>
+                    <li>Don't overcrowd the pan to ensure proper stir-frying.</li>
+                </ul>
+            </div>
+
+            <!-- Comments Section -->
+            <div class="bg-white dark:bg-gray-800 p-6 rounded-lg shadow-lg">
+                <h2 class="text-2xl font-bold text-gray-800 dark:text-white mb-4">Comments</h2>
+                <div id="comments" class="space-y-4 mb-6">
+                    <!-- Comments will be loaded here -->
+                </div>
+                <form id="commentForm" class="space-y-4">
+                    <textarea id="commentText" class="w-full p-3 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-700 text-gray-700 dark:text-gray-300" rows="3" placeholder="Share your thoughts..."></textarea>
+                    <button type="submit" class="bg-green-500 text-white px-6 py-2 rounded-lg hover:bg-green-600 transition-colors">Post Comment</button>
+                </form>
+            </div>
+        </div>
+    </main>
+
+    <!-- Footer -->
+    <footer class="bg-gray-800 text-white py-8 mt-12">
+        <div class="container mx-auto px-4">
+            <div class="grid grid-cols-1 md:grid-cols-4 gap-8">
+                <div>
+                    <h3 class="text-xl font-bold mb-4">PlatePilot</h3>
+                    <p class="text-xl text-gray-600 dark:text-gray-300 mb-8" data-translate="recipe.vegetable_stir_fry.description">A quick and healthy stir-fry loaded with colorful vegetables and aromatic Asian flavors.</p>
+                </div>
+                <div>
+                    <h4 class="font-semibold mb-4">Quick Links</h4>
+                    <ul class="space-y-2">
+                        <li><a href="index.html" class="text-gray-400 hover:text-white transition-colors">Home</a></li>
+                        <li><a href="recipes.html" class="text-gray-400 hover:text-white transition-colors">Recipes</a></li>
+                        <li><a href="games.html" class="text-gray-400 hover:text-white transition-colors">Games</a></li>
+                        <li><a href="secret-recipes.html" class="text-gray-400 hover:text-white transition-colors">Secret Recipes</a></li>
+                        <li><a href="diet-planner.html" class="text-gray-400 hover:text-white transition-colors">Diet Planner</a></li>
+                    </ul>
+                </div>
+                <div>
+                    <h4 class="font-semibold mb-4">Contact</h4>
+                    <ul class="space-y-2 text-gray-400">
+                        <li>Email: platepilot.11@gmail.com</li>
+                        <li>Phone: +91 9251681626</li>
+                    </ul>
+                </div>
+                <div>
+                    <h4 class="font-semibold mb-4">Follow Us</h4>
+                    <div class="flex space-x-4">
+                        <a href="#" class="text-gray-400 hover:text-white transition-colors">Facebook</a>
+                        <a href="#" class="text-gray-400 hover:text-white transition-colors">Twitter</a>
+                        <a href="#" class="text-gray-400 hover:text-white transition-colors">Instagram</a>
+                    </div>
+                </div>
+            </div>
+            <div class="border-t border-gray-700 mt-8 pt-8 text-center text-gray-400">
+                <p>&copy; 2024 PlatePilot. All rights reserved.</p>
+            </div>
+        </div>
+    </footer>
+
+    <script>
+        // Set base path for GitHub Pages
+        const basePath = '/PlatePilot';
+        
+        // Update navigation links
+        document.addEventListener('DOMContentLoaded', function() {
+            document.querySelectorAll('a[href]').forEach(link => {
+                const href = link.getAttribute('href');
+                if (href.startsWith('index.html') || 
+                    href.startsWith('recipes.html') || 
+                    href.startsWith('upload-recipe.html') || 
+                    href.startsWith('games.html') || 
+                    href.startsWith('secret-recipes.html') || 
+                    href.startsWith('diet-planner.html')) {
+                    if (!href.includes(basePath)) {
+                        link.href = basePath + '/' + href;
+                    }
+                }
+            });
+            
+            // Initialize dark mode
+            if (localStorage.getItem('darkMode') === 'true') {
+                document.documentElement.classList.add('dark');
+            }
+            
+            // Toggle dark mode
+            window.toggleDarkMode = function() {
+                if (document.documentElement.classList.contains('dark')) {
+                    document.documentElement.classList.remove('dark');
+                    localStorage.setItem('darkMode', 'false');
+                } else {
+                    document.documentElement.classList.add('dark');
+                    localStorage.setItem('darkMode', 'true');
+                }
+            };
+            
+            // Mobile menu toggle
+            window.toggleMobileMenu = function() {
+                const mobileMenu = document.getElementById('mobileMenu');
+                mobileMenu.classList.toggle('hidden');
+            };
+
+            // Comments functionality
+            const commentForm = document.getElementById('commentForm');
+            const commentsContainer = document.getElementById('comments');
+            
+            // Load comments
+            function loadComments() {
+                const comments = JSON.parse(localStorage.getItem('vegetable-stir-fry-comments')) || [];
+                commentsContainer.innerHTML = comments.map(comment => `
+                    <div class="bg-gray-50 dark:bg-gray-700 p-4 rounded-lg">
+                        <p class="text-xl text-gray-600 dark:text-gray-300 mb-8" data-translate="recipe.vegetable_stir_fry.description">A quick and healthy stir-fry loaded with colorful vegetables and aromatic Asian flavors.</p>
+                    </div>
+                `).join('');
+            }
+            
+            // Save comment
+            commentForm.addEventListener('submit', function(e) {
+                e.preventDefault();
+                const commentText = document.getElementById('commentText').value.trim();
+                if (commentText) {
+                    const comments = JSON.parse(localStorage.getItem('vegetable-stir-fry-comments')) || [];
+                    comments.push(commentText);
+                    localStorage.setItem('vegetable-stir-fry-comments', JSON.stringify(comments));
+                    document.getElementById('commentText').value = '';
+                    loadComments();
+                }
+            });
+            
+            // Initial load of comments
+            loadComments();
+        });
+    </script>
+</body>
+</html> 

@@ -1,0 +1,504 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>PlatePilot - Pilot your plate. Powered by AI. Fueled by wellness.</title>
+    <meta name="description" content="PlatePilot: Discover healthy recipes, interactive games, and AI-powered meal planning for wellness.">
+    <meta property="og:title" content="PlatePilot - Pilot your plate. Powered by AI. Fueled by wellness.">
+    <meta property="og:description" content="Discover healthy recipes, interactive games, and AI-powered meal planning for wellness.">
+    <meta property="og:image" content="https://pkispro.github.io/PlatePilot/assets/platepilot-og.jpg">
+    <meta property="og:type" content="website">
+    <meta property="og:url" content="https://pkispro.github.io/PlatePilot/">
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:title" content="PlatePilot - Pilot your plate. Powered by AI. Fueled by wellness.">
+    <meta name="twitter:description" content="Discover healthy recipes, interactive games, and AI-powered meal planning for wellness.">
+    <meta name="twitter:image" content="https://pkispro.github.io/PlatePilot/assets/platepilot-og.jpg">
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            darkMode: 'class',
+            theme: {
+                extend: {
+                    colors: {
+                        // You can add custom colors here if needed
+                    }
+                }
+            }
+        }
+    </script>
+    <!-- Language System -->
+    <script src="translations.js"></script>
+    <script src="translations-extended.js"></script>
+    <script src="translations-more.js"></script>
+    <script src="language-selector.js"></script>
+    <style>
+        .feature-card {
+            transition: all 0.3s ease-in-out;
+        }
+        .feature-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04);
+        }
+    </style>
+</head>
+<body class="bg-gray-50 dark:bg-gray-900 min-h-screen">
+    <!-- Navigation Bar -->
+    <nav class="bg-white dark:bg-gray-900 shadow-md sticky top-0 z-50">
+        <div class="container mx-auto px-4">
+            <div class="flex justify-between items-center h-16">
+                <a href="index.html" class="text-2xl font-bold text-green-600 dark:text-green-400 hover:text-green-700 dark:hover:text-green-300 transition-colors">PlatePilot</a>
+                <div class="hidden md:flex items-center space-x-4">
+                    <a href="index.html" class="text-gray-700 dark:text-gray-300 hover:text-green-600 dark:hover:text-green-400 font-bold transition-colors" data-translate="home">Home</a>
+                    <a href="marketplace.html" class="bg-green-600 text-white px-4 py-2 rounded-lg font-semibold hover:bg-green-700 transition-colors" data-translate="marketplace">Marketplace</a>
+                    <a href="seller-onboarding.html" class="bg-blue-600 text-white px-4 py-2 rounded-lg font-semibold hover:bg-blue-700 transition-colors" data-translate="becomeSeller">Become a Seller</a>
+                    <!-- Recipes Dropdown -->
+                    <div class="relative group">
+                        <button class="text-gray-700 dark:text-gray-300 hover:text-green-600 dark:hover:text-green-400 transition-colors font-semibold flex items-center" data-translate="recipes">Recipes <svg class="w-4 h-4 ml-1" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"/></svg></button>
+                        <div class="absolute left-0 mt-2 w-48 bg-white dark:bg-gray-800 rounded-lg shadow-lg opacity-0 group-hover:opacity-100 group-focus-within:opacity-100 pointer-events-none group-hover:pointer-events-auto group-focus-within:pointer-events-auto transition-opacity z-50">
+                            <a href="recipes.html" class="block px-4 py-2 text-gray-700 dark:text-gray-300 hover:bg-green-100 dark:hover:bg-green-900 rounded-t-lg" data-translate="allRecipes">All Recipes</a>
+                            <a href="upload-recipe.html" class="block px-4 py-2 text-gray-700 dark:text-gray-300 hover:bg-green-100 dark:hover:bg-green-900" data-translate="shareRecipe">Share Recipe</a>
+                            <a href="leaderboard.html" class="block px-4 py-2 text-gray-700 dark:text-gray-300 hover:bg-green-100 dark:hover:bg-green-900 rounded-b-lg" data-translate="leaderboard">Leaderboard</a>
+                        </div>
+                    </div>
+                    <!-- More Dropdown -->
+                    <div class="relative group">
+                        <button class="text-gray-700 dark:text-gray-300 hover:text-green-600 dark:hover:text-green-400 transition-colors font-semibold flex items-center" data-translate="more">More <svg class="w-4 h-4 ml-1" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"/></svg></button>
+                        <div class="absolute left-0 mt-2 w-48 bg-white dark:bg-gray-800 rounded-lg shadow-lg opacity-0 group-hover:opacity-100 group-focus-within:opacity-100 pointer-events-none group-hover:pointer-events-auto group-focus-within:pointer-events-auto transition-opacity z-50">
+                            <a href="games.html" class="block px-4 py-2 text-gray-700 dark:text-gray-300 hover:bg-green-100 dark:hover:bg-green-900 rounded-t-lg" data-translate="games">Games</a>
+                            <a href="secret-recipes.html" class="block px-4 py-2 text-gray-700 dark:text-gray-300 hover:bg-green-100 dark:hover:bg-green-900" data-translate="secretRecipes">Secret Recipes</a>
+                            <a href="diet-planner.html" class="block px-4 py-2 text-gray-700 dark:text-gray-300 hover:bg-green-100 dark:hover:bg-green-900" data-translate="dietPlanner">Diet Planner</a>
+                            <a href="ai-verification.html" class="block px-4 py-2 text-gray-700 dark:text-gray-300 hover:bg-green-100 dark:hover:bg-green-900 rounded-b-lg">AI Verification</a>
+                        </div>
+                    </div>
+                    <div id="languageSelectorContainer" class="ml-4"></div>
+                    <button onclick="toggleDarkMode()" class="p-2 rounded-lg bg-gray-200 dark:bg-gray-700 hover:bg-gray-300 dark:hover:bg-gray-600 transition-colors">
+                        <span class="dark:hidden" data-translate="moon">🌙</span>
+                        <span class="hidden dark:inline" data-translate="sun">☀️</span>
+                    </button>
+                </div>
+                <!-- Mobile Menu Button -->
+                <button class="md:hidden p-2 rounded-lg hover:bg-gray-200 dark:hover:bg-gray-700 transition-colors" onclick="toggleMobileMenu()" data-translate="menu">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 text-gray-700 dark:text-gray-300" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16" />
+                    </svg>
+                </button>
+            </div>
+            <!-- Mobile Menu -->
+            <div id="mobileMenu" class="md:hidden hidden pb-4">
+                <div class="flex flex-col space-y-4">
+                    <a href="index.html" class="text-gray-700 dark:text-gray-300 hover:text-green-600 dark:hover:text-green-400 font-bold transition-colors" data-translate="home">Home</a>
+                    <a href="marketplace.html" class="bg-green-600 text-white px-4 py-2 rounded-lg font-semibold hover:bg-green-700 transition-colors" data-translate="marketplace">Marketplace</a>
+                    <a href="seller-onboarding.html" class="bg-blue-600 text-white px-4 py-2 rounded-lg font-semibold hover:bg-blue-700 transition-colors" data-translate="becomeSeller">Become a Seller</a>
+                    <!-- Recipes Dropdown (Collapsible) -->
+                    <div>
+                        <button onclick="toggleMobileDropdown('recipesDropdown')" class="flex items-center justify-between w-full text-gray-700 dark:text-gray-300 font-semibold py-2 px-2 rounded hover:bg-green-100 dark:hover:bg-green-900 transition-colors" data-translate="recipes">Recipes <svg class="w-4 h-4 ml-1 inline" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"/></svg></button>
+                        <div id="recipesDropdown" class="hidden flex flex-col ml-4 mt-2 space-y-2">
+                            <a href="recipes.html" class="text-gray-700 dark:text-gray-300 hover:text-green-600 dark:hover:text-green-400" data-translate="allRecipes">All Recipes</a>
+                            <a href="upload-recipe.html" class="text-gray-700 dark:text-gray-300 hover:text-green-600 dark:hover:text-green-400" data-translate="shareRecipe">Share Recipe</a>
+                            <a href="leaderboard.html" class="text-gray-700 dark:text-gray-300 hover:text-green-600 dark:hover:text-green-400" data-translate="leaderboard">Leaderboard</a>
+                        </div>
+                    </div>
+                    <!-- More Dropdown (Collapsible) -->
+                    <div>
+                        <button onclick="toggleMobileDropdown('moreDropdown')" class="flex items-center justify-between w-full text-gray-700 dark:text-gray-300 font-semibold py-2 px-2 rounded hover:bg-green-100 dark:hover:bg-green-900 transition-colors" data-translate="more">More <svg class="w-4 h-4 ml-1 inline" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"/></svg></button>
+                        <div id="moreDropdown" class="hidden flex flex-col ml-4 mt-2 space-y-2">
+                            <a href="games.html" class="text-gray-700 dark:text-gray-300 hover:text-green-600 dark:hover:text-green-400" data-translate="games">Games</a>
+                            <a href="secret-recipes.html" class="text-gray-700 dark:text-gray-300 hover:text-green-600 dark:hover:text-green-400" data-translate="secretRecipes">Secret Recipes</a>
+                            <a href="diet-planner.html" class="text-gray-700 dark:text-gray-300 hover:text-green-600 dark:hover:text-green-400" data-translate="dietPlanner">Diet Planner</a>
+                        </div>
+                    </div>
+                    <div id="languageSelectorContainer" class="mt-2"></div>
+                    <button onclick="toggleDarkMode()" class="p-2 rounded-lg bg-gray-200 dark:bg-gray-700 hover:bg-gray-300 dark:hover:bg-gray-600 transition-colors w-12 self-center">
+                        <span class="dark:hidden" data-translate="moon">🌙</span>
+                        <span class="hidden dark:inline" data-translate="sun">☀️</span>
+                    </button>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Hero Section -->
+    <section class="bg-green-600 text-white py-20">
+        <div class="container mx-auto px-4 text-center">
+            <h1 class="text-5xl font-bold mb-6" data-translate="heroTitle">Connecting Rural Farmers with Urban Health</h1>
+            <p class="text-xl mb-8 max-w-2xl mx-auto" data-translate="heroSubtitle">Buy verified organic fruits and vegetables directly from rural communities and farmers. Empower healthy living and fair trade with PlatePilot's trusted online marketplace.</p>
+            <div class="flex flex-wrap justify-center gap-4">
+                <a href="marketplace.html" class="bg-white text-green-600 px-8 py-3 rounded-lg font-semibold hover:bg-gray-100 transition-colors" data-translate="shopOrganic">Shop Organic Produce</a>
+                <a href="seller-onboarding.html" class="bg-transparent border-2 border-white text-white px-8 py-3 rounded-lg font-semibold hover:bg-white hover:text-green-600 transition-colors" data-translate="becomeSeller">Become a Seller</a>
+            </div>
+        </div>
+    </section>
+    <!-- Our Mission Section -->
+    <section class="py-16 bg-gray-100 dark:bg-gray-800">
+        <div class="container mx-auto px-4 text-center max-w-3xl">
+            <h2 class="text-3xl font-bold text-gray-800 dark:text-white mb-6" data-translate="ourMission">Our Mission</h2>
+            <p class="text-lg text-gray-700 dark:text-gray-300 mb-4" data-translate="missionDescription">
+                Urban communities are seeking verified organic food as awareness of health risks from pesticides grows. Yet, credible sources for organic produce are scarce. Rural farmers can grow organic, but often don't due to low prices and lack of direct market access. PlatePilot bridges this gap empowering farmers to sell organic fruits and veggies at double the rate of conventional produce, with quality checks by AI and professional inspectors. Join us in fueling a healthy, fair, and sustainable food future.
+            </p>
+        </div>
+    </section>
+    <!-- How It Works Section -->
+    <section class="py-16" id="marketplace">
+        <div class="container mx-auto px-4">
+            <h2 class="text-3xl font-bold text-center text-gray-800 dark:text-white mb-12" data-translate="howPlatePilotWorks">How PlatePilot Works</h2>
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-12">
+                <div class="bg-white dark:bg-gray-800 rounded-xl p-8 shadow-lg">
+                    <h3 class="text-2xl font-bold text-green-600 mb-4" data-translate="urbanBuyers">For Urban Buyers</h3>
+                    <ul class="text-gray-700 dark:text-gray-300 text-lg space-y-3">
+                        <li>• Browse and shop verified organic fruits and vegetables</li>
+                        <li>• Transparent pricing—paying farmers double for organic</li>
+                        <li>• Quality assured by AI and professional inspectors</li>
+                        <li>• Home delivery to your city</li>
+                    </ul>
+                    <a href="marketplace.html" class="mt-6 inline-block bg-green-600 text-white px-6 py-2 rounded-lg font-semibold hover:bg-green-700 transition-colors" data-translate="startShopping">Start Shopping</a>
+                </div>
+                <div class="bg-white dark:bg-gray-800 rounded-xl p-8 shadow-lg" id="farmer-join">
+                    <h3 class="text-2xl font-bold text-green-600 mb-4" data-translate="farmersRural">For Farmers & Rural Communities</h3>
+                    <ul class="text-gray-700 dark:text-gray-300 text-lg space-y-3">
+                        <li>• Register and list your organic produce</li>
+                        <li>• Specify your land usage for organic farming</li>
+                        <li>• Get paid double the market rate for organic crops</li>
+                        <li>• Benefit from PlatePilot’s direct-to-customer platform</li>
+                    </ul>
+                    <a href="seller-onboarding.html" class="mt-6 inline-block bg-green-600 text-white px-6 py-2 rounded-lg font-semibold hover:bg-green-700 transition-colors" data-translate="joinSeller">Join as a Seller</a>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Quality Check Section -->
+    <section class="py-16 bg-gradient-to-r from-green-100 via-blue-100 to-pink-100 dark:from-green-900 dark:via-blue-900 dark:to-pink-900">
+        <div class="container mx-auto px-4 max-w-4xl text-center">
+            <h2 class="text-3xl font-bold text-gray-800 dark:text-white mb-6" data-translate="verifiedOrganic">Verified Organic: Our Two-Level Quality Check</h2>
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
+                <div class="bg-white dark:bg-gray-800 rounded-xl p-8 shadow-lg flex flex-col items-center">
+                    <div class="w-16 h-16 bg-green-100 dark:bg-green-900 rounded-full flex items-center justify-center mb-4">
+                        <svg class="w-8 h-8 text-green-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2l4-4" /></svg>
+                    </div>
+                    <h3 class="text-xl font-bold text-green-600 mb-2" data-translate="aiModelCheck">AI Model Check</h3>
+                    <p class="text-gray-700 dark:text-gray-300" data-translate="aiModelDescription">Our trained AI analyzes images and data to verify organic produce authenticity, ensuring only genuine listings reach the marketplace.</p>
+                </div>
+                <div class="bg-white dark:bg-gray-800 rounded-xl p-8 shadow-lg flex flex-col items-center">
+                    <div class="w-16 h-16 bg-blue-100 dark:bg-blue-900 rounded-full flex items-center justify-center mb-4">
+                        <svg class="w-8 h-8 text-blue-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7" /></svg>
+                    </div>
+                    <h3 class="text-xl font-bold text-blue-600 mb-2" data-translate="professionalInspector">Professional Inspector</h3>
+                    <p class="text-gray-700 dark:text-gray-300" data-translate="professionalInspectorDescription">Certified inspectors conduct physical checks at the farm, guaranteeing the highest standards of organic quality and safety for every order.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+    <!-- Features Section -->
+    <section class="py-20">
+        <div class="container mx-auto px-4">
+            <h2 class="text-3xl font-bold text-center text-gray-800 dark:text-white mb-12" data-translate="whyChoosePlatePilot">Why Choose PlatePilot?</h2>
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+                <!-- Healthy Recipes -->
+                <div class="feature-card bg-white dark:bg-gray-800 rounded-xl p-6 text-center">
+                    <div class="w-16 h-16 bg-green-100 dark:bg-green-900 rounded-full flex items-center justify-center mx-auto mb-4">
+                        <svg class="w-8 h-8 text-green-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253" />
+                        </svg>
+                    </div>
+                    <h3 class="text-xl font-bold text-gray-800 dark:text-white mb-2" data-translate="healthyRecipes">Healthy Recipes</h3>
+                    <p class="text-gray-600 dark:text-gray-300" data-translate="accessRecipes">Access a wide variety of nutritious and delicious recipes for every meal.</p>
+                </div>
+
+                <!-- Interactive Games -->
+                <div class="feature-card bg-white dark:bg-gray-800 rounded-xl p-6 text-center">
+                    <div class="w-16 h-16 bg-green-100 dark:bg-green-900 rounded-full flex items-center justify-center mx-auto mb-4">
+                        <svg class="w-8 h-8 text-green-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14.752 11.168l-3.197-2.132A1 1 0 0010 9.87v4.263a1 1 0 001.555.832l3.197-2.132a1 1 0 000-1.664z" />
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+                        </svg>
+                    </div>
+                    <h3 class="text-xl font-bold text-gray-800 dark:text-white mb-2" data-translate="interactiveGames">Interactive Games</h3>
+                    <p class="text-gray-600 dark:text-gray-300" data-translate="learnNutrition">Learn about nutrition through fun and engaging games.</p>
+                </div>
+
+                <!-- Personalized Plans -->
+                <div class="feature-card bg-white dark:bg-gray-800 rounded-xl p-6 text-center">
+                    <div class="w-16 h-16 bg-green-100 dark:bg-green-900 rounded-full flex items-center justify-center mx-auto mb-4">
+                        <svg class="w-8 h-8 text-green-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2" />
+                        </svg>
+                    </div>
+                    <h3 class="text-xl font-bold text-gray-800 dark:text-white mb-2" data-translate="personalizedPlans">Personalized Plans</h3>
+                    <p class="text-gray-600 dark:text-gray-300" data-translate="customizedPlans">Get customized meal plans based on your preferences and goals.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Call to Action -->
+    <section class="bg-gray-100 dark:bg-gray-800 py-20">
+        <div class="container mx-auto px-4 text-center">
+            <h2 class="text-3xl font-bold text-gray-800 dark:text-white mb-6" data-translate="readyToStart">Ready to Start Your Healthy Journey?</h2>
+            <p class="text-xl text-gray-600 dark:text-gray-300 mb-8" data-translate="joinPlatePilot">Join PlatePilot today and discover a world of healthy living.</p>
+            <a href="diet-planner.html" class="bg-green-500 text-white px-8 py-3 rounded-lg font-semibold hover:bg-green-600 transition-colors" data-translate="getStarted">
+                Get Started
+            </a>
+        </div>
+    </section>
+
+    <!-- Testimonials Section -->
+    <section class="py-20 bg-gradient-to-r from-green-100 via-blue-100 to-pink-100 dark:from-green-900 dark:via-blue-900 dark:to-pink-900">
+        <div class="container mx-auto px-4">
+            <h2 class="text-3xl font-bold text-center text-gray-800 dark:text-white mb-12" data-translate="whatOurUsersSay">What Our Users Say</h2>
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+                <div class="bg-white dark:bg-gray-800 rounded-xl p-6 shadow-lg text-center">
+                    <p class="text-lg text-gray-700 dark:text-gray-300 mb-4 italic" data-translate="testimonial1">"PlatePilot made healthy eating fun and easy for my family!"</p>
+                    <div class="font-bold text-green-600 dark:text-green-400">Aarav S.</div>
+                </div>
+                <div class="bg-white dark:bg-gray-800 rounded-xl p-6 shadow-lg text-center">
+                    <p class="text-lg text-gray-700 dark:text-gray-300 mb-4 italic" data-translate="testimonial2">"The AI meal planner is a game changer. I love the recipes and the games!"</p>
+                    <div class="font-bold text-blue-600 dark:text-blue-400">Priya M.</div>
+                </div>
+                <div class="bg-white dark:bg-gray-800 rounded-xl p-6 shadow-lg text-center">
+                    <p class="text-lg text-gray-700 dark:text-gray-300 mb-4 italic" data-translate="testimonial3">"Colorful, easy to use, and packed with features. Highly recommended!"</p>
+                    <div class="font-bold text-pink-600 dark:text-pink-400">Rahul K.</div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Explore More Features Section -->
+    <section class="py-20 bg-gray-100 dark:bg-gray-800">
+        <div class="container mx-auto px-4">
+            <h2 class="text-3xl font-bold text-center text-gray-800 dark:text-white mb-12" data-translate="exploreMore">Explore More with PlatePilot</h2>
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+                <!-- Healthy Recipes -->
+                <div class="feature-card bg-white dark:bg-gray-900 rounded-xl p-6 text-center">
+                    <div class="w-16 h-16 bg-green-100 dark:bg-green-900 rounded-full flex items-center justify-center mx-auto mb-4">
+                        <svg class="w-8 h-8 text-green-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253" /></svg>
+                    </div>
+                    <h3 class="text-xl font-bold text-gray-800 dark:text-white mb-2" data-translate="healthyRecipes">Healthy Recipes</h3>
+                    <p class="text-gray-600 dark:text-gray-300 mb-4" data-translate="discoverRecipes">Discover a wide variety of nutritious and delicious recipes for every meal.</p>
+                    <a href="recipes.html" class="bg-green-600 text-white px-6 py-2 rounded-lg font-semibold hover:bg-green-700 transition-colors" data-translate="exploreRecipes">Explore Recipes</a>
+                </div>
+                <!-- Community Recipes -->
+                <div class="feature-card bg-white dark:bg-gray-900 rounded-xl p-6 text-center">
+                    <div class="w-16 h-16 bg-blue-100 dark:bg-blue-900 rounded-full flex items-center justify-center mx-auto mb-4">
+                        <svg class="w-8 h-8 text-blue-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 20h5v-2a4 4 0 00-3-3.87M9 20H4v-2a4 4 0 013-3.87m13-6.13A4 4 0 0016 4a4 4 0 00-8 0 4 4 0 00-3 3.87M12 14v7m0 0H7m5 0h5" /></svg>
+                    </div>
+                    <h3 class="text-xl font-bold text-gray-800 dark:text-white mb-2" data-translate="communityRecipes">Community Recipes</h3>
+                    <p class="text-gray-600 dark:text-gray-300 mb-4" data-translate="shareRecipes">Share your own healthy recipes and discover creations from our community.</p>
+                    <a href="upload-recipe.html" class="bg-blue-600 text-white px-6 py-2 rounded-lg font-semibold hover:bg-blue-700 transition-colors" data-translate="shareRecipe">Share a Recipe</a>
+                </div>
+                <!-- AI Meal Planner -->
+                <div class="feature-card bg-white dark:bg-gray-900 rounded-xl p-6 text-center">
+                    <div class="w-16 h-16 bg-pink-100 dark:bg-pink-900 rounded-full flex items-center justify-center mx-auto mb-4">
+                        <svg class="w-8 h-8 text-pink-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2" /></svg>
+                    </div>
+                    <h3 class="text-xl font-bold text-gray-800 dark:text-white mb-2" data-translate="aiPoweredMealPlanner">AI-Powered Meal Planner</h3>
+                    <p class="text-gray-600 dark:text-gray-300 mb-4" data-translate="getPersonalizedPlans">Get personalized meal plans powered by AI, tailored to your health goals.</p>
+                    <a href="diet-planner.html" class="bg-pink-600 text-white px-6 py-2 rounded-lg font-semibold hover:bg-pink-700 transition-colors" data-translate="startPlanning">Start Planning</a>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="bg-gray-800 text-white py-8">
+        <div class="container mx-auto px-4">
+            <div class="grid grid-cols-1 md:grid-cols-4 gap-8">
+                <div>
+                    <h3 class="text-xl font-bold mb-4" data-translate="footerLogo">PlatePilot</h3>
+                    <p class="text-gray-400" data-translate="footerTagline">Pilot your plate. Powered by AI. Fueled by wellness.</p>
+                </div>
+                <div>
+                    <h4 class="font-semibold mb-4" data-translate="footerQuickLinks">Quick Links</h4>
+                    <ul class="space-y-2">
+                        <li><a href="index.html" class="text-gray-400 hover:text-white transition-colors" data-translate="home">Home</a></li>
+                        <li><a href="recipes.html" class="text-gray-400 hover:text-white transition-colors" data-translate="recipes">Recipes</a></li>
+                        <li><a href="leaderboard.html" class="text-gray-400 hover:text-white transition-colors" data-translate="leaderboard">Leaderboard</a></li>
+                        <li><a href="games.html" class="text-gray-400 hover:text-white transition-colors" data-translate="games">Games</a></li>
+                        <li><a href="secret-recipes.html" class="text-gray-400 hover:text-white transition-colors" data-translate="secretRecipes">Secret Recipes</a></li>
+                        <li><a href="diet-planner.html" class="text-gray-400 hover:text-white transition-colors" data-translate="dietPlanner">Diet Planner</a></li>
+                    </ul>
+                </div>
+                <div>
+                    <h4 class="font-semibold mb-4" data-translate="footerContact">Contact</h4>
+                    <ul class="space-y-2 text-gray-400">
+                        <li data-translate="footerEmail">Email: platepilot.11@gmail.com</li>
+                        <li data-translate="footerPhone">Phone: +91 9251681626</li>
+                    </ul>
+                </div>
+                <div>
+                    <h4 class="font-semibold mb-4" data-translate="footerFollowUs">Follow Us</h4>
+                    <div class="flex space-x-4">
+                        <a href="#" class="text-gray-400 hover:text-white transition-colors" data-translate="facebook">Facebook</a>
+                        <a href="#" class="text-gray-400 hover:text-white transition-colors" data-translate="twitter">Twitter</a>
+                        <a href="#" class="text-gray-400 hover:text-white transition-colors" data-translate="instagram">Instagram</a>
+                    </div>
+                </div>
+            </div>
+            <div class="border-t border-gray-700 mt-8 pt-8 text-center text-gray-400">
+                <p data-translate="footerCopyright">&copy; 2024 PlatePilot. All rights reserved.</p>
+            </div>
+            <div class="mt-8 text-center text-gray-400 text-sm">
+                <p data-translate="footerLanguageSupport">🌐 PlatePilot supports 50+ languages for accessibility. Need help? <a href="mailto:platepilot.11@gmail.com" class="underline hover:text-white">Contact us</a>.</p>
+            </div>
+        </div>
+    </footer>
+
+    <!-- Floating AI Assistant Button -->
+    <button id="aiAssistantBtn" onclick="openAIAssistant()" class="fixed bottom-8 right-8 bg-gradient-to-r from-green-400 to-blue-500 text-white p-4 rounded-full shadow-lg hover:scale-110 transition-transform z-50">
+        <svg xmlns="http://www.w3.org/2000/svg" class="h-8 w-8" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 20h9" />
+            <circle cx="12" cy="12" r="8" stroke="currentColor" stroke-width="2" fill="none" />
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 12h.01M12 12h.01M16 12h.01" />
+        </svg>
+    </button>
+
+    <!-- AI Assistant Modal (placeholder) -->
+    <div id="aiAssistantModal" class="fixed inset-0 bg-black bg-opacity-50 hidden items-center justify-center z-50">
+        <div class="bg-white dark:bg-gray-800 p-8 rounded-xl max-w-lg w-full shadow-2xl flex flex-col items-center">
+            <h3 class="text-2xl font-bold mb-4 text-gray-800 dark:text-white" data-translate="aiAssistantTitle">AI Assistant</h3>
+            <p class="text-gray-600 dark:text-gray-300 mb-6" data-translate="aiAssistantGreeting">Hi! I'm your PlatePilot AI. How can I help you today?</p>
+            <input id="aiInput" type="text" placeholder="Ask me anything..." class="w-full p-3 border border-gray-300 dark:border-gray-600 rounded-lg mb-4 bg-white dark:bg-gray-700 text-gray-700 dark:text-gray-300">
+            <button onclick="handleAISubmit()" class="bg-green-500 text-white px-6 py-2 rounded-lg hover:bg-green-600 mb-2" data-translate="send">Send</button>
+            <div id="aiResponse" class="w-full mt-2 text-left text-gray-700 dark:text-gray-200"></div>
+            <button onclick="closeAIAssistant()" class="bg-gray-300 dark:bg-gray-700 text-gray-800 dark:text-gray-200 px-6 py-2 rounded-lg hover:bg-gray-400 dark:hover:bg-gray-600 mt-4" data-translate="close">Close</button>
+        </div>
+    </div>
+
+    <!-- Back to Top Button -->
+    <button id="backToTop" aria-label="Back to Top" class="hidden fixed bottom-24 right-8 bg-green-500 text-white p-3 rounded-full shadow-lg hover:bg-green-600 transition-colors z-50">
+        <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 15l7-7 7 7" />
+        </svg>
+    </button>
+
+    <script>
+        // Set base path for GitHub Pages
+        const basePath = '/PlatePilot';
+        
+        // Update all navigation links
+        document.addEventListener('DOMContentLoaded', function() {
+            // Update navigation links
+            document.querySelectorAll('a[href]').forEach(link => {
+                const href = link.getAttribute('href');
+                if (href.startsWith('index.html') || 
+                    href.startsWith('recipes.html') || 
+                    href.startsWith('upload-recipe.html') || 
+                    href.startsWith('games.html') || 
+                    href.startsWith('secret-recipes.html') || 
+                    href.startsWith('diet-planner.html') || 
+                    href.startsWith('leaderboard.html') || 
+                    href.startsWith('login.html') || 
+                    href.startsWith('signup.html') ||
+                    href.startsWith('marketplace.html') ||
+                    href.startsWith('seller-onboarding.html')) {
+                    if (!href.includes(basePath)) {
+                        link.href = basePath + '/' + href;
+                    }
+                }
+            });
+            
+            // Initialize dark mode
+            if (localStorage.getItem('darkMode') === 'true') {
+                document.documentElement.classList.add('dark');
+            }
+            
+            // Toggle dark mode
+            window.toggleDarkMode = function() {
+                if (document.documentElement.classList.contains('dark')) {
+                    document.documentElement.classList.remove('dark');
+                    localStorage.setItem('darkMode', 'false');
+                } else {
+                    document.documentElement.classList.add('dark');
+                    localStorage.setItem('darkMode', 'true');
+                }
+            };
+            
+            // Mobile menu toggle
+            window.toggleMobileMenu = function() {
+                const mobileMenu = document.getElementById('mobileMenu');
+                mobileMenu.classList.toggle('hidden');
+            };
+            
+            // Check login status
+            const user = JSON.parse(localStorage.getItem('currentUser'));
+            const welcomeMessage = document.getElementById('welcomeMessage');
+            
+            if (user) {
+                if (welcomeMessage) {
+                    welcomeMessage.textContent = `Welcome, ${user.name}!`;
+                }
+            } else {
+                if (welcomeMessage) {
+                    welcomeMessage.textContent = '';
+                }
+            }
+            
+            // Logout functionality
+            window.logout = function() {
+                localStorage.removeItem('currentUser');
+                window.location.href = basePath + '/login.html';
+            };
+        });
+
+        // AI Assistant Modal functionality
+        function openAIAssistant() {
+            document.getElementById('aiAssistantModal').classList.remove('hidden');
+            document.getElementById('aiAssistantModal').classList.add('flex');
+        }
+        function closeAIAssistant() {
+            document.getElementById('aiAssistantModal').classList.add('hidden');
+            document.getElementById('aiAssistantModal').classList.remove('flex');
+        }
+
+        // Back to Top functionality
+        const backToTop = document.getElementById('backToTop');
+        window.addEventListener('scroll', () => {
+            if (window.scrollY > 300) {
+                backToTop.classList.remove('hidden');
+            } else {
+                backToTop.classList.add('hidden');
+            }
+        });
+        backToTop.addEventListener('click', () => {
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+        });
+
+        // Mobile dropdown functionality
+        window.toggleMobileDropdown = function(id) {
+            const el = document.getElementById(id);
+            if (el) {
+                el.classList.toggle('hidden');
+            }
+        };
+
+        // Simple demo AI chatbot logic
+        const aiDemoResponses = [
+            "Remember to eat a variety of colorful fruits and veggies!",
+            "Did you know? Organic produce is grown without synthetic pesticides.",
+            "Try our AI meal planner for healthy recipe ideas!",
+            "You can become a seller and list your organic produce on PlatePilot.",
+            "Looking for recipes? Check out our Recipes section!",
+            "Stay hydrated and eat fresh for a healthy lifestyle!"
+        ];
+        function handleAISubmit() {
+            const input = document.getElementById('aiInput');
+            const responseDiv = document.getElementById('aiResponse');
+            if (!input.value.trim()) {
+                responseDiv.textContent = "Please enter a question.";
+                return;
+            }
+            // Pick a random response
+            const reply = aiDemoResponses[Math.floor(Math.random() * aiDemoResponses.length)];
+            responseDiv.textContent = reply;
+            input.value = '';
+        }
+        // Allow Enter key to submit
+        const aiInput = document.getElementById('aiInput');
+        if (aiInput) {
+            aiInput.addEventListener('keydown', function(e) {
+                if (e.key === 'Enter') handleAISubmit();
+            });
+        }
+    </script>
+</body>
+</html> 

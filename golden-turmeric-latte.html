@@ -1,0 +1,406 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Golden Turmeric Latte - PlatePilot</title>
+    <meta name="description" content="PlatePilot: Golden Turmeric Latte - A soothing, anti-inflammatory drink recipe with nutrition info, comments, and AI-powered wellness assistant.">
+    <meta property="og:title" content="Golden Turmeric Latte - PlatePilot">
+    <meta property="og:description" content="A soothing, anti-inflammatory drink recipe with nutrition info, comments, and AI-powered wellness assistant.">
+    <meta property="og:image" content="https://images.unsplash.com/photo-1512621776951-a57141f2eefd">
+    <meta property="og:type" content="article">
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:title" content="Golden Turmeric Latte - PlatePilot">
+    <meta name="twitter:description" content="A soothing, anti-inflammatory drink recipe with nutrition info, comments, and AI-powered wellness assistant.">
+    <meta name="twitter:image" content="https://images.unsplash.com/photo-1512621776951-a57141f2eefd">
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            darkMode: 'class',
+            theme: {
+                extend: {
+                    colors: {
+                        // You can add custom colors here if needed
+                    }
+                }
+            }
+        }
+    </script>
+    <style>
+        .recipe-image { transition: transform 0.3s; }
+        .recipe-image:hover { transform: scale(1.02); }
+        .floating-ai-btn { position: fixed; bottom: 2rem; right: 2rem; z-index: 50; }
+        .tooltip { position: relative; cursor: pointer; }
+        .tooltip .tooltip-text { visibility: hidden; width: 120px; background: #222; color: #fff; text-align: center; border-radius: 6px; padding: 5px 0; position: absolute; z-index: 100; bottom: 125%; left: 50%; margin-left: -60px; opacity: 0; transition: opacity 0.3s; }
+        .tooltip:hover .tooltip-text { visibility: visible; opacity: 1; }
+        .back-to-top { position: fixed; bottom: 5rem; right: 2rem; z-index: 40; display: none; }
+        .back-to-top.show { display: block; }
+    </style>
+</head>
+<body class="bg-gray-50 dark:bg-gray-900 min-h-screen">
+    <!-- Navigation Bar -->
+    <nav class="bg-white dark:bg-gray-900 shadow-md sticky top-0 z-50">
+        <div class="container mx-auto px-4">
+            <div class="flex justify-between items-center h-16">
+                <a href="index.html" class="text-2xl font-bold text-green-600 dark:text-green-400 hover:text-green-700 dark:hover:text-green-300 transition-colors">
+                    PlatePilot
+                </a>
+                <div class="hidden md:flex items-center space-x-8">
+                    <a href="index.html" class="text-gray-700 dark:text-gray-300 hover:text-green-600 dark:hover:text-green-400 transition-colors">Home</a>
+                    <a href="recipes.html" class="text-gray-700 dark:text-gray-300 hover:text-green-600 dark:hover:text-green-400 transition-colors">Recipes</a>
+                    <a href="games.html" class="text-gray-700 dark:text-gray-300 hover:text-green-600 dark:hover:text-green-400 transition-colors">Games</a>
+                    <a href="secret-recipes.html" class="text-green-600 dark:text-green-400 font-medium">Secret Recipes</a>
+                    <a href="diet-planner.html" class="text-gray-700 dark:text-gray-300 hover:text-green-600 dark:hover:text-green-400 transition-colors">Diet Planner</a>
+                    <button onclick="toggleDarkMode()" class="p-2 rounded-lg bg-gray-200 dark:bg-gray-700 hover:bg-gray-300 dark:hover:bg-gray-600 transition-colors">
+                        <span class="dark:hidden">🌙</span>
+                        <span class="hidden dark:inline">☀️</span>
+                    </button>
+                </div>
+                <!-- Mobile Menu Button -->
+                <button class="md:hidden p-2 rounded-lg hover:bg-gray-200 dark:hover:bg-gray-700 transition-colors" onclick="toggleMobileMenu()">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 text-gray-700 dark:text-gray-300" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16" />
+                    </svg>
+                </button>
+            </div>
+            <!-- Mobile Menu -->
+            <div id="mobileMenu" class="md:hidden hidden pb-4">
+                <div class="flex flex-col space-y-4">
+                    <a href="index.html" class="text-gray-700 dark:text-gray-300 hover:text-green-600 dark:hover:text-green-400 transition-colors">Home</a>
+                    <a href="recipes.html" class="text-gray-700 dark:text-gray-300 hover:text-green-600 dark:hover:text-green-400 transition-colors">Recipes</a>
+                    <a href="games.html" class="text-gray-700 dark:text-gray-300 hover:text-green-600 dark:hover:text-green-400 transition-colors">Games</a>
+                    <a href="secret-recipes.html" class="text-green-600 dark:text-green-400 font-medium">Secret Recipes</a>
+                    <a href="diet-planner.html" class="text-gray-700 dark:text-gray-300 hover:text-green-600 dark:hover:text-green-400 transition-colors">Diet Planner</a>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Recipe Content -->
+    <div class="container mx-auto px-4 py-12">
+        <!-- Back to Recipes Button -->
+        <a href="secret-recipes.html" class="inline-flex items-center text-gray-600 dark:text-gray-300 hover:text-green-500 dark:hover:text-green-400 mb-6 no-print">
+            <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 mr-2" viewBox="0 0 20 20" fill="currentColor">
+                <path fill-rule="evenodd" d="M9.707 14.707a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414l4-4a1 1 0 011.414 1.414L7.414 9H15a1 1 0 110 2H7.414l2.293 2.293a1 1 0 010 1.414z" clip-rule="evenodd" />
+            </svg>
+            Back to Secret Recipes
+        </a>
+        <div class="max-w-4xl mx-auto">
+            <!-- Recipe Header -->
+            <div class="text-center mb-12">
+                <h1 class="text-4xl font-bold text-gray-800 dark:text-white mb-4" data-translate="recipe.golden_turmeric_latte.title">Golden Turmeric Latte</h1>
+                <p class="text-xl text-gray-600 dark:text-gray-300 mb-8" data-translate="recipe.golden_turmeric_latte.description">A warming, anti-inflammatory drink perfect for any time of day</p>
+            </div>
+
+            <!-- Recipe Image -->
+            <div class="mb-12 relative">
+                <img src="https://images.unsplash.com/photo-1504674900247-1a781979e2c7" alt="Golden Turmeric Latte" class="w-full h-96 object-cover rounded-xl shadow-lg recipe-image">
+                <div class="absolute top-4 right-4 flex space-x-2">
+                    <button onclick="likeRecipe('golden-turmeric-latte')" class="bg-white dark:bg-gray-700 p-2 rounded-full shadow-md hover:bg-gray-100 dark:hover:bg-gray-600 transition-colors">
+                        <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 text-red-500" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z" />
+                        </svg>
+                    </button>
+                    <button onclick="toggleComments()" class="bg-white dark:bg-gray-700 p-2 rounded-full shadow-md hover:bg-gray-100 dark:hover:bg-gray-600 transition-colors">
+                        <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 text-blue-500" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 12h.01M12 12h.01M16 12h.01M21 12c0 4.418-4.03 8-9 8a9.863 9.863 0 01-4.255-.949L3 20l1.395-3.72C3.512 15.042 3 13.574 3 12c0-4.418 4.03-8 9-8s9 3.582 9 8z" />
+                        </svg>
+                    </button>
+                    <button onclick="printRecipe()" class="bg-white dark:bg-gray-700 p-2 rounded-full shadow-md hover:bg-gray-100 dark:hover:bg-gray-600 transition-colors">
+                        <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 text-gray-600 dark:text-gray-300" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 17h2a2 2 0 002-2v-4a2 2 0 00-2-2H5a2 2 0 00-2 2v4a2 2 0 002 2h2m2 4h6a2 2 0 002-2v-4a2 2 0 00-2-2H9a2 2 0 00-2 2v4a2 2 0 002 2zm8-12V5a2 2 0 00-2-2H9a2 2 0 00-2 2v4h10z" />
+                        </svg>
+                    </button>
+                    <button onclick="openVideoModal()" class="bg-white dark:bg-gray-700 p-2 rounded-full shadow-md hover:bg-gray-100 dark:hover:bg-gray-600 transition-colors">
+                        <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 text-red-500" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14.752 11.168l-3.197-2.132A1 1 0 0010 9.87v4.263a1 1 0 001.555.832l3.197-2.132a1 1 0 000-1.664z" />
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+                        </svg>
+                    </button>
+                </div>
+            </div>
+
+            <!-- Recipe Video -->
+            <div class="mb-12">
+                <h2 class="text-2xl font-bold text-gray-800 dark:text-white mb-4">Watch How to Make It</h2>
+                <div class="aspect-w-16 aspect-h-9">
+                    <iframe 
+                        src="https://www.youtube.com/embed/your-video-id" 
+                        title="How to Make Golden Turmeric Latte"
+                        class="w-full h-96 rounded-xl shadow-lg"
+                        frameborder="0"
+                        allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+                        allowfullscreen>
+                    </iframe>
+                </div>
+            </div>
+
+            <!-- Recipe Details -->
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-4 mb-8">
+                <div class="bg-gray-50 dark:bg-gray-700 p-4 rounded-lg">
+                    <h3 class="text-sm font-medium text-gray-500 dark:text-gray-400">Prep Time</h3>
+                    <p class="text-xl text-gray-600 dark:text-gray-300 mb-8" data-translate="recipe.golden_turmeric_latte.description">A warming, anti-inflammatory drink perfect for any time of day</p>
+                </div>
+                <div class="bg-gray-50 dark:bg-gray-700 p-4 rounded-lg">
+                    <h3 class="text-sm font-medium text-gray-500 dark:text-gray-400">Cook Time</h3>
+                    <p class="text-xl text-gray-600 dark:text-gray-300 mb-8" data-translate="recipe.golden_turmeric_latte.description">A warming, anti-inflammatory drink perfect for any time of day</p>
+                </div>
+                <div class="bg-gray-50 dark:bg-gray-700 p-4 rounded-lg">
+                    <h3 class="text-sm font-medium text-gray-500 dark:text-gray-400">Servings</h3>
+                    <p class="text-xl text-gray-600 dark:text-gray-300 mb-8" data-translate="recipe.golden_turmeric_latte.description">A warming, anti-inflammatory drink perfect for any time of day</p>
+                </div>
+            </div>
+
+            <!-- Ingredients -->
+            <div class="mb-8">
+                <h2 class="text-2xl font-bold text-gray-800 dark:text-white mb-4">Ingredients</h2>
+                <ul class="list-disc list-inside text-gray-600 dark:text-gray-300 space-y-2">
+                    <li>1 cup almond milk</li>
+                    <li>1/2 tsp turmeric powder</li>
+                    <li>1/4 tsp cinnamon</li>
+                    <li>1/4 tsp ginger powder</li>
+                    <li>1 tbsp honey</li>
+                    <li>Pinch of black pepper</li>
+                    <li>1/2 tsp coconut oil (optional)</li>
+                </ul>
+            </div>
+
+            <!-- Instructions -->
+            <div class="mb-8">
+                <h2 class="text-2xl font-bold text-gray-800 dark:text-white mb-4">Instructions</h2>
+                <ol class="list-decimal list-inside text-gray-600 dark:text-gray-300 space-y-2">
+                    <li>Heat almond milk in a small saucepan over medium heat</li>
+                    <li>Add turmeric, cinnamon, ginger, and black pepper</li>
+                    <li>Whisk until well combined and heated through</li>
+                    <li>Remove from heat and stir in honey</li>
+                    <li>Add coconut oil if using and whisk until melted</li>
+                    <li>Pour into a mug and enjoy</li>
+                </ol>
+            </div>
+
+            <!-- Nutrition Information -->
+            <div class="mb-8">
+                <h2 class="text-2xl font-bold text-gray-800 dark:text-white mb-4">Nutrition Information (per serving)</h2>
+                <div class="grid grid-cols-2 md:grid-cols-4 gap-4">
+                    <div class="bg-gray-50 dark:bg-gray-700 p-4 rounded-lg">
+                        <h3 class="text-sm font-medium text-gray-500 dark:text-gray-400">Calories</h3>
+                        <p class="text-xl text-gray-600 dark:text-gray-300 mb-8" data-translate="recipe.golden_turmeric_latte.description">A warming, anti-inflammatory drink perfect for any time of day</p>
+                    </div>
+                    <div class="bg-gray-50 dark:bg-gray-700 p-4 rounded-lg">
+                        <h3 class="text-sm font-medium text-gray-500 dark:text-gray-400">Protein</h3>
+                        <p class="text-xl text-gray-600 dark:text-gray-300 mb-8" data-translate="recipe.golden_turmeric_latte.description">A warming, anti-inflammatory drink perfect for any time of day</p>
+                    </div>
+                    <div class="bg-gray-50 dark:bg-gray-700 p-4 rounded-lg">
+                        <h3 class="text-sm font-medium text-gray-500 dark:text-gray-400">Carbs</h3>
+                        <p class="text-xl text-gray-600 dark:text-gray-300 mb-8" data-translate="recipe.golden_turmeric_latte.description">A warming, anti-inflammatory drink perfect for any time of day</p>
+                    </div>
+                    <div class="bg-gray-50 dark:bg-gray-700 p-4 rounded-lg">
+                        <h3 class="text-sm font-medium text-gray-500 dark:text-gray-400">Fat</h3>
+                        <p class="text-xl text-gray-600 dark:text-gray-300 mb-8" data-translate="recipe.golden_turmeric_latte.description">A warming, anti-inflammatory drink perfect for any time of day</p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Comments Section -->
+            <div id="commentsSection" class="hidden mt-8">
+                <div class="mb-4">
+                    <textarea id="commentInput" placeholder="Write a comment..." class="w-full p-2 border rounded-lg dark:bg-gray-700 dark:border-gray-600 mb-2" rows="3"></textarea>
+                    <button onclick="addComment()" class="bg-green-500 text-white px-4 py-2 rounded-lg hover:bg-green-600">Post Comment</button>
+                </div>
+                <div id="commentsList" class="space-y-4"></div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Footer -->
+    <footer class="bg-gray-800 text-white py-8 mt-12">
+        <div class="container mx-auto px-4">
+            <div class="grid grid-cols-1 md:grid-cols-4 gap-8">
+                <div>
+                    <h3 class="text-xl font-bold mb-4">PlatePilot</h3>
+                    <p class="text-xl text-gray-600 dark:text-gray-300 mb-8" data-translate="recipe.golden_turmeric_latte.description">A warming, anti-inflammatory drink perfect for any time of day</p>
+                </div>
+                <div>
+                    <h4 class="font-semibold mb-4">Quick Links</h4>
+                    <ul class="space-y-2">
+                        <li><a href="index.html" class="text-gray-400 hover:text-white transition-colors">Home</a></li>
+                        <li><a href="recipes.html" class="text-gray-400 hover:text-white transition-colors">Recipes</a></li>
+                        <li><a href="games.html" class="text-gray-400 hover:text-white transition-colors">Games</a></li>
+                        <li><a href="secret-recipes.html" class="text-gray-400 hover:text-white transition-colors">Secret Recipes</a></li>
+                        <li><a href="diet-planner.html" class="text-gray-400 hover:text-white transition-colors">Diet Planner</a></li>
+                    </ul>
+                </div>
+                <div>
+                    <h4 class="font-semibold mb-4">Contact</h4>
+                    <ul class="space-y-2 text-gray-400">
+                        <li>Email: platepilot.11@gmail.com</li>
+                        <li>Phone: +91 9251681626</li>
+                    </ul>
+                </div>
+                <div>
+                    <h4 class="font-semibold mb-4">Follow Us</h4>
+                    <div class="flex space-x-4">
+                        <a href="#" class="text-gray-400 hover:text-white transition-colors">Facebook</a>
+                        <a href="#" class="text-gray-400 hover:text-white transition-colors">Twitter</a>
+                        <a href="#" class="text-gray-400 hover:text-white transition-colors">Instagram</a>
+                    </div>
+                </div>
+            </div>
+            <div class="border-t border-gray-700 mt-8 pt-8 text-center text-gray-400">
+                <p>&copy; 2024 PlatePilot. All rights reserved.</p>
+            </div>
+        </div>
+    </footer>
+
+    <!-- Video Modal -->
+    <div id="videoModal" class="fixed inset-0 bg-black bg-opacity-50 hidden items-center justify-center z-50">
+        <div class="bg-white dark:bg-gray-800 p-4 rounded-lg w-11/12 max-w-4xl">
+            <div class="flex justify-between items-center mb-4">
+                <h3 class="text-xl font-bold text-gray-800 dark:text-white">Recipe Video</h3>
+                <button onclick="closeVideoModal()" class="text-gray-500 hover:text-gray-700 dark:text-gray-400 dark:hover:text-gray-200">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
+                    </svg>
+                </button>
+            </div>
+            <div class="aspect-w-16 aspect-h-9">
+                <iframe id="recipeVideo" class="w-full h-96" src="" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Dark mode toggle
+        function toggleDarkMode() {
+            document.documentElement.classList.toggle('dark');
+            localStorage.setItem('darkMode', document.documentElement.classList.contains('dark'));
+        }
+
+        // Check for saved dark mode preference
+        if (localStorage.getItem('darkMode') === 'true') {
+            document.documentElement.classList.add('dark');
+        }
+
+        // Mobile menu toggle
+        function toggleMobileMenu() {
+            const mobileMenu = document.getElementById('mobileMenu');
+            mobileMenu.classList.toggle('hidden');
+        }
+
+        // Check access on page load
+        window.onload = function() {
+            const currentUser = localStorage.getItem('currentUser');
+            if (!currentUser) {
+                window.location.href = 'login.html';
+                return;
+            }
+
+            // Load saved likes and comments
+            const savedLikes = localStorage.getItem('golden-turmeric-latte-likes');
+            if (savedLikes) {
+                document.getElementById('likeCount').textContent = savedLikes;
+            }
+
+            const savedComments = JSON.parse(localStorage.getItem('golden-turmeric-latte-comments') || '[]');
+            document.getElementById('commentCount').textContent = savedComments.length;
+        }
+
+        // Like functionality
+        function toggleLike() {
+            const currentUser = localStorage.getItem('currentUser');
+            if (!currentUser) {
+                alert('Please log in to like recipes');
+                return;
+            }
+
+            const likeCount = document.getElementById('likeCount');
+            const currentLikes = parseInt(likeCount.textContent);
+            const newLikes = currentLikes + 1;
+            likeCount.textContent = newLikes;
+            localStorage.setItem('golden-turmeric-latte-likes', newLikes);
+        }
+
+        // Comments functionality
+        function toggleComments() {
+            const currentUser = localStorage.getItem('currentUser');
+            if (!currentUser) {
+                alert('Please log in to view comments');
+                return;
+            }
+
+            const commentsSection = document.getElementById('commentsSection');
+            commentsSection.classList.toggle('hidden');
+            loadComments();
+        }
+
+        function addComment() {
+            const currentUser = localStorage.getItem('currentUser');
+            if (!currentUser) {
+                alert('Please log in to add comments');
+                return;
+            }
+
+            const commentInput = document.getElementById('commentInput');
+            const comment = commentInput.value.trim();
+            
+            if (comment) {
+                const comments = JSON.parse(localStorage.getItem('golden-turmeric-latte-comments') || '[]');
+                comments.push({
+                    user: currentUser,
+                    text: comment,
+                    timestamp: new Date().toISOString()
+                });
+                
+                localStorage.setItem('golden-turmeric-latte-comments', JSON.stringify(comments));
+                commentInput.value = '';
+                loadComments();
+            }
+        }
+
+        function loadComments() {
+            const comments = JSON.parse(localStorage.getItem('golden-turmeric-latte-comments') || '[]');
+            const commentsList = document.getElementById('commentsList');
+            commentsList.innerHTML = '';
+            
+            comments.forEach(comment => {
+                const commentElement = document.createElement('div');
+                commentElement.className = 'bg-gray-100 dark:bg-gray-700 p-4 rounded-lg mb-4';
+                commentElement.innerHTML = `
+                    <div class="flex justify-between items-start mb-2">
+                        <span class="font-semibold text-gray-800 dark:text-white">${comment.user}</span>
+                        <span class="text-sm text-gray-500 dark:text-gray-400">${new Date(comment.timestamp).toLocaleDateString()}</span>
+                    </div>
+                    <p class="text-xl text-gray-600 dark:text-gray-300 mb-8" data-translate="recipe.golden_turmeric_latte.description">A warming, anti-inflammatory drink perfect for any time of day</p>
+                `;
+                commentsList.appendChild(commentElement);
+            });
+            
+            document.getElementById('commentCount').textContent = comments.length;
+        }
+
+        // Video modal functionality
+        function openVideoModal() {
+            const modal = document.getElementById('videoModal');
+            const video = document.getElementById('recipeVideo');
+            video.src = 'https://www.youtube.com/embed/your-video-id'; // Replace with actual video ID
+            modal.classList.remove('hidden');
+            modal.classList.add('flex');
+        }
+
+        function closeVideoModal() {
+            const modal = document.getElementById('videoModal');
+            const video = document.getElementById('recipeVideo');
+            video.src = '';
+            modal.classList.add('hidden');
+            modal.classList.remove('flex');
+        }
+
+        // Close modal when clicking outside
+        document.getElementById('videoModal').addEventListener('click', function(e) {
+            if (e.target === this) {
+                closeVideoModal();
+            }
+        });
+    </script>
+</body>
+</html> 

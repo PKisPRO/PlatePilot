@@ -1,0 +1,147 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Test Gemini API</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+</head>
+<body class="bg-gray-100 p-8">
+    <div class="max-w-2xl mx-auto bg-white rounded-lg shadow-lg p-6">
+        <h1 class="text-2xl font-bold mb-4">Test Gemini Vision API</h1>
+
+        <div class="mb-4">
+            <label class="block mb-2 font-semibold">Select Model:</label>
+            <select id="modelSelect" class="border p-2 rounded w-full">
+                <option value="gemini-2.0-flash-exp">gemini-2.0-flash-exp (Recommended)</option>
+                <option value="gemini-1.5-flash">gemini-1.5-flash</option>
+                <option value="gemini-1.5-pro">gemini-1.5-pro</option>
+                <option value="gemini-pro-vision">gemini-pro-vision</option>
+            </select>
+        </div>
+
+        <div class="mb-4">
+            <label class="block mb-2 font-semibold">Upload an image:</label>
+            <input type="file" id="imageInput" accept="image/*" class="border p-2 rounded w-full">
+        </div>
+
+        <button id="testBtn" class="bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600">
+            Test API
+        </button>
+
+        <div id="result" class="mt-4 p-4 bg-gray-50 rounded hidden">
+            <h3 class="font-bold mb-2">Result:</h3>
+            <pre id="output" class="text-sm overflow-auto max-h-96"></pre>
+        </div>
+
+        <div id="error" class="mt-4 p-4 bg-red-50 rounded hidden">
+            <h3 class="font-bold mb-2 text-red-600">Error:</h3>
+            <pre id="errorOutput" class="text-sm overflow-auto max-h-96 text-red-600"></pre>
+        </div>
+    </div>
+
+    <script>
+        const API_KEY = 'AIzaSyAFdDnDZeMxyXDb8-HY9vz6H0_QkcqXlbw';
+
+        document.getElementById('testBtn').addEventListener('click', async () => {
+            const modelSelect = document.getElementById('modelSelect');
+            const MODEL_NAME = modelSelect.value;
+            const API_URL = `https://generativelanguage.googleapis.com/v1beta/models/${MODEL_NAME}:generateContent?key=${API_KEY}`;
+
+            const fileInput = document.getElementById('imageInput');
+            const file = fileInput.files[0];
+
+            if (!file) {
+                alert('Please select an image first!');
+                return;
+            }
+
+            // Show loading
+            document.getElementById('result').classList.add('hidden');
+            document.getElementById('error').classList.add('hidden');
+            document.getElementById('testBtn').textContent = 'Testing...';
+            document.getElementById('testBtn').disabled = true;
+
+            try {
+                // Convert to base64
+                const base64 = await fileToBase64(file);
+
+                // Extract base64 data and mime type
+                const matches = base64.match(/^data:([A-Za-z-+\/]+);base64,(.+)$/);
+                if (!matches || matches.length !== 3) {
+                    throw new Error('Invalid base64 image format');
+                }
+
+                const mimeType = matches[1];
+                const base64Data = matches[2];
+
+                console.log('📤 Sending request:', {
+                    url: API_URL,
+                    mimeType: mimeType,
+                    dataLength: base64Data.length
+                });
+
+                // Call Gemini API
+                const response = await fetch(API_URL, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({
+                        contents: [
+                            {
+                                parts: [
+                                    {
+                                        text: "Analyze this image and describe what you see in detail."
+                                    },
+                                    {
+                                        inline_data: {
+                                            mime_type: mimeType,
+                                            data: base64Data
+                                        }
+                                    }
+                                ]
+                            }
+                        ],
+                        generationConfig: {
+                            temperature: 0.4,
+                            maxOutputTokens: 1000,
+                        }
+                    })
+                });
+
+                console.log('📥 Response status:', response.status);
+
+                if (!response.ok) {
+                    const errorData = await response.json();
+                    throw new Error(JSON.stringify(errorData, null, 2));
+                }
+
+                const data = await response.json();
+                console.log('✅ Success:', data);
+
+                // Display result
+                document.getElementById('result').classList.remove('hidden');
+                document.getElementById('output').textContent = JSON.stringify(data, null, 2);
+
+            } catch (error) {
+                console.error('❌ Error:', error);
+                document.getElementById('error').classList.remove('hidden');
+                document.getElementById('errorOutput').textContent = error.message;
+            } finally {
+                document.getElementById('testBtn').textContent = 'Test API';
+                document.getElementById('testBtn').disabled = false;
+            }
+        });
+
+        function fileToBase64(file) {
+            return new Promise((resolve, reject) => {
+                const reader = new FileReader();
+                reader.readAsDataURL(file);
+                reader.onload = () => resolve(reader.result);
+                reader.onerror = error => reject(error);
+            });
+        }
+    </script>
+</body>
+</html>
