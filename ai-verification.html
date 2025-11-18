@@ -498,15 +498,47 @@
                     const mimeType = matches[1];
                     const base64Data = matches[2];
 
-                    // Construct Gemini API URL
-                    const apiUrl = `${AI_CONFIG.API_BASE_URL}/models/${AI_CONFIG.MODEL_NAME}:generateContent?key=${AI_CONFIG.API_KEY}`;
-
-                    const response = await fetch(apiUrl, {
-                        method: 'POST',
-                        headers: {
+                    // Use OpenAI API if configured, otherwise fall back to Gemini
+                    const isOpenAI = AI_CONFIG.API_TYPE === 'openai' || AI_CONFIG.API_BASE_URL.includes('openai.com');
+                    
+                    let apiUrl, requestBody, headers;
+                    
+                    if (isOpenAI) {
+                        // OpenAI API format
+                        apiUrl = `${AI_CONFIG.API_BASE_URL}/chat/completions`;
+                        headers = {
+                            'Content-Type': 'application/json',
+                            'Authorization': `Bearer ${AI_CONFIG.API_KEY}`
+                        };
+                        requestBody = {
+                            model: AI_CONFIG.MODEL_NAME || 'gpt-4o',
+                            messages: [
+                                {
+                                    role: 'user',
+                                    content: [
+                                        {
+                                            type: 'text',
+                                            text: `${AI_CONFIG.SYSTEM_PROMPT}\n\nPlease analyze this image (${filename}) for organic authenticity. Provide your analysis in the specified JSON format with heatmap data.`
+                                        },
+                                        {
+                                            type: 'image_url',
+                                            image_url: {
+                                                url: `data:${mimeType};base64,${base64Data}`
+                                            }
+                                        }
+                                    ]
+                                }
+                            ],
+                            max_tokens: 1000,
+                            temperature: 0.1
+                        };
+                    } else {
+                        // Gemini API format (fallback)
+                        apiUrl = `${AI_CONFIG.API_BASE_URL}/models/${AI_CONFIG.MODEL_NAME}:generateContent?key=${AI_CONFIG.API_KEY}`;
+                        headers = {
                             'Content-Type': 'application/json'
-                        },
-                        body: JSON.stringify({
+                        };
+                        requestBody = {
                             contents: [
                                 {
                                     parts: [
@@ -526,7 +558,13 @@
                                 temperature: 0.1,
                                 maxOutputTokens: 1000,
                             }
-                        })
+                        };
+                    }
+
+                    const response = await fetch(apiUrl, {
+                        method: 'POST',
+                        headers: headers,
+                        body: JSON.stringify(requestBody)
                     });
 
                     if (!response.ok) {
@@ -535,7 +573,13 @@
                     }
 
                     const data = await response.json();
-                    const content = data.candidates[0].content.parts[0].text;
+                    // Handle both OpenAI and Gemini response formats
+                    let content;
+                    if (isOpenAI) {
+                        content = data.choices[0].message.content;
+                    } else {
+                        content = data.candidates[0].content.parts[0].text;
+                    }
 
                     console.log('API Response:', content);
 
@@ -868,43 +912,88 @@ FOR TEXT QUESTIONS:
 
 KEY: For images, ALWAYS return pure JSON (no markdown blocks).`;
 
-                    // Construct Gemini API URL
-                    const apiUrl = `${AI_CONFIG.API_BASE_URL}/models/${AI_CONFIG.MODEL_NAME}:generateContent?key=${AI_CONFIG.API_KEY}`;
-
-                    const parts = [];
-
-                    if (imageBase64) {
-                        // Extract base64 data and mime type
-                        const matches = imageBase64.match(/^data:([A-Za-z-+\/]+);base64,(.+)$/);
-                        if (!matches || matches.length !== 3) {
-                            throw new Error('Invalid base64 image format');
-                        }
-
-                        const mimeType = matches[1];
-                        const base64Data = matches[2];
-
-                        parts.push({
-                            text: `${systemPrompt}\n\n${message || 'Analyze this produce image for organic vs conventional classification. Provide confidence score, analysis, key findings, and heatmap data in JSON format.'}`
-                        });
-
-                        parts.push({
-                            inline_data: {
-                                mime_type: mimeType,
-                                data: base64Data
+                    // Use OpenAI API if configured, otherwise fall back to Gemini
+                    const isOpenAI = AI_CONFIG.API_TYPE === 'openai' || AI_CONFIG.API_BASE_URL.includes('openai.com');
+                    
+                    let apiUrl, requestBody, headers;
+                    
+                    if (isOpenAI) {
+                        // OpenAI API format
+                        apiUrl = `${AI_CONFIG.API_BASE_URL}/chat/completions`;
+                        headers = {
+                            'Content-Type': 'application/json',
+                            'Authorization': `Bearer ${AI_CONFIG.API_KEY}`
+                        };
+                        
+                        const contentArray = [
+                            {
+                                type: 'text',
+                                text: `${systemPrompt}\n\n${message || 'Analyze this produce image for organic vs conventional classification. Provide confidence score, analysis, key findings, and heatmap data in JSON format.'}`
                             }
-                        });
+                        ];
+                        
+                        if (imageBase64) {
+                            // Extract base64 data and mime type
+                            const matches = imageBase64.match(/^data:([A-Za-z-+\/]+);base64,(.+)$/);
+                            if (!matches || matches.length !== 3) {
+                                throw new Error('Invalid base64 image format');
+                            }
+                            const mimeType = matches[1];
+                            const base64Data = matches[2];
+                            
+                            contentArray.push({
+                                type: 'image_url',
+                                image_url: {
+                                    url: `data:${mimeType};base64,${base64Data}`
+                                }
+                            });
+                        }
+                        
+                        requestBody = {
+                            model: AI_CONFIG.MODEL_NAME || 'gpt-4o',
+                            messages: [
+                                {
+                                    role: 'user',
+                                    content: contentArray
+                                }
+                            ],
+                            max_tokens: 1500,
+                            temperature: 0.3
+                        };
                     } else {
-                        parts.push({
-                            text: `${systemPrompt}\n\n${message}`
-                        });
-                    }
-
-                    const response = await fetch(apiUrl, {
-                        method: 'POST',
-                        headers: {
+                        // Gemini API format (fallback)
+                        apiUrl = `${AI_CONFIG.API_BASE_URL}/models/${AI_CONFIG.MODEL_NAME}:generateContent?key=${AI_CONFIG.API_KEY}`;
+                        headers = {
                             'Content-Type': 'application/json'
-                        },
-                        body: JSON.stringify({
+                        };
+                        
+                        const parts = [];
+                        if (imageBase64) {
+                            // Extract base64 data and mime type
+                            const matches = imageBase64.match(/^data:([A-Za-z-+\/]+);base64,(.+)$/);
+                            if (!matches || matches.length !== 3) {
+                                throw new Error('Invalid base64 image format');
+                            }
+                            const mimeType = matches[1];
+                            const base64Data = matches[2];
+
+                            parts.push({
+                                text: `${systemPrompt}\n\n${message || 'Analyze this produce image for organic vs conventional classification. Provide confidence score, analysis, key findings, and heatmap data in JSON format.'}`
+                            });
+
+                            parts.push({
+                                inline_data: {
+                                    mime_type: mimeType,
+                                    data: base64Data
+                                }
+                            });
+                        } else {
+                            parts.push({
+                                text: `${systemPrompt}\n\n${message}`
+                            });
+                        }
+                        
+                        requestBody = {
                             contents: [
                                 {
                                     parts: parts
@@ -914,7 +1003,13 @@ KEY: For images, ALWAYS return pure JSON (no markdown blocks).`;
                                 temperature: 0.3,
                                 maxOutputTokens: 1500,
                             }
-                        })
+                        };
+                    }
+
+                    const response = await fetch(apiUrl, {
+                        method: 'POST',
+                        headers: headers,
+                        body: JSON.stringify(requestBody)
                     });
 
                     if (!response.ok) {
@@ -923,7 +1018,13 @@ KEY: For images, ALWAYS return pure JSON (no markdown blocks).`;
                     }
 
                     const data = await response.json();
-                    const content = data.candidates[0].content.parts[0].text;
+                    // Handle both OpenAI and Gemini response formats
+                    let content;
+                    if (isOpenAI) {
+                        content = data.choices[0].message.content;
+                    } else {
+                        content = data.candidates[0].content.parts[0].text;
+                    }
 
                     return content;
 
