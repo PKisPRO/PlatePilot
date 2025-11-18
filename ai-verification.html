@@ -457,9 +457,12 @@
                 } catch (error) {
                     console.error('Analysis failed:', error);
                     const resultDiv = document.getElementById(`result-${file.name}`);
+                    const errorMessage = error.message || 'Unknown error occurred';
                     resultDiv.innerHTML = `
-                        <div class="text-sm text-red-600">
-                            Analysis failed. Please try again or contact support.
+                        <div class="text-sm text-red-600 space-y-2">
+                            <div class="font-semibold">❌ Analysis failed</div>
+                            <div class="text-xs text-gray-600 dark:text-gray-400">${errorMessage}</div>
+                            <div class="text-xs text-gray-500 dark:text-gray-500">Please check the browser console for more details.</div>
                         </div>
                     `;
                 }
@@ -487,7 +490,14 @@
                         throw new Error('AI_CONFIG not loaded');
                     }
 
-                    console.log('Making API call with model:', AI_CONFIG.MODEL_NAME);
+                    // Log configuration for debugging
+                    console.log('🔍 AI Configuration:', {
+                        API_BASE_URL: AI_CONFIG.API_BASE_URL,
+                        MODEL_NAME: AI_CONFIG.MODEL_NAME,
+                        API_TYPE: AI_CONFIG.API_TYPE,
+                        HAS_API_KEY: !!AI_CONFIG.API_KEY,
+                        API_KEY_PREFIX: AI_CONFIG.API_KEY ? AI_CONFIG.API_KEY.substring(0, 10) + '...' : 'MISSING'
+                    });
 
                     // Extract base64 data and mime type
                     const matches = base64Image.match(/^data:([A-Za-z-+\/]+);base64,(.+)$/);
@@ -500,6 +510,8 @@
 
                     // Use OpenAI API if configured, otherwise fall back to Gemini
                     const isOpenAI = AI_CONFIG.API_TYPE === 'openai' || AI_CONFIG.API_BASE_URL.includes('openai.com');
+                    
+                    console.log('🌐 Using API:', isOpenAI ? 'OpenAI' : 'Gemini');
                     
                     let apiUrl, requestBody, headers;
                     
@@ -561,14 +573,25 @@
                         };
                     }
 
+                    console.log('📤 Sending API request to:', apiUrl);
+                    console.log('📋 Request headers:', { ...headers, Authorization: headers.Authorization ? 'Bearer ***' : 'N/A' });
+                    
                     const response = await fetch(apiUrl, {
                         method: 'POST',
                         headers: headers,
                         body: JSON.stringify(requestBody)
                     });
 
+                    console.log('📥 Response status:', response.status, response.statusText);
+
                     if (!response.ok) {
-                        const errorData = await response.json();
+                        let errorData;
+                        try {
+                            errorData = await response.json();
+                        } catch (e) {
+                            errorData = { error: await response.text() };
+                        }
+                        console.error('❌ API Error:', errorData);
                         throw new Error(`API request failed: ${response.status} ${response.statusText} - ${JSON.stringify(errorData)}`);
                     }
 
@@ -610,16 +633,18 @@
                     }
                     
                 } catch (error) {
-                    console.error('API call failed:', error);
-                    // Fallback response for demo purposes
-                    return {
-                        confidence: Math.floor(Math.random() * 100),
-                        analysis: 'Unable to connect to verification service. Please try again later.',
-                        recommendation: 'Manual review recommended',
-                        keyFindings: ['Service unavailable'],
-                        flagged: true,
-                        heatmapData: {}
-                    };
+                    console.error('❌ API call failed:', error);
+                    console.error('Error details:', {
+                        message: error.message,
+                        stack: error.stack,
+                        config: {
+                            API_BASE_URL: AI_CONFIG?.API_BASE_URL,
+                            MODEL_NAME: AI_CONFIG?.MODEL_NAME,
+                            API_TYPE: AI_CONFIG?.API_TYPE
+                        }
+                    });
+                    // Re-throw the error so it can be handled by the caller
+                    throw error;
                 }
             }
 
