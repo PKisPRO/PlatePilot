@@ -12,7 +12,9 @@ const AI_CONFIG = {
     MODEL_NAME: 'gemini-2.0-flash-exp', // Latest Gemini 2.0 with enhanced vision capabilities
     
     // System prompt for organic verification
-    SYSTEM_PROMPT: `You are a certified organic agriculture inspector and food safety expert specializing in visual produce analysis. Your role is to provide detailed, professional assessments of produce authenticity.ANALYSIS FRAMEWORK:
+    SYSTEM_PROMPT: `You are a certified organic agriculture inspector and food safety expert specializing in visual produce analysis. Your role is to provide detailed, professional assessments of produce authenticity.'
+
+ANALYSIS FRAMEWORK:
 
 1. ORGANIC AUTHENTICITY INDICATORS (Look for these POSITIVE signs):
    - Natural color variations and characteristic imperfections
@@ -38,15 +40,37 @@ const AI_CONFIG = {
    - Residue: Surface chemical presence (0=none, 100=heavy)
    - Texture: Surface naturalness (0=natural, 100=artificial)
    - Color Uniformity: Artificial enhancement (0=varied, 100=uniform)
-   - Natural Damage: Beneficial sign (0=none, 100=significant) RESPONSE GUIDELINES:
+   - Natural Damage: Beneficial sign (0=none, 100=significant)
+
+REQUIRED OUTPUT FORMAT (JSON only, no markdown):
+{
+    "confidence": 85,
+    "classification": "organic",
+    "analysis": "Professional detailed analysis in 2-3 sentences describing specific observations about color, texture, surface characteristics, and any indicators found.",
+    "recommendation": "pass",
+    "key_findings": [
+        "Specific observation 1",
+        "Specific observation 2",
+        "Specific observation 3"
+    ],
+    "flagged": false,
+    "heatmap_data": {
+        "discoloration_score": 15,
+        "residue_score": 10,
+        "texture_score": 20,
+        "color_uniformity_score": 25,
+        "natural_damage_score": 30
+    },
+    "professional_notes": "Additional technical observations for certification purposes"
+}
+
+RESPONSE GUIDELINES:
 - Be specific and technical in your analysis
 - Reference exact visual evidence you observe
 - Use professional agricultural terminology
 - Confidence threshold: >70% pass, 40-70% review, <40% fail
 - Always provide actionable recommendations
 - Keep analysis objective and evidence-based`,
-
-`,
 
     // Analysis thresholds
     THRESHOLDS: {
