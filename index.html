@@ -68,7 +68,8 @@
                             <a href="games.html" class="block px-4 py-2 text-gray-700 dark:text-gray-300 hover:bg-green-100 dark:hover:bg-green-900 rounded-t-lg" data-translate="games">Games</a>
                             <a href="secret-recipes.html" class="block px-4 py-2 text-gray-700 dark:text-gray-300 hover:bg-green-100 dark:hover:bg-green-900" data-translate="secretRecipes">Secret Recipes</a>
                             <a href="diet-planner.html" class="block px-4 py-2 text-gray-700 dark:text-gray-300 hover:bg-green-100 dark:hover:bg-green-900" data-translate="dietPlanner">Diet Planner</a>
-                            <a href="ai-verification.html" class="block px-4 py-2 text-gray-700 dark:text-gray-300 hover:bg-green-100 dark:hover:bg-green-900 rounded-b-lg">AI Verification</a>
+                            <a href="ai-verification.html" class="block px-4 py-2 text-gray-700 dark:text-gray-300 hover:bg-green-100 dark:hover:bg-green-900">AI Verification</a>
+                            <a href="subscription.html" class="block px-4 py-2 text-gray-700 dark:text-gray-300 hover:bg-green-100 dark:hover:bg-green-900 rounded-b-lg">Subscription</a>
                         </div>
                     </div>
                     <div id="languageSelectorContainer" class="ml-4"></div>
@@ -106,6 +107,8 @@
                             <a href="games.html" class="text-gray-700 dark:text-gray-300 hover:text-green-600 dark:hover:text-green-400" data-translate="games">Games</a>
                             <a href="secret-recipes.html" class="text-gray-700 dark:text-gray-300 hover:text-green-600 dark:hover:text-green-400" data-translate="secretRecipes">Secret Recipes</a>
                             <a href="diet-planner.html" class="text-gray-700 dark:text-gray-300 hover:text-green-600 dark:hover:text-green-400" data-translate="dietPlanner">Diet Planner</a>
+                            <a href="ai-verification.html" class="text-gray-700 dark:text-gray-300 hover:text-green-600 dark:hover:text-green-400">AI Verification</a>
+                            <a href="subscription.html" class="text-gray-700 dark:text-gray-300 hover:text-green-600 dark:hover:text-green-400">Subscription</a>
                         </div>
                     </div>
                     <div id="languageSelectorContainer" class="mt-2"></div>
@@ -316,6 +319,7 @@
                         <li><a href="games.html" class="text-gray-400 hover:text-white transition-colors" data-translate="games">Games</a></li>
                         <li><a href="secret-recipes.html" class="text-gray-400 hover:text-white transition-colors" data-translate="secretRecipes">Secret Recipes</a></li>
                         <li><a href="diet-planner.html" class="text-gray-400 hover:text-white transition-colors" data-translate="dietPlanner">Diet Planner</a></li>
+                        <li><a href="subscription.html" class="text-gray-400 hover:text-white transition-colors">Subscription</a></li>
                     </ul>
                 </div>
                 <div>
@@ -390,7 +394,9 @@
                     href.startsWith('login.html') || 
                     href.startsWith('signup.html') ||
                     href.startsWith('marketplace.html') ||
-                    href.startsWith('seller-onboarding.html')) {
+                    href.startsWith('seller-onboarding.html') ||
+                    href.startsWith('subscription.html') ||
+                    href.startsWith('ai-verification.html')) {
                     if (!href.includes(basePath)) {
                         link.href = basePath + '/' + href;
                     }
