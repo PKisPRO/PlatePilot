@@ -1,0 +1,27 @@
+/* Subscription-specific tweaks to complement Tailwind utility classes */
+
+.subscription-item-row:hover {
+    background-color: rgba(16, 185, 129, 0.04); /* Tailwind green-500 at low opacity */
+}
+
+.subscription-badge {
+    border-radius: 9999px;
+    font-size: 0.75rem;
+    padding: 0.125rem 0.5rem;
+}
+
+.subscription-badge-active {
+    background-color: rgba(16, 185, 129, 0.15);
+    color: #047857; /* green-700 */
+}
+
+.subscription-badge-paused {
+    background-color: rgba(245, 158, 11, 0.15);
+    color: #92400e; /* amber-800 */
+}
+
+.subscription-badge-cancelled {
+    background-color: rgba(239, 68, 68, 0.15);
+    color: #b91c1c; /* red-700 */
+}
+

@@ -35,6 +35,7 @@
                     <a href="secret-recipes.html" class="text-gray-700 dark:text-gray-300 hover:text-green-600 dark:hover:text-green-400 transition-colors">Secret Recipes</a>
                     <a href="diet-planner.html" class="text-gray-700 dark:text-gray-300 hover:text-green-600 dark:hover:text-green-400 transition-colors">Diet Planner</a>
                     <a href="ai-verification.html" class="text-green-600 dark:text-green-400 font-medium">AI Verification</a>
+                    <a href="subscription.html" class="text-gray-700 dark:text-gray-300 hover:text-green-600 dark:hover:text-green-400 transition-colors">Subscription</a>
                     <button onclick="toggleDarkMode()" class="p-2 rounded-lg bg-gray-200 dark:bg-gray-700 hover:bg-gray-300 dark:hover:bg-gray-600 transition-colors">
                         <span class="dark:hidden">🌙</span>
                         <span class="hidden dark:inline">☀️</span>
@@ -58,6 +59,7 @@
                     <a href="secret-recipes.html" class="text-gray-700 dark:text-gray-300 hover:text-green-600 dark:hover:text-green-400 transition-colors">Secret Recipes</a>
                     <a href="diet-planner.html" class="text-gray-700 dark:text-gray-300 hover:text-green-600 dark:hover:text-green-400 transition-colors">Diet Planner</a>
                     <a href="ai-verification.html" class="text-green-600 dark:text-green-400 font-medium">AI Verification</a>
+                    <a href="subscription.html" class="text-gray-700 dark:text-gray-300 hover:text-green-600 dark:hover:text-green-400 transition-colors">Subscription</a>
                 </div>
             </div>
         </div>
@@ -240,6 +242,7 @@
                         <li><a href="games.html" class="text-gray-400 hover:text-white transition-colors">Games</a></li>
                         <li><a href="secret-recipes.html" class="text-gray-400 hover:text-white transition-colors">Secret Recipes</a></li>
                         <li><a href="diet-planner.html" class="text-gray-400 hover:text-white transition-colors">Diet Planner</a></li>
+                        <li><a href="subscription.html" class="text-gray-400 hover:text-white transition-colors">Subscription</a></li>
                     </ul>
                 </div>
                 <div>
@@ -270,8 +273,8 @@
         
         // Update all navigation links
         document.addEventListener('DOMContentLoaded', function() {
-            // Update navigation links
-            document.querySelectorAll('a[href^="index.html"], a[href^="recipes.html"], a[href^="upload-recipe.html"], a[href^="games.html"], a[href^="secret-recipes.html"], a[href^="diet-planner.html"], a[href^="ai-verification.html"]').forEach(link => {
+            // Update navigation links (including Subscription)
+            document.querySelectorAll('a[href^="index.html"], a[href^="recipes.html"], a[href^="upload-recipe.html"], a[href^="games.html"], a[href^="secret-recipes.html"], a[href^="diet-planner.html"], a[href^="ai-verification.html"], a[href^="subscription.html"]').forEach(link => {
                 if (!link.href.includes(basePath)) {
                     link.href = basePath + '/' + link.href;
                 }
@@ -457,7 +460,7 @@
                 } catch (error) {
                     console.error('Analysis failed:', error);
                     const resultDiv = document.getElementById(`result-${file.name}`);
-                    const errorMessage = error.message || 'Unknown error occurred';
+                     const errorMessage = error.message || 'Unknown error occurred';
                     resultDiv.innerHTML = `
                         <div class="text-sm text-red-600 space-y-2">
                             <div class="font-semibold">❌ Analysis failed</div>

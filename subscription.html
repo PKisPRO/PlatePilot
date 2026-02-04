@@ -1,0 +1,433 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Subscription Delivery - PlatePilot</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="subscription.css">
+    <script>
+        tailwind.config = {
+            darkMode: 'class',
+            theme: {
+                extend: {
+                    colors: {}
+                }
+            }
+        };
+    </script>
+</head>
+<body class="bg-gray-50 dark:bg-gray-900 min-h-screen">
+    <!-- Navigation Bar -->
+    <nav class="bg-white dark:bg-gray-900 shadow-md sticky top-0 z-50">
+        <div class="container mx-auto px-4">
+            <div class="flex justify-between items-center h-16">
+                <a href="index.html" class="text-2xl font-bold text-green-600 dark:text-green-400 hover:text-green-700 dark:hover:text-green-300 transition-colors">PlatePilot</a>
+                <div class="hidden md:flex items-center space-x-8">
+                    <a href="index.html" class="text-gray-700 dark:text-gray-300 hover:text-green-600 dark:hover:text-green-400 transition-colors">Home</a>
+                    <a href="recipes.html" class="text-gray-700 dark:text-gray-300 hover:text-green-600 dark:hover:text-green-400 transition-colors">Recipes</a>
+                    <a href="leaderboard.html" class="text-gray-700 dark:text-gray-300 hover:text-green-600 dark:hover:text-green-400 transition-colors">Leaderboard</a>
+                    <a href="upload-recipe.html" class="text-gray-700 dark:text-gray-300 hover:text-green-600 dark:hover:text-green-400 transition-colors">Share Recipe</a>
+                    <a href="games.html" class="text-gray-700 dark:text-gray-300 hover:text-green-600 dark:hover:text-green-400 transition-colors">Games</a>
+                    <a href="secret-recipes.html" class="text-gray-700 dark:text-gray-300 hover:text-green-600 dark:hover:text-green-400 transition-colors">Secret Recipes</a>
+                    <a href="diet-planner.html" class="text-gray-700 dark:text-gray-300 hover:text-green-600 dark:hover:text-green-400 transition-colors">Diet Planner</a>
+                    <a href="ai-verification.html" class="text-gray-700 dark:text-gray-300 hover:text-green-600 dark:hover:text-green-400 transition-colors">AI Verification</a>
+                    <a href="subscription.html" class="text-green-600 dark:text-green-400 font-medium">Subscription</a>
+                    <button onclick="toggleDarkMode()" class="p-2 rounded-lg bg-gray-200 dark:bg-gray-700 hover:bg-gray-300 dark:hover:bg-gray-600 transition-colors">
+                        <span class="dark:hidden">🌙</span>
+                        <span class="hidden dark:inline">☀️</span>
+                    </button>
+                </div>
+                <!-- Mobile Menu Button -->
+                <button class="md:hidden p-2 rounded-lg hover:bg-gray-200 dark:hover:bg-gray-700 transition-colors" onclick="toggleMobileMenu()">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 text-gray-700 dark:text-gray-300" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16" />
+                    </svg>
+                </button>
+            </div>
+            <!-- Mobile Menu -->
+            <div id="mobileMenu" class="md:hidden hidden pb-4">
+                <div class="flex flex-col space-y-4">
+                    <a href="index.html" class="text-gray-700 dark:text-gray-300 hover:text-green-600 dark:hover:text-green-400 transition-colors">Home</a>
+                    <a href="recipes.html" class="text-gray-700 dark:text-gray-300 hover:text-green-600 dark:hover:text-green-400 transition-colors">Recipes</a>
+                    <a href="leaderboard.html" class="text-gray-700 dark:text-gray-300 hover:text-green-600 dark:hover:text-green-400 transition-colors">Leaderboard</a>
+                    <a href="upload-recipe.html" class="text-gray-700 dark:text-gray-300 hover:text-green-600 dark:hover:text-green-400 transition-colors">Share Recipe</a>
+                    <a href="games.html" class="text-gray-700 dark:text-gray-300 hover:text-green-600 dark:hover:text-green-400 transition-colors">Games</a>
+                    <a href="secret-recipes.html" class="text-gray-700 dark:text-gray-300 hover:text-green-600 dark:hover:text-green-400 transition-colors">Secret Recipes</a>
+                    <a href="diet-planner.html" class="text-gray-700 dark:text-gray-300 hover:text-green-600 dark:hover:text-green-400 transition-colors">Diet Planner</a>
+                    <a href="ai-verification.html" class="text-gray-700 dark:text-gray-300 hover:text-green-600 dark:hover:text-green-400 transition-colors">AI Verification</a>
+                    <a href="subscription.html" class="text-green-600 dark:text-green-400 font-medium">Subscription</a>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Main Content -->
+    <div class="container mx-auto px-4 py-10">
+        <div class="max-w-6xl mx-auto">
+            <!-- Header -->
+            <div class="mb-8 text-center">
+                <h1 class="text-4xl font-bold text-gray-800 dark:text-white mb-3">
+                    Subscription Delivery
+                </h1>
+                <p class="text-lg text-gray-600 dark:text-gray-300">
+                    Fresh fruits & vegetables, delivered to your doorstep on a schedule that suits you.
+                </p>
+            </div>
+
+            <!-- Layout: Form + Summary/Management -->
+            <div id="subscription-layout" class="grid grid-cols-1 lg:grid-cols-3 gap-6">
+                <!-- Left: Subscription Form -->
+                <div class="lg:col-span-2 space-y-6">
+                    <!-- Items Card -->
+                    <div class="bg-white dark:bg-gray-800 rounded-xl shadow-md p-6">
+                        <div class="flex items-center justify-between mb-4">
+                            <h2 class="text-xl font-semibold text-gray-800 dark:text-white">
+                                Select Items
+                            </h2>
+                            <p class="text-xs text-gray-500 dark:text-gray-400">
+                                Choose fruits & vegetables and set quantities.
+                            </p>
+                        </div>
+                        <div id="itemsContainer" class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                            <!-- Items will be injected from JS based on PRICE_MAP -->
+                        </div>
+                        <p class="mt-3 text-xs text-gray-500 dark:text-gray-400">
+                            Tip: Quantities are per delivery. We’ll multiply based on your selected plan.
+                        </p>
+                    </div>
+
+                    <!-- Schedule Card -->
+                    <div class="bg-white dark:bg-gray-800 rounded-xl shadow-md p-6">
+                        <h2 class="text-xl font-semibold text-gray-800 dark:text-white mb-4">
+                            Delivery Schedule
+                        </h2>
+                        <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                            <!-- Days of week -->
+                            <div>
+                                <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
+                                    Days of the week <span class="text-red-500">*</span>
+                                </label>
+                                <div id="daysContainer" class="grid grid-cols-2 gap-2 text-sm">
+                                    <!-- Days checkboxes injected from JS -->
+                                </div>
+                                <p class="mt-2 text-xs text-gray-500 dark:text-gray-400">
+                                    For custom plans, we’ll use exactly these days.
+                                </p>
+                            </div>
+
+                            <!-- Plan & Time -->
+                            <div class="space-y-4">
+                                <div>
+                                    <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
+                                        Plan type <span class="text-red-500">*</span>
+                                    </label>
+                                    <div class="space-y-2 text-sm">
+                                        <label class="flex items-center space-x-2">
+                                            <input type="radio" name="planType" value="weekly" class="text-green-600 focus:ring-green-500">
+                                            <span class="text-gray-700 dark:text-gray-300">Weekly (once a week)</span>
+                                        </label>
+                                        <label class="flex items-center space-x-2">
+                                            <input type="radio" name="planType" value="alternate" class="text-green-600 focus:ring-green-500">
+                                            <span class="text-gray-700 dark:text-gray-300">Alternate days (~2.5 deliveries/week)</span>
+                                        </label>
+                                        <label class="flex items-center space-x-2">
+                                            <input type="radio" name="planType" value="custom" class="text-green-600 focus:ring-green-500">
+                                            <span class="text-gray-700 dark:text-gray-300">Custom days (based on selected days)</span>
+                                        </label>
+                                    </div>
+                                </div>
+
+                                <div>
+                                    <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
+                                        Time slot <span class="text-red-500">*</span>
+                                    </label>
+                                    <div class="flex space-x-4 text-sm">
+                                        <label class="flex items-center space-x-2">
+                                            <input type="radio" name="timeSlot" value="morning" class="text-green-600 focus:ring-green-500">
+                                            <span class="text-gray-700 dark:text-gray-300">Morning</span>
+                                        </label>
+                                        <label class="flex items-center space-x-2">
+                                            <input type="radio" name="timeSlot" value="evening" class="text-green-600 focus:ring-green-500">
+                                            <span class="text-gray-700 dark:text-gray-300">Evening</span>
+                                        </label>
+                                    </div>
+                                </div>
+
+                                <div>
+                                    <label for="startDate" class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
+                                        Start date <span class="text-red-500">*</span>
+                                    </label>
+                                    <input
+                                        id="startDate"
+                                        type="date"
+                                        class="w-full px-3 py-2 rounded-lg border border-gray-300 dark:border-gray-700 bg-gray-50 dark:bg-gray-900 text-gray-800 dark:text-gray-100 focus:outline-none focus:ring-2 focus:ring-green-500"
+                                    >
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Customer Details Card -->
+                    <div class="bg-white dark:bg-gray-800 rounded-xl shadow-md p-6">
+                        <h2 class="text-xl font-semibold text-gray-800 dark:text-white mb-4">
+                            Delivery Details
+                        </h2>
+                        <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                            <div class="md:col-span-2">
+                                <label for="address" class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
+                                    Delivery address <span class="text-red-500">*</span>
+                                </label>
+                                <textarea
+                                    id="address"
+                                    rows="3"
+                                    class="w-full px-3 py-2 rounded-lg border border-gray-300 dark:border-gray-700 bg-gray-50 dark:bg-gray-900 text-gray-800 dark:text-gray-100 focus:outline-none focus:ring-2 focus:ring-green-500"
+                                    placeholder="Flat / House no., Street, Locality, City, Pincode"
+                                ></textarea>
+                            </div>
+                            <div>
+                                <label for="phone" class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
+                                    Phone number <span class="text-red-500">*</span>
+                                </label>
+                                <input
+                                    id="phone"
+                                    type="tel"
+                                    class="w-full px-3 py-2 rounded-lg border border-gray-300 dark:border-gray-700 bg-gray-50 dark:bg-gray-900 text-gray-800 dark:text-gray-100 focus:outline-none focus:ring-2 focus:ring-green-500"
+                                    placeholder="+91 9XXXXXXXXX"
+                                >
+                            </div>
+                        </div>
+
+                        <div id="formErrors" class="mt-4 hidden rounded-lg border border-red-300 bg-red-50 px-3 py-2 text-xs text-red-700"></div>
+
+                        <div class="mt-6 flex flex-wrap items-center justify-between gap-3">
+                            <p class="text-xs text-gray-500 dark:text-gray-400">
+                                By confirming, you agree to receive weekly deliveries as per your selected plan. You can pause or cancel anytime.
+                            </p>
+                            <button
+                                id="confirmSubscriptionBtn"
+                                class="inline-flex items-center justify-center rounded-lg bg-green-600 px-5 py-2.5 text-sm font-semibold text-white shadow hover:bg-green-700 focus:outline-none focus:ring-2 focus:ring-green-500"
+                            >
+                                Confirm Subscription
+                            </button>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Right: Summary + Manage Subscriptions -->
+                <div class="space-y-6">
+                    <!-- Summary Card -->
+                    <div class="bg-white dark:bg-gray-800 rounded-xl shadow-md p-6 sticky top-24">
+                        <h2 class="text-xl font-semibold text-gray-800 dark:text-white mb-4">
+                            Subscription Summary
+                        </h2>
+                        <div class="space-y-4 text-sm">
+                            <div>
+                                <h3 class="font-medium text-gray-700 dark:text-gray-200 mb-1">Items</h3>
+                                <ul id="summaryItems" class="space-y-1 text-gray-600 dark:text-gray-300 text-xs">
+                                    <li class="text-gray-400 dark:text-gray-500">No items selected yet.</li>
+                                </ul>
+                            </div>
+
+                            <div>
+                                <h3 class="font-medium text-gray-700 dark:text-gray-200 mb-1">Schedule</h3>
+                                <p id="summaryDays" class="text-xs text-gray-600 dark:text-gray-300">
+                                    No days selected.
+                                </p>
+                                <p id="summaryPlanType" class="mt-1 text-xs text-gray-600 dark:text-gray-300">
+                                    Plan: Not selected.
+                                </p>
+                                <p id="summaryTimeSlot" class="mt-1 text-xs text-gray-600 dark:text-gray-300">
+                                    Time slot: Not selected.
+                                </p>
+                            </div>
+
+                            <div class="border-t border-gray-200 dark:border-gray-700 pt-3 space-y-1 text-xs">
+                                <div class="flex justify-between">
+                                    <span class="text-gray-600 dark:text-gray-300">Per delivery produce cost</span>
+                                    <span id="summaryPerDelivery" class="font-medium text-gray-800 dark:text-gray-100">₹0</span>
+                                </div>
+                                <div class="flex justify-between">
+                                    <span class="text-gray-600 dark:text-gray-300">Estimated deliveries / week</span>
+                                    <span id="summaryDeliveriesPerWeek" class="font-medium text-gray-800 dark:text-gray-100">0</span>
+                                </div>
+                                <div class="flex justify-between">
+                                    <span class="text-gray-600 dark:text-gray-300">Estimated weekly cost</span>
+                                    <span id="summaryWeeklyCost" class="font-semibold text-gray-800 dark:text-gray-100">₹0</span>
+                                </div>
+                                <div class="flex justify-between">
+                                    <span class="text-gray-600 dark:text-gray-300">Delivery fee / week</span>
+                                    <span id="summaryDeliveryFee" class="font-semibold text-gray-800 dark:text-gray-100">₹0</span>
+                                </div>
+                                <div class="flex justify-between pt-2 border-t border-dashed border-gray-200 dark:border-gray-700 mt-2">
+                                    <span class="text-sm font-semibold text-gray-800 dark:text-gray-100">Total weekly</span>
+                                    <span id="summaryTotalWeekly" class="text-lg font-bold text-green-600 dark:text-green-400">₹0</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Manage Subscriptions -->
+                    <div class="bg-white dark:bg-gray-800 rounded-xl shadow-md p-6">
+                        <div class="flex items-center justify-between mb-3">
+                            <h2 class="text-lg font-semibold text-gray-800 dark:text-white">
+                                Your Subscriptions
+                            </h2>
+                            <button
+                                id="refreshSubscriptionsBtn"
+                                class="text-xs text-gray-500 hover:text-green-600 dark:text-gray-400 dark:hover:text-green-400"
+                            >
+                                Refresh
+                            </button>
+                        </div>
+                        <div id="subscriptionsList" class="space-y-3 text-sm">
+                            <p class="text-xs text-gray-500 dark:text-gray-400">
+                                You don’t have any subscriptions yet. Create one using the form on the left.
+                            </p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Success Screen (hidden by default) -->
+            <div id="successScreen" class="hidden">
+                <div class="max-w-xl mx-auto mt-10 bg-white dark:bg-gray-800 rounded-xl shadow-lg p-8 text-center">
+                    <div class="mx-auto mb-4 flex h-12 w-12 items-center justify-center rounded-full bg-green-100 dark:bg-green-900">
+                        <svg class="h-6 w-6 text-green-600 dark:text-green-300" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7" />
+                        </svg>
+                    </div>
+                    <h2 class="text-2xl font-bold text-gray-800 dark:text-white mb-2">
+                        Subscription Confirmed!
+                    </h2>
+                    <p class="text-sm text-gray-600 dark:text-gray-300 mb-6">
+                        Your fresh produce subscription has been set up. You’ll receive timely deliveries as per your plan.
+                    </p>
+
+                    <div class="bg-gray-50 dark:bg-gray-900 rounded-lg border border-gray-200 dark:border-gray-700 p-4 text-left text-sm mb-6">
+                        <p class="mb-1 text-gray-700 dark:text-gray-200">
+                            <span class="font-semibold">Subscription ID:</span>
+                            <span id="successSubscriptionId" class="ml-1 font-mono text-green-700 dark:text-green-300"></span>
+                        </p>
+                        <p class="mb-1 text-gray-700 dark:text-gray-200">
+                            <span class="font-semibold">Next delivery:</span>
+                            <span id="successNextDelivery" class="ml-1"></span>
+                        </p>
+                        <p class="text-gray-700 dark:text-gray-200">
+                            <span class="font-semibold">Weekly total:</span>
+                            <span id="successWeeklyTotal" class="ml-1"></span>
+                        </p>
+                    </div>
+
+                    <div class="flex flex-wrap items-center justify-center gap-3">
+                        <button
+                            id="downloadPlanBtn"
+                            class="inline-flex items-center rounded-lg bg-blue-600 px-4 py-2 text-sm font-semibold text-white shadow hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500"
+                        >
+                            Download Plan
+                        </button>
+                        <button
+                            id="newSubscriptionBtn"
+                            class="inline-flex items-center rounded-lg bg-gray-100 px-4 py-2 text-sm font-semibold text-gray-800 hover:bg-gray-200 dark:bg-gray-700 dark:text-gray-100 dark:hover:bg-gray-600 focus:outline-none focus:ring-2 focus:ring-gray-400"
+                        >
+                            Create Another
+                        </button>
+                        <button
+                            id="viewAllSubscriptionsBtn"
+                            class="inline-flex items-center rounded-lg border border-gray-300 px-4 py-2 text-sm font-semibold text-gray-800 hover:bg-gray-50 dark:border-gray-600 dark:text-gray-100 dark:hover:bg-gray-800 focus:outline-none focus:ring-2 focus:ring-gray-400"
+                        >
+                            Manage Subscriptions
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Footer -->
+    <footer class="bg-gray-800 text-white py-8 mt-12">
+        <div class="container mx-auto px-4">
+            <div class="grid grid-cols-1 md:grid-cols-4 gap-8">
+                <div>
+                    <h3 class="text-xl font-bold mb-4">PlatePilot</h3>
+                    <p class="text-gray-400">Pilot your plate. Powered by AI. Fueled by wellness.</p>
+                </div>
+                <div>
+                    <h4 class="font-semibold mb-4">Quick Links</h4>
+                    <ul class="space-y-2 text-sm">
+                        <li><a href="index.html" class="text-gray-400 hover:text-white transition-colors">Home</a></li>
+                        <li><a href="recipes.html" class="text-gray-400 hover:text-white transition-colors">Recipes</a></li>
+                        <li><a href="games.html" class="text-gray-400 hover:text-white transition-colors">Games</a></li>
+                        <li><a href="diet-planner.html" class="text-gray-400 hover:text-white transition-colors">Diet Planner</a></li>
+                        <li><a href="ai-verification.html" class="text-gray-400 hover:text-white transition-colors">AI Verification</a></li>
+                        <li><a href="subscription.html" class="text-gray-400 hover:text-white transition-colors">Subscription</a></li>
+                    </ul>
+                </div>
+                <div>
+                    <h4 class="font-semibold mb-4">Contact</h4>
+                    <ul class="space-y-2 text-sm text-gray-400">
+                        <li>Email: platepilot.11@gmail.com</li>
+                        <li>Phone: +91 9251681626</li>
+                    </ul>
+                </div>
+                <div>
+                    <h4 class="font-semibold mb-4">Follow Us</h4>
+                    <div class="flex space-x-4 text-sm">
+                        <a href="#" class="text-gray-400 hover:text-white transition-colors">Facebook</a>
+                        <a href="#" class="text-gray-400 hover:text-white transition-colors">Twitter</a>
+                        <a href="#" class="text-gray-400 hover:text-white transition-colors">Instagram</a>
+                    </div>
+                </div>
+            </div>
+            <div class="border-t border-gray-700 mt-8 pt-8 text-center text-gray-400 text-sm">
+                <p>&copy; 2024 PlatePilot. All rights reserved.</p>
+            </div>
+        </div>
+    </footer>
+
+    <script>
+        // Set base path for GitHub Pages
+        const basePath = '/PlatePilot';
+
+        document.addEventListener('DOMContentLoaded', function () {
+            // Update navigation links (including Subscription)
+            document.querySelectorAll(
+                'a[href^="index.html"], ' +
+                'a[href^="recipes.html"], ' +
+                'a[href^="upload-recipe.html"], ' +
+                'a[href^="games.html"], ' +
+                'a[href^="secret-recipes.html"], ' +
+                'a[href^="diet-planner.html"], ' +
+                'a[href^="ai-verification.html"], ' +
+                'a[href^="subscription.html"]'
+            ).forEach(link => {
+                if (!link.href.includes(basePath)) {
+                    link.href = basePath + '/' + link.getAttribute('href');
+                }
+            });
+
+            // Initialize dark mode
+            if (localStorage.getItem('darkMode') === 'true') {
+                document.documentElement.classList.add('dark');
+            }
+
+            window.toggleDarkMode = function () {
+                if (document.documentElement.classList.contains('dark')) {
+                    document.documentElement.classList.remove('dark');
+                    localStorage.setItem('darkMode', 'false');
+                } else {
+                    document.documentElement.classList.add('dark');
+                    localStorage.setItem('darkMode', 'true');
+                }
+            };
+
+            window.toggleMobileMenu = function () {
+                const mobileMenu = document.getElementById('mobileMenu');
+                mobileMenu.classList.toggle('hidden');
+            };
+        });
+    </script>
+    <script src="subscription.js"></script>
+</body>
+</html>
+
