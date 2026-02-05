@@ -8,8 +8,25 @@ const AI_CONFIG = {
     // Your Google Gemini API key (keep this secure!)
     API_KEY: 'AIzaSyAFdDnDZeMxyXDb8-HY9vz6H0_QkcqXlbw',
 
-    // Gemini model name - use the latest experimental version
-    MODEL_NAME: 'gemini-2.0-flash-exp', // Latest Gemini 2.0 with enhanced vision capabilities
+    // Gemini model name - use only Gemini 1.5 Flash or Gemini 1.5 Pro
+    // Available models:
+    // - 'gemini-1.5-flash' - ~15 requests per minute (RPM) - Recommended for faster responses
+    // - 'gemini-1.5-pro' - ~2 requests per minute (RPM) - More powerful but slower
+    MODEL_NAME: 'gemini-1.5-flash', // Default: Gemini 1.5 Flash (15 RPM)
+    
+    // Rate limiting configuration based on model RPM
+    RATE_LIMITS: {
+        'gemini-1.5-flash': {
+            rpm: 15,                    // 15 requests per minute
+            minInterval: 4000,           // 4 seconds minimum between requests (60s / 15 = 4s)
+            description: 'Fast model with 15 RPM limit'
+        },
+        'gemini-1.5-pro': {
+            rpm: 2,                     // 2 requests per minute
+            minInterval: 30000,          // 30 seconds minimum between requests (60s / 2 = 30s)
+            description: 'Powerful model with 2 RPM limit'
+        }
+    },
     
     // System prompt for organic verification
     SYSTEM_PROMPT: `You are a certified organic agriculture inspector and food safety expert specializing in visual produce analysis. Your role is to provide detailed, professional assessments of produce authenticity.'
@@ -80,9 +97,41 @@ RESPONSE GUIDELINES:
     }
 };
 
+// Rate limiting tracker
+let lastRequestTime = {};
+const getRateLimit = (modelName) => {
+    return AI_CONFIG.RATE_LIMITS[modelName] || AI_CONFIG.RATE_LIMITS['gemini-1.5-flash'];
+};
+
+// Function to enforce rate limiting
+async function enforceRateLimit(modelName) {
+    const rateLimit = getRateLimit(modelName);
+    const now = Date.now();
+    const lastTime = lastRequestTime[modelName] || 0;
+    const timeSinceLastRequest = now - lastTime;
+    
+    if (timeSinceLastRequest < rateLimit.minInterval) {
+        const waitTime = rateLimit.minInterval - timeSinceLastRequest;
+        console.log(`⏳ Rate limit: Waiting ${Math.ceil(waitTime / 1000)}s before next request (${rateLimit.rpm} RPM limit)`);
+        await new Promise(resolve => setTimeout(resolve, waitTime));
+    }
+    
+    lastRequestTime[modelName] = Date.now();
+}
+
 // Function to call the Gemini API
 async function callOrganicVerificationAPI(base64Image, filename) {
     try {
+        // Validate model name
+        const modelName = AI_CONFIG.MODEL_NAME;
+        if (modelName !== 'gemini-1.5-flash' && modelName !== 'gemini-1.5-pro') {
+            console.warn(`⚠️ Invalid model: ${modelName}. Falling back to gemini-1.5-flash`);
+            AI_CONFIG.MODEL_NAME = 'gemini-1.5-flash';
+        }
+        
+        // Enforce rate limiting based on selected model
+        await enforceRateLimit(AI_CONFIG.MODEL_NAME);
+        
         // Extract base64 data and mime type
         const matches = base64Image.match(/^data:([A-Za-z-+\/]+);base64,(.+)$/);
         if (!matches || matches.length !== 3) {
@@ -95,11 +144,14 @@ async function callOrganicVerificationAPI(base64Image, filename) {
         // Construct Gemini API URL with API key
         const apiUrl = `${AI_CONFIG.API_BASE_URL}/models/${AI_CONFIG.MODEL_NAME}:generateContent?key=${AI_CONFIG.API_KEY}`;
 
+        const rateLimit = getRateLimit(AI_CONFIG.MODEL_NAME);
         console.log('🔍 Gemini API Request:', {
             url: apiUrl,
             mimeType: mimeType,
             imageDataLength: base64Data.length,
-            model: AI_CONFIG.MODEL_NAME
+            model: AI_CONFIG.MODEL_NAME,
+            rateLimit: `${rateLimit.rpm} RPM (${rateLimit.minInterval / 1000}s min interval)`,
+            description: rateLimit.description
         });
 
         const response = await fetch(apiUrl, {

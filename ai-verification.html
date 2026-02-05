@@ -511,10 +511,33 @@
                     const mimeType = matches[1];
                     const base64Data = matches[2];
 
+                    // Validate model name
+                    let modelName = AI_CONFIG.MODEL_NAME;
+                    if (modelName !== 'gemini-1.5-flash' && modelName !== 'gemini-1.5-pro') {
+                        console.warn(`⚠️ Invalid model: ${modelName}. Using gemini-1.5-flash`);
+                        modelName = 'gemini-1.5-flash';
+                    }
+                    
+                    // Get rate limit for this model
+                    const rateLimit = AI_CONFIG.RATE_LIMITS && AI_CONFIG.RATE_LIMITS[modelName] 
+                        ? AI_CONFIG.RATE_LIMITS[modelName]
+                        : { rpm: 15, minInterval: 4000 };
+                    
+                    // Enforce rate limiting
+                    const now = Date.now();
+                    const lastTime = window.lastImageRequestTime || 0;
+                    const timeSinceLastRequest = now - lastTime;
+                    if (timeSinceLastRequest < rateLimit.minInterval) {
+                        const waitTime = rateLimit.minInterval - timeSinceLastRequest;
+                        console.log(`⏳ Rate limit: Waiting ${Math.ceil(waitTime / 1000)}s before image analysis (${rateLimit.rpm} RPM limit)`);
+                        await new Promise(resolve => setTimeout(resolve, waitTime));
+                    }
+                    window.lastImageRequestTime = Date.now();
+                    
                     // Use OpenAI API if configured, otherwise fall back to Gemini
                     const isOpenAI = AI_CONFIG.API_TYPE === 'openai' || AI_CONFIG.API_BASE_URL.includes('openai.com');
                     
-                    console.log('🌐 Using API:', isOpenAI ? 'OpenAI' : 'Gemini');
+                    console.log('🌐 Using API:', isOpenAI ? 'OpenAI' : `Gemini (${modelName}, ${rateLimit.rpm} RPM)`);
                     
                     let apiUrl, requestBody, headers;
                     
@@ -526,7 +549,7 @@
                             'Authorization': `Bearer ${AI_CONFIG.API_KEY}`
                         };
                         requestBody = {
-                            model: AI_CONFIG.MODEL_NAME || 'gpt-4o',
+                            model: modelName || 'gpt-4o',
                             messages: [
                                 {
                                     role: 'user',
@@ -548,8 +571,8 @@
                             temperature: 0.1
                         };
                     } else {
-                        // Gemini API format (fallback)
-                        apiUrl = `${AI_CONFIG.API_BASE_URL}/models/${AI_CONFIG.MODEL_NAME}:generateContent?key=${AI_CONFIG.API_KEY}`;
+                        // Gemini API format - use validated model name
+                        apiUrl = `${AI_CONFIG.API_BASE_URL}/models/${modelName}:generateContent?key=${AI_CONFIG.API_KEY}`;
                         headers = {
                             'Content-Type': 'application/json'
                         };
@@ -700,7 +723,7 @@
                     metadata: {
                         analyzer: 'PlatePilot AI Organic Verification System',
                         version: '2.0',
-                        model: 'Google Gemini 1.5 Flash',
+                        model: AI_CONFIG.MODEL_NAME || 'gemini-1.5-flash',
                         certifiedBy: 'AI Visual Analysis Engine'
                     }
                 };
@@ -768,7 +791,7 @@ ${resultObj.professionalNotes}
 ───────────────────────────────────────────────────────────────
 TECHNICAL DETAILS
 ───────────────────────────────────────────────────────────────
-Analysis Engine: Google Gemini 1.5 Flash (AI Vision Model)
+Analysis Engine: ${AI_CONFIG.MODEL_NAME || 'gemini-1.5-flash'} (AI Vision Model)
 System Version: PlatePilot V2.0
 Analysis Method: Multi-factor Visual Assessment
 Confidence Thresholds:
@@ -883,32 +906,64 @@ Report Date: ${timestamp.toISOString()}
                 if (loadingMsg) loadingMsg.remove();
             }
 
-            // Rate limiting variables
-            let lastRequestTime = 0;
-            const MIN_REQUEST_INTERVAL = 2000; // 2 seconds between requests
+            // Rate limiting tracker for chat
+            let lastChatRequestTime = {};
+            
+            // Get rate limit for model
+            function getChatRateLimit(modelName) {
+                if (!modelName || (modelName !== 'gemini-1.5-flash' && modelName !== 'gemini-1.5-pro')) {
+                    modelName = 'gemini-1.5-flash'; // Default fallback
+                }
+                const limits = {
+                    'gemini-1.5-flash': { rpm: 15, minInterval: 4000 },  // 4 seconds
+                    'gemini-1.5-pro': { rpm: 2, minInterval: 30000 }      // 30 seconds
+                };
+                return limits[modelName] || limits['gemini-1.5-flash'];
+            }
+            
+            // Enforce rate limiting for chat
+            async function enforceChatRateLimit(modelName) {
+                const rateLimit = getChatRateLimit(modelName);
+                const now = Date.now();
+                const lastTime = lastChatRequestTime[modelName] || 0;
+                const timeSinceLastRequest = now - lastTime;
+                
+                if (timeSinceLastRequest < rateLimit.minInterval) {
+                    const waitTime = rateLimit.minInterval - timeSinceLastRequest;
+                    console.log(`⏳ Chat rate limit: Waiting ${Math.ceil(waitTime / 1000)}s (${rateLimit.rpm} RPM limit)`);
+                    await new Promise(resolve => setTimeout(resolve, waitTime));
+                }
+                
+                lastChatRequestTime[modelName] = Date.now();
+            }
 
             // Call Gemini API for chat
             async function sendChatMessage(message, imageBase64 = null) {
                 try {
-                    // Rate limiting - wait if requests are too frequent
-                    const now = Date.now();
-                    const timeSinceLastRequest = now - lastRequestTime;
-                    if (timeSinceLastRequest < MIN_REQUEST_INTERVAL) {
-                        await new Promise(resolve => setTimeout(resolve, MIN_REQUEST_INTERVAL - timeSinceLastRequest));
-                    }
-                    lastRequestTime = Date.now();
-
-                    // Wait for AI_CONFIG to be loaded
+                    // Wait for AI_CONFIG to be loaded first
                     let attempts = 0;
                     while (typeof AI_CONFIG === 'undefined' && attempts < 50) {
                         await new Promise(resolve => setTimeout(resolve, 100));
                         attempts++;
                     }
-
+                    
                     if (typeof AI_CONFIG === 'undefined') {
                         throw new Error('AI_CONFIG not loaded');
                     }
+                    
+                    // Validate and get model name
+                    let modelName = AI_CONFIG.MODEL_NAME;
+                    if (modelName !== 'gemini-1.5-flash' && modelName !== 'gemini-1.5-pro') {
+                        console.warn(`⚠️ Invalid model: ${modelName}. Using gemini-1.5-flash`);
+                        modelName = 'gemini-1.5-flash';
+                    }
+                    
+                    // Enforce rate limiting based on selected model
+                    await enforceChatRateLimit(modelName);
 
+                    const rateLimit = getChatRateLimit(modelName);
+                    console.log(`💬 Chat using model: ${modelName} (${rateLimit.rpm} RPM limit)`);
+                    
                     const systemPrompt = `You are PlatePilot AI, a certified organic agriculture inspector specializing in visual produce analysis.
 
 FOR IMAGE ANALYSIS - Use this exact JSON format (no markdown):
@@ -978,7 +1033,7 @@ KEY: For images, ALWAYS return pure JSON (no markdown blocks).`;
                         }
                         
                         requestBody = {
-                            model: AI_CONFIG.MODEL_NAME || 'gpt-4o',
+                            model: modelName || 'gpt-4o',
                             messages: [
                                 {
                                     role: 'user',
@@ -989,8 +1044,8 @@ KEY: For images, ALWAYS return pure JSON (no markdown blocks).`;
                             temperature: 0.3
                         };
                     } else {
-                        // Gemini API format (fallback)
-                        apiUrl = `${AI_CONFIG.API_BASE_URL}/models/${AI_CONFIG.MODEL_NAME}:generateContent?key=${AI_CONFIG.API_KEY}`;
+                        // Gemini API format - use validated model name
+                        apiUrl = `${AI_CONFIG.API_BASE_URL}/models/${modelName}:generateContent?key=${AI_CONFIG.API_KEY}`;
                         headers = {
                             'Content-Type': 'application/json'
                         };
