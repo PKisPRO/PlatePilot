@@ -6,7 +6,7 @@ const AI_CONFIG = {
     API_BASE_URL: 'https://generativelanguage.googleapis.com/v1beta',
 
     // Your Google Gemini API key (keep this secure!)
-    API_KEY: 'AIzaSyAFdDnDZeMxyXDb8-HY9vz6H0_QkcqXlbw',
+    API_KEY: 'AIzaSyCWoJ1qhPY3e1K-0escLurXDpIoQ0hQhDo',
 
     // Gemini model name - use only Gemini 1.5 Flash or Gemini 1.5 Pro
     // Available models:
