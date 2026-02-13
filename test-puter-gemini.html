@@ -1,0 +1,293 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Puter.js Gemini API Test - FREE Access</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://js.puter.com/v2/"></script>
+    <style>
+        .status { padding: 1rem; margin: 1rem 0; border-radius: 0.5rem; }
+        .success { background: #d1fae5; color: #065f46; }
+        .error { background: #fee2e2; color: #991b1b; }
+        .info { background: #dbeafe; color: #1e40af; }
+    </style>
+</head>
+<body class="bg-gray-50 p-8">
+    <div class="max-w-4xl mx-auto">
+        <h1 class="text-3xl font-bold mb-4">Puter.js Gemini API Test</h1>
+        <p class="text-gray-600 mb-6">Testing FREE Gemini API access without API keys!</p>
+        
+        <div id="status" class="status info">
+            ⏳ Waiting for Puter.js to load...
+        </div>
+        
+        <div class="bg-yellow-50 border border-yellow-200 p-4 rounded-lg mb-6">
+            <h3 class="font-semibold text-yellow-800 mb-2">📊 Diagnostic Info</h3>
+            <div id="diagnostics" class="text-sm text-yellow-700">
+                <div>Puter.js Status: <span id="puter-status">Checking...</span></div>
+                <div>Browser Console: Open DevTools (F12) to see detailed logs</div>
+            </div>
+        </div>
+        
+        <div class="bg-white p-6 rounded-lg shadow-md mb-6">
+            <h2 class="text-xl font-semibold mb-4">Test 1: Basic Text Generation</h2>
+            <button id="test1" class="bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600">
+                Test Gemini 2.5 Flash
+            </button>
+            <div id="result1" class="mt-4 p-4 bg-gray-100 rounded min-h-[100px]"></div>
+        </div>
+        
+        <div class="bg-white p-6 rounded-lg shadow-md mb-6">
+            <h2 class="text-xl font-semibold mb-4">Test 2: Image Analysis</h2>
+            <input type="file" id="imageInput" accept="image/*" class="mb-4">
+            <button id="test2" class="bg-green-500 text-white px-4 py-2 rounded hover:bg-green-600">
+                Analyze Image with Gemini
+            </button>
+            <div id="result2" class="mt-4 p-4 bg-gray-100 rounded min-h-[100px]"></div>
+            <div id="imagePreview" class="mt-4"></div>
+        </div>
+        
+        <div class="bg-white p-6 rounded-lg shadow-md">
+            <h2 class="text-xl font-semibold mb-4">Test 3: Compare Models</h2>
+            <button id="test3" class="bg-purple-500 text-white px-4 py-2 rounded hover:bg-purple-600">
+                Compare Gemini Models
+            </button>
+            <div id="result3" class="mt-4 p-4 bg-gray-100 rounded min-h-[200px]"></div>
+        </div>
+    </div>
+
+    <script>
+        let puterLoaded = false;
+        let loadAttempts = 0;
+        const maxAttempts = 50; // 5 seconds max
+
+        // Wait for Puter.js to load with timeout
+        async function waitForPuter() {
+            loadAttempts = 0;
+            while ((typeof puter === 'undefined' || !puter.ai) && loadAttempts < maxAttempts) {
+                await new Promise(r => setTimeout(r, 100));
+                loadAttempts++;
+                
+                // Update status every second
+                if (loadAttempts % 10 === 0) {
+                    const statusDiv = document.getElementById('status');
+                    statusDiv.className = 'status info';
+                    statusDiv.textContent = `⏳ Loading Puter.js... (${loadAttempts * 100}ms)`;
+                }
+            }
+            
+            if (typeof puter !== 'undefined' && puter.ai) {
+                puterLoaded = true;
+                document.getElementById('status').className = 'status success';
+                document.getElementById('status').textContent = '✅ Puter.js loaded successfully! Ready to use FREE Gemini API.';
+                document.getElementById('puter-status').textContent = '✅ LOADED';
+                document.getElementById('puter-status').className = 'text-green-600 font-bold';
+                console.log('✅ Puter.js loaded:', puter);
+                console.log('✅ Available models:', puter.ai);
+                
+                // Auto-run a quick test
+                runQuickTest();
+            } else {
+                document.getElementById('status').className = 'status error';
+                document.getElementById('status').textContent = '❌ Puter.js failed to load. Check console for errors.';
+                document.getElementById('puter-status').textContent = '❌ FAILED';
+                document.getElementById('puter-status').className = 'text-red-600 font-bold';
+                console.error('❌ Puter.js not loaded after', loadAttempts * 100, 'ms');
+                console.log('Debug: typeof puter =', typeof puter);
+                if (typeof puter !== 'undefined') {
+                    console.log('Debug: puter object:', puter);
+                    console.log('Debug: puter.ai =', puter.ai);
+                }
+            }
+        }
+
+        // Quick automatic test
+        async function runQuickTest() {
+            const resultDiv = document.getElementById('result1');
+            resultDiv.innerHTML = '<div class="text-blue-600">🔄 Running automatic test...</div>';
+            
+            try {
+                console.log('🧪 Testing Puter.js with simple query...');
+                const startTime = Date.now();
+                
+                const response = await puter.ai.chat(
+                    "Say 'Hello, Puter.js is working!' in one sentence.",
+                    { model: 'gemini-2.5-flash' }
+                );
+                
+                const duration = Date.now() - startTime;
+                resultDiv.innerHTML = `
+                    <div class="text-green-600 font-bold mb-2">✅ SUCCESS! Puter.js is working!</div>
+                    <div class="mb-2"><strong>Response:</strong> ${response}</div>
+                    <div class="text-sm text-gray-500">Response time: ${duration}ms</div>
+                `;
+                console.log('✅ Test successful! Response:', response);
+                console.log('✅ Response time:', duration, 'ms');
+            } catch (error) {
+                resultDiv.innerHTML = `
+                    <div class="text-red-600 font-bold mb-2">❌ ERROR</div>
+                    <div>${error.message}</div>
+                    <div class="text-sm text-gray-500 mt-2">Check browser console for details</div>
+                `;
+                console.error('❌ Test failed:', error);
+                console.error('Error details:', {
+                    message: error.message,
+                    stack: error.stack,
+                    name: error.name
+                });
+            }
+        }
+
+        // Test 1: Basic text generation
+        document.getElementById('test1').addEventListener('click', async () => {
+            if (!puterLoaded) {
+                await waitForPuter();
+            }
+            
+            if (!puterLoaded) {
+                document.getElementById('result1').innerHTML = '<div class="text-red-600">❌ Puter.js is not loaded. Please refresh the page.</div>';
+                return;
+            }
+            
+            const resultDiv = document.getElementById('result1');
+            resultDiv.innerHTML = '<div class="text-blue-600">⏳ Generating response...</div>';
+            
+            try {
+                console.log('🧪 Running Test 1: Basic text generation');
+                const startTime = Date.now();
+                
+                const response = await puter.ai.chat(
+                    "Explain what organic food means in 2-3 sentences.",
+                    { model: 'gemini-2.5-flash' }
+                );
+                
+                const duration = Date.now() - startTime;
+                resultDiv.innerHTML = `
+                    <div class="text-green-600 font-semibold mb-2">✅ Success!</div>
+                    <div class="mb-2">${response}</div>
+                    <div class="text-sm text-gray-500">Response time: ${duration}ms</div>
+                `;
+                console.log('✅ Test 1 successful:', response);
+            } catch (error) {
+                resultDiv.innerHTML = `
+                    <div class="text-red-600 font-semibold mb-2">❌ Error</div>
+                    <div>${error.message}</div>
+                    <div class="text-sm text-gray-500 mt-2">Check console for details</div>
+                `;
+                console.error('❌ Test 1 failed:', error);
+            }
+        });
+
+        // Test 2: Image analysis
+        document.getElementById('test2').addEventListener('click', async () => {
+            if (!puterLoaded) {
+                await waitForPuter();
+            }
+            
+            if (!puterLoaded) {
+                document.getElementById('result2').innerHTML = '<div class="text-red-600">❌ Puter.js is not loaded. Please refresh the page.</div>';
+                return;
+            }
+            
+            const fileInput = document.getElementById('imageInput');
+            const file = fileInput.files[0];
+            
+            if (!file) {
+                alert('Please select an image first!');
+                return;
+            }
+            
+            const resultDiv = document.getElementById('result2');
+            const previewDiv = document.getElementById('imagePreview');
+            resultDiv.innerHTML = '<div class="text-blue-600">⏳ Analyzing image...</div>';
+            
+            try {
+                // Convert file to data URL
+                const reader = new FileReader();
+                reader.onload = async (e) => {
+                    const dataUrl = e.target.result;
+                    
+                    // Show preview
+                    previewDiv.innerHTML = `<img src="${dataUrl}" class="max-w-md rounded shadow" alt="Preview">`;
+                    
+                    console.log('🧪 Running Test 2: Image analysis');
+                    const startTime = Date.now();
+                    
+                    // Analyze with Gemini
+                    const response = await puter.ai.chat(
+                        "Analyze this image. Describe what you see in detail, including colors, textures, and any notable features. If it's food, assess if it appears organic or conventional.",
+                        dataUrl,
+                        { model: 'gemini-2.5-flash' }
+                    );
+                    
+                    const duration = Date.now() - startTime;
+                    resultDiv.innerHTML = `
+                        <div class="text-green-600 font-semibold mb-2">✅ Success!</div>
+                        <div class="mb-2">${response}</div>
+                        <div class="text-sm text-gray-500">Response time: ${duration}ms</div>
+                    `;
+                    console.log('✅ Test 2 successful:', response);
+                };
+                reader.readAsDataURL(file);
+            } catch (error) {
+                resultDiv.innerHTML = `
+                    <div class="text-red-600 font-semibold mb-2">❌ Error</div>
+                    <div>${error.message}</div>
+                    <div class="text-sm text-gray-500 mt-2">Check console for details</div>
+                `;
+                console.error('❌ Test 2 failed:', error);
+            }
+        });
+
+        // Test 3: Compare models
+        document.getElementById('test3').addEventListener('click', async () => {
+            if (!puterLoaded) {
+                await waitForPuter();
+            }
+            
+            if (!puterLoaded) {
+                document.getElementById('result3').innerHTML = '<div class="text-red-600">❌ Puter.js is not loaded. Please refresh the page.</div>';
+                return;
+            }
+            
+            const resultDiv = document.getElementById('result3');
+            resultDiv.innerHTML = '<div class="text-blue-600">⏳ Testing multiple models...</div>';
+            
+            const models = [
+                'gemini-2.5-flash',
+                'gemini-2.5-pro',
+                'gemini-3-pro-preview'
+            ];
+            
+            console.log('🧪 Running Test 3: Compare models');
+            let html = '';
+            
+            for (const model of models) {
+                try {
+                    html += `<div class="mb-4"><strong class="text-blue-600">${model}:</strong> `;
+                    const startTime = Date.now();
+                    const response = await puter.ai.chat(
+                        "What is the difference between organic and conventional farming? Answer in one sentence.",
+                        { model: model }
+                    );
+                    const duration = Date.now() - startTime;
+                    html += `<span class="text-gray-700">${response}</span> <span class="text-gray-500 text-sm">(${duration}ms)</span></div>`;
+                    console.log(`✅ ${model} successful:`, response, `(${duration}ms)`);
+                } catch (error) {
+                    html += `<div class="text-red-600">❌ Error: ${error.message}</div>`;
+                    console.error(`❌ ${model} failed:`, error);
+                }
+            }
+            
+            resultDiv.innerHTML = html || '<div class="text-red-600">All models failed. Check console.</div>';
+        });
+
+        // Initialize on page load
+        console.log('🚀 Initializing Puter.js test page...');
+        console.log('📡 Loading Puter.js from: https://js.puter.com/v2/');
+        waitForPuter();
+    </script>
+</body>
+</html>
+

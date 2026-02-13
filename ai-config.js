@@ -8,24 +8,14 @@ const AI_CONFIG = {
     // Your Google Gemini API key (keep this secure!)
     API_KEY: 'AIzaSyCWoJ1qhPY3e1K-0escLurXDpIoQ0hQhDo',
 
-    // Gemini model name - use only Gemini 1.5 Flash or Gemini 1.5 Pro
-    // Available models:
-    // - 'gemini-1.5-flash' - ~15 requests per minute (RPM) - Recommended for faster responses
-    // - 'gemini-1.5-pro' - ~2 requests per minute (RPM) - More powerful but slower
-    MODEL_NAME: 'gemini-1.5-flash', // Default: Gemini 1.5 Flash (15 RPM)
+    // Gemini model name - use any available model (e.g. gemini-1.5-flash, gemini-1.5-pro, gemini-2.0-flash-exp)
+    MODEL_NAME: 'gemini-1.5-flash',
     
-    // Rate limiting configuration based on model RPM
+    // Rate limiting per model (optional). Unknown models use DEFAULT.
     RATE_LIMITS: {
-        'gemini-1.5-flash': {
-            rpm: 15,                    // 15 requests per minute
-            minInterval: 4000,           // 4 seconds minimum between requests (60s / 15 = 4s)
-            description: 'Fast model with 15 RPM limit'
-        },
-        'gemini-1.5-pro': {
-            rpm: 2,                     // 2 requests per minute
-            minInterval: 30000,          // 30 seconds minimum between requests (60s / 2 = 30s)
-            description: 'Powerful model with 2 RPM limit'
-        }
+        'gemini-1.5-flash': { rpm: 15, minInterval: 4000, description: '15 RPM' },
+        'gemini-1.5-pro': { rpm: 2, minInterval: 30000, description: '2 RPM' },
+        'DEFAULT': { rpm: 15, minInterval: 4000, description: 'Default 15 RPM' }
     },
     
     // System prompt for organic verification
@@ -100,7 +90,7 @@ RESPONSE GUIDELINES:
 // Rate limiting tracker
 let lastRequestTime = {};
 const getRateLimit = (modelName) => {
-    return AI_CONFIG.RATE_LIMITS[modelName] || AI_CONFIG.RATE_LIMITS['gemini-1.5-flash'];
+    return AI_CONFIG.RATE_LIMITS[modelName] || AI_CONFIG.RATE_LIMITS['DEFAULT'] || AI_CONFIG.RATE_LIMITS['gemini-1.5-flash'];
 };
 
 // Function to enforce rate limiting
@@ -122,15 +112,8 @@ async function enforceRateLimit(modelName) {
 // Function to call the Gemini API
 async function callOrganicVerificationAPI(base64Image, filename) {
     try {
-        // Validate model name
-        const modelName = AI_CONFIG.MODEL_NAME;
-        if (modelName !== 'gemini-1.5-flash' && modelName !== 'gemini-1.5-pro') {
-            console.warn(`⚠️ Invalid model: ${modelName}. Falling back to gemini-1.5-flash`);
-            AI_CONFIG.MODEL_NAME = 'gemini-1.5-flash';
-        }
-        
-        // Enforce rate limiting based on selected model
-        await enforceRateLimit(AI_CONFIG.MODEL_NAME);
+        const modelName = AI_CONFIG.MODEL_NAME || 'gemini-1.5-flash';
+        await enforceRateLimit(modelName);
         
         // Extract base64 data and mime type
         const matches = base64Image.match(/^data:([A-Za-z-+\/]+);base64,(.+)$/);

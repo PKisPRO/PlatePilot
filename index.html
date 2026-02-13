@@ -30,7 +30,6 @@
     <!-- Language System -->
     <script src="translations.js"></script>
     <script src="translations-extended.js"></script>
-    <script src="translations-more.js"></script>
     <script src="language-selector.js"></script>
     <style>
         .feature-card {
@@ -73,6 +72,17 @@
                         </div>
                     </div>
                     <div id="languageSelectorContainer" class="ml-4"></div>
+                    <span id="welcomeMessage" class="ml-4 text-sm text-gray-600 dark:text-gray-300"></span>
+                    <a id="loginNavLink" href="login.html" class="text-sm text-gray-700 dark:text-gray-300 hover:text-green-600 dark:hover:text-green-400 transition-colors">
+                        Login
+                    </a>
+                    <button
+                        id="logoutNavButton"
+                        onclick="logout()"
+                        class="hidden text-sm px-3 py-1 rounded-lg border border-gray-300 dark:border-gray-600 text-gray-700 dark:text-gray-200 hover:bg-gray-100 dark:hover:bg-gray-800 transition-colors"
+                    >
+                        Logout
+                    </button>
                     <button onclick="toggleDarkMode()" class="p-2 rounded-lg bg-gray-200 dark:bg-gray-700 hover:bg-gray-300 dark:hover:bg-gray-600 transition-colors">
                         <span class="dark:hidden" data-translate="moon">🌙</span>
                         <span class="hidden dark:inline" data-translate="sun">☀️</span>
@@ -112,6 +122,23 @@
                         </div>
                     </div>
                     <div id="languageSelectorContainer" class="mt-2"></div>
+                    <div class="mt-2 flex flex-col space-y-2 items-start px-2">
+                        <span id="welcomeMessageMobile" class="text-sm text-gray-600 dark:text-gray-300"></span>
+                        <a
+                            id="loginNavLinkMobile"
+                            href="login.html"
+                            class="text-sm text-gray-700 dark:text-gray-300 hover:text-green-600 dark:hover:text-green-400 transition-colors"
+                        >
+                            Login
+                        </a>
+                        <button
+                            id="logoutNavButtonMobile"
+                            onclick="logout()"
+                            class="hidden text-sm px-3 py-1 rounded-lg border border-gray-300 dark:border-gray-600 text-gray-700 dark:text-gray-200 hover:bg-gray-100 dark:hover:bg-gray-800 transition-colors"
+                        >
+                            Logout
+                        </button>
+                    </div>
                     <button onclick="toggleDarkMode()" class="p-2 rounded-lg bg-gray-200 dark:bg-gray-700 hover:bg-gray-300 dark:hover:bg-gray-600 transition-colors w-12 self-center">
                         <span class="dark:hidden" data-translate="moon">🌙</span>
                         <span class="hidden dark:inline" data-translate="sun">☀️</span>
@@ -356,13 +383,37 @@
         </svg>
     </button>
 
-    <!-- AI Assistant Modal (placeholder) -->
+    <!-- AI Assistant Modal -->
     <div id="aiAssistantModal" class="fixed inset-0 bg-black bg-opacity-50 hidden items-center justify-center z-50">
         <div class="bg-white dark:bg-gray-800 p-8 rounded-xl max-w-lg w-full shadow-2xl flex flex-col items-center">
-            <h3 class="text-2xl font-bold mb-4 text-gray-800 dark:text-white" data-translate="aiAssistantTitle">AI Assistant</h3>
-            <p class="text-gray-600 dark:text-gray-300 mb-6" data-translate="aiAssistantGreeting">Hi! I'm your PlatePilot AI. How can I help you today?</p>
-            <input id="aiInput" type="text" placeholder="Ask me anything..." class="w-full p-3 border border-gray-300 dark:border-gray-600 rounded-lg mb-4 bg-white dark:bg-gray-700 text-gray-700 dark:text-gray-300">
-            <button onclick="handleAISubmit()" class="bg-green-500 text-white px-6 py-2 rounded-lg hover:bg-green-600 mb-2" data-translate="send">Send</button>
+            <h3 class="text-2xl font-bold mb-4 text-gray-800 dark:text-white" data-translate="aiAssistantTitle">PlatePilot AI Assistant</h3>
+            <p class="text-gray-600 dark:text-gray-300 mb-6" data-translate="aiAssistantGreeting">
+                For security and cost reasons, the live PlatePilot AI chat is currently
+                <span class="font-semibold text-red-500">temporarily disabled</span> on this public website.<br><br>
+                To use PlatePilot AI, you can:
+                <br>• Email us at
+                <a href="mailto:panavgupta.happy@gmail.com" class="underline text-green-600 dark:text-green-400">panavgupta.happy@gmail.com</a>
+                for access, or
+                <br>• Go to ChatGPT and search for
+                <span class="font-semibold">Plate Pilot AI</span> in the GPTs section if it is urgent.
+                <br><br>
+                Thank you for understanding and for supporting responsible AI use.
+            </p>
+            <input
+                id="aiInput"
+                type="text"
+                placeholder="PlatePilot AI chat is temporarily disabled. Please see the note above."
+                class="w-full p-3 border border-gray-300 dark:border-gray-600 rounded-lg mb-4 bg-white dark:bg-gray-700 text-gray-700 dark:text-gray-300 opacity-60 cursor-not-allowed"
+                disabled
+            >
+            <button
+                onclick="handleAISubmit()"
+                class="bg-green-500 text-white px-6 py-2 rounded-lg mb-2 opacity-60 cursor-not-allowed"
+                data-translate="send"
+                disabled
+            >
+                Send
+            </button>
             <div id="aiResponse" class="w-full mt-2 text-left text-gray-700 dark:text-gray-200"></div>
             <button onclick="closeAIAssistant()" class="bg-gray-300 dark:bg-gray-700 text-gray-800 dark:text-gray-200 px-6 py-2 rounded-lg hover:bg-gray-400 dark:hover:bg-gray-600 mt-4" data-translate="close">Close</button>
         </div>
@@ -428,15 +479,35 @@
             // Check login status
             const user = JSON.parse(localStorage.getItem('currentUser'));
             const welcomeMessage = document.getElementById('welcomeMessage');
+            const welcomeMessageMobile = document.getElementById('welcomeMessageMobile');
+            const loginNavLink = document.getElementById('loginNavLink');
+            const loginNavLinkMobile = document.getElementById('loginNavLinkMobile');
+            const logoutNavButton = document.getElementById('logoutNavButton');
+            const logoutNavButtonMobile = document.getElementById('logoutNavButtonMobile');
             
             if (user) {
+                const name = user.name || 'User';
                 if (welcomeMessage) {
-                    welcomeMessage.textContent = `Welcome, ${user.name}!`;
+                    welcomeMessage.textContent = `Welcome, ${name}!`;
                 }
+                if (welcomeMessageMobile) {
+                    welcomeMessageMobile.textContent = `Welcome, ${name}!`;
+                }
+                if (loginNavLink) loginNavLink.classList.add('hidden');
+                if (loginNavLinkMobile) loginNavLinkMobile.classList.add('hidden');
+                if (logoutNavButton) logoutNavButton.classList.remove('hidden');
+                if (logoutNavButtonMobile) logoutNavButtonMobile.classList.remove('hidden');
             } else {
                 if (welcomeMessage) {
                     welcomeMessage.textContent = '';
                 }
+                if (welcomeMessageMobile) {
+                    welcomeMessageMobile.textContent = '';
+                }
+                if (loginNavLink) loginNavLink.classList.remove('hidden');
+                if (loginNavLinkMobile) loginNavLinkMobile.classList.remove('hidden');
+                if (logoutNavButton) logoutNavButton.classList.add('hidden');
+                if (logoutNavButtonMobile) logoutNavButtonMobile.classList.add('hidden');
             }
             
             // Logout functionality
@@ -477,26 +548,22 @@
             }
         };
 
-        // Simple demo AI chatbot logic
+        // Simple AI assistant notice (chat temporarily disabled)
         const aiDemoResponses = [
-            "Remember to eat a variety of colorful fruits and veggies!",
-            "Did you know? Organic produce is grown without synthetic pesticides.",
-            "Try our AI meal planner for healthy recipe ideas!",
-            "You can become a seller and list your organic produce on PlatePilot.",
-            "Looking for recipes? Check out our Recipes section!",
-            "Stay hydrated and eat fresh for a healthy lifestyle!"
+            "For security and cost reasons, the live PlatePilot AI chat is currently disabled on this public website.",
+            "You can email us at panavgupta.happy@gmail.com or search for 'Plate Pilot AI' in the GPTs section on ChatGPT.",
+            "Thank you for understanding and for supporting responsible AI use."
         ];
         function handleAISubmit() {
-            const input = document.getElementById('aiInput');
             const responseDiv = document.getElementById('aiResponse');
-            if (!input.value.trim()) {
-                responseDiv.textContent = "Please enter a question.";
-                return;
-            }
-            // Pick a random response
-            const reply = aiDemoResponses[Math.floor(Math.random() * aiDemoResponses.length)];
-            responseDiv.textContent = reply;
-            input.value = '';
+            if (!responseDiv) return;
+            // Show a clear notice instead of live chat responses
+            responseDiv.innerHTML = `
+                For security and cost reasons, the live PlatePilot AI chat is currently <strong>disabled</strong> on this public website.<br/>
+                You can email us at <a href="mailto:panavgupta.happy@gmail.com" class="underline text-green-600 dark:text-green-400">panavgupta.happy@gmail.com</a>
+                or go to ChatGPT and search for <strong>Plate Pilot AI</strong> in the GPTs section if it is urgent.<br/><br/>
+                Thank you for understanding and for supporting responsible AI use.
+            `;
         }
         // Allow Enter key to submit
         const aiInput = document.getElementById('aiInput');

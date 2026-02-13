@@ -2,7 +2,7 @@
 // This file contains sensitive information and should be kept local
 
 const LOCAL_API_CONFIG = {
-    API_KEY: 'AIzaSyBU6KJ6oYeuxGqCY8dh_bJ8N_E-X9iJY3s',
+    API_KEY: 'AIzaSyCWoJ1qhPY3e1K-0escLurXDpIoQ0hQhDo',
     API_TYPE: 'gemini' // Using Google Gemini API
 };
 
@@ -14,7 +14,7 @@ const LOCAL_API_CONFIG = {
             // Switch to Gemini API with new key
             AI_CONFIG.API_KEY = LOCAL_API_CONFIG.API_KEY;
             AI_CONFIG.API_BASE_URL = 'https://generativelanguage.googleapis.com/v1beta';
-            AI_CONFIG.MODEL_NAME = 'gemini-2.0-flash-exp'; // Latest Gemini 2.0 with enhanced vision capabilities
+            AI_CONFIG.MODEL_NAME = 'gemini-1.5-flash'; // Gemini 1.5 Flash (15 RPM)
             AI_CONFIG.API_TYPE = 'gemini';
             console.log('✅ Gemini API configuration loaded successfully', {
                 API_BASE_URL: AI_CONFIG.API_BASE_URL,
